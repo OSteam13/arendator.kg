@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Arendator.kg — свежие квартиры без посредников</title>
+  <meta name="description" content="Свежие объявления аренды от владельцев. Анти-агент фильтр, номера открываются после оплаты. Объявления живут 24 часа." />
+  <link rel="icon" href="./images/Arendatorkg.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root{--container:1180px; --ads:110px}
+    .container{max-width:var(--container)}
+    .shadow-soft{box-shadow:0 8px 30px rgba(0,0,0,.08)}
+    html,body{overflow-x:hidden}
+    /* боковые баннеры (только фоновые заглушки, не мешают кликам) */
+    .side-ads{position:fixed;top:60px;bottom:0;width:var(--ads);display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:10}
+    .side-ads>div{writing-mode:vertical-rl;transform:rotate(180deg);opacity:.75}
+    @media (max-width:1400px){.side-ads{display:none}}
+    /* чтобы кнопка телефона не пропадала и не ломалась строка */
+    .card-actions{display:flex;gap:.5rem;align-items:center}
+    .card-actions>input{min-width:0}
+    .mask-blur{filter:blur(3px)}
+  </style>
+</head>
+<body class="bg-neutral-50 text-neutral-900">
+
+  <!-- Верхняя зелёная плашка -->
+  <div class="bg-emerald-600 text-white text-center text-xs sm:text-sm py-2">
+    Объявления живут 24 часа · Анти-агент фильтр включён
+  </div>
+
+  <!-- Боковые «Реклама» -->
+  <aside class="side-ads left-0"><div class="rounded-2xl bg-white border border-neutral-200 shadow-soft px-2 py-4 text-sm">Реклама</div></aside>
+  <aside class="side-ads right-0"><div class="rounded-2xl bg-white border border-neutral-200 shadow-soft px-2 py-4 text-sm">Реклама</div></aside>
+
+  <!-- Хедер (логотип НЕ трогаю) -->
+  <header class="bg-white sticky top-0 z-40 border-b border-neutral-100/80">
+    <div class="container mx-auto px-4 py-3 flex items-center gap-3">
+      <a href="/" class="flex items-center gap-2 shrink-0">
+        <img src="./images/Arendatorkg.png" alt="Arendator.kg" class="w-8 h-8 rounded-full object-contain">
+      </a>
+
+      <nav class="ml-2 flex items-center gap-5 text-sm">
+        <a href="post.html" class="px-3 py-1.5 rounded-xl bg-neutral-900 text-white hover:bg-neutral-800">Добавить объявление</a>
+        <a href="#sell" class="hover:text-blue-600">Продажа</a>
+        <a href="blog.html" class="hover:text-blue-600">Блог</a>
+        <button id="navFav" class="hover:text-blue-600">Избранное</button>
+      </nav>
+
+      <div class="ml-auto flex items-center gap-4 text-sm">
+        <div class="hidden sm:flex items-center gap-2 text-neutral-600">
+          <a class="hover:text-blue-600" href="#" aria-label="Рус">Рус</a>
+          <span>·</span>
+          <a class="hover:text-blue-600" href="#" aria-label="Кыр">Кыр</a>
+        </div>
+        <button id="btnAuth" class="text-blue-600 hover:underline">Вход / регистрация</button>
+        <button id="btnPayPrimary" class="px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700">Открыть номера владельцев</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Герой: поиск + лучший вариант (идеально на одной линии) -->
+  <section class="container mx-auto px-4 pt-8">
+    <div class="grid md:grid-cols-2 gap-8 items-stretch">
+      <!-- Левая панель: Поиск -->
+      <div class="bg-white border border-neutral-200 rounded-2xl shadow-soft p-4 sm:p-5 h-full flex flex-col">
+        <h1 class="text-3xl md:text-5xl font-extrabold leading-tight text-blue-600">
+          Ищете квартиру в аренду?
+        </h1>
+        <p class="mt-3 text-base md:text-lg text-neutral-600">
+          Объявления обновляются каждую секунду из 30 источников. Только свежие — жильё за день!
+        </p>
+
+        <div class="mt-5 grid grid-cols-2 gap-3">
+          <select id="s1" class="px-3 py-2 rounded-xl border border-neutral-200">
+            <option>Снять</option><option>Сдать</option>
+          </select>
+          <select id="s2" class="px-3 py-2 rounded-xl border border-neutral-200">
+            <option>Квартира</option><option>Комната</option><option>Дом</option>
+          </select>
+          <select id="s3" class="px-3 py-2 rounded-xl border border-neutral-200">
+            <option>Чуй / Бш</option><option>Ыссык-Куль</option><option>Ош</option>
+          </select>
+          <select id="s4" class="px-3 py-2 rounded-xl border border-neutral-200">
+            <option>Бишкек</option><option>Округ</option>
+          </select>
+          <input id="pMin" type="number" placeholder="Цена от" class="px-3 py-2 rounded-xl border border-neutral-200">
+          <input id="pMax" type="number" placeholder="Цена до" class="px-3 py-2 rounded-xl border border-neutral-200">
+        </div>
+
+        <div class="mt-3 grid grid-cols-2 gap-3 text-sm">
+          <label class="inline-flex items-center gap-2"><input type="checkbox" id="own"> от владельца</label>
+          <label class="inline-flex items-center gap-2"><input type="checkbox" id="daily"> посуточно</label>
+          <label class="inline-flex items-center gap-2"><input type="checkbox" id="long"> долгосрочно</label>
+        </div>
+
+        <div class="mt-3 flex items-center gap-6 text-sm text-neutral-600">
+          <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Анти-агент фильтр</div>
+          <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-blue-600"></span> Пуш-уведомления</div>
+        </div>
+
+        <div class="mt-auto pt-4 flex gap-3">
+          <button id="btnApplyFiltersTop" class="px-4 py-2 rounded-xl bg-neutral-900 text-white hover:bg-neutral-800">Показать объявления</button>
+          <button id="btnResetTop" class="px-4 py-2 rounded-xl border border-neutral-200 hover:bg-neutral-50">Сбросить</button>
+        </div>
+      </div>
+
+      <!-- Правая панель: Лучший вариант -->
+      <div class="bg-white border border-neutral-200 rounded-2xl shadow-soft p-4 sm:p-5 h-full flex flex-col">
+        <h3 class="text-xl md:text-2xl font-semibold text-blue-600 text-center mb-3">
+          Лучший вариант на данную минуту — успей купить!!!
+        </h3>
+
+        <div class="rounded-xl overflow-hidden border border-neutral-200">
+          <div class="aspect-[16/9] bg-neutral-100">
+            <img id="bestImg" src="" alt="Лучшее объявление" class="w-full h-full object-cover">
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 p-3">
+            <div class="p-3 rounded-xl bg-neutral-50 border border-neutral-200">
+              <div class="font-semibold" id="bestTitle"></div>
+              <div class="text-neutral-600" id="bestPrice"></div>
+            </div>
+            <div class="p-3 rounded-xl bg-neutral-50 border border-neutral-200">
+              <div class="font-semibold" id="bestDistrict"></div>
+              <div class="text-neutral-600" id="bestRooms"></div>
+            </div>
+            <div class="p-3 rounded-xl bg-neutral-50 border border-neutral-200">
+              <div class="font-semibold">Без посредников</div>
+              <div class="text-neutral-600">от владельца</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<!-- Межстраничный рекламный блок -->
+<div class="container mx-auto px-4">
+  <div id="ad-mid"
+       class="my-6 rounded-2xl border border-neutral-200 bg-white shadow-soft grid place-items-center
+              min-h-[84px] sm:min-h-[100px] md:min-h-[100px]">
+    <span class="text-sm text-neutral-500">
+      Место для рекламы (банк · мебель · интернет)
+    </span>
+  </div>
+</div>
+
+
+  <!-- Список объявлений -->
+  <main id="listings" class="container mx-auto px-4 py-1">
+    <div id="listGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"></div>
+    <div id="emptyState" class="hidden text-center py-16 text-neutral-600">По этим фильтрам нет свежих объявлений.</div>
+  </main>
+
+  <!-- Тарифы -->
+  <section class="container mx-auto px-4 pb-10">
+    <h2 class="text-2xl font-bold mb-2">Тарифы доступа</h2>
+    <p class="text-neutral-700 mb-6">
+      Наши объявления живут всего 24 часа. Лучшие варианты улетают за часы. Открой номера владельцев и забронируй первым — без агентов и переплат.
+    </p>
+
+    <div class="grid sm:grid-cols-2 gap-4">
+      <div class="rounded-2xl border border-neutral-200 bg-white p-5 shadow-soft">
+        <div class="text-xl font-bold mb-1">200 сом — Неделя</div>
+        <ul class="space-y-1 text-neutral-700 text-sm mb-4">
+          <li>• Телефоны владельцев без лимита</li>
+          <li>• Анти-агент фильтр — скрываем посредников</li>
+          <li>• Пуш-уведомления о новых совпадениях</li>
+          <li>• Ежесекундное обновление из 30 источников</li>
+        </ul>
+        <button class="px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 pay">Открыть номера владельцев</button>
+        <div class="text-xs text-neutral-500 mt-2">Если доступ не открылся сразу — быстро решим в чате или продлим время.</div>
+      </div>
+
+      <div class="rounded-2xl border border-neutral-200 bg-white p-5 shadow-soft">
+        <div class="text-xl font-bold mb-1">500 сом — Месяц</div>
+        <ul class="space-y-1 text-neutral-700 text-sm mb-4">
+          <li>• Телефоны владельцев без лимита</li>
+          <li>• Анти-агент фильтр — скрываем посредников</li>
+          <li>• Пуш-уведомления о новых совпадениях</li>
+          <li>• Ежесекундное обновление из 30 источников</li>
+        </ul>
+        <button class="px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 pay">Открыть номера владельцев</button>
+        <div class="text-xs text-neutral-500 mt-2">Если доступ не открылся сразу — быстро решим в чате или продлим время.</div>
+      </div>
+    </div>
+
+    <!-- мини-FAQ -->
+    <details class="mt-6 rounded-2xl border border-neutral-200 bg-white p-5 shadow-soft">
+      <summary class="cursor-pointer font-semibold">Частые вопросы</summary>
+      <div class="mt-3 text-sm text-neutral-700 space-y-2">
+        <p><b>Почему платно?</b> Мы парсим 30+ источников, фильтруем агентов и держим сервера. Плата покрывает сбор и ускоряет вам поиск.</p>
+        <p><b>Можно сначала попробовать?</b> Следим за качеством: если что-то не работает, продлим доступ.</p>
+        <p><b>Списаний не будет?</b> Нет автоплатежей — контролируете сами.</p>
+        <p>Каждую минуту появляется что-то новое, а старое пропадает. Проверенные источники + ручная модерация жалоб. Безопасная оплата. Чеки и поддержка в Telegram.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- Футер (логотип НЕ трогаю) -->
+  <footer class="border-t border-neutral-100 bg-white">
+    <div class="container mx-auto px-4 py-8 grid md:grid-cols-4 gap-6 text-sm">
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-2">
+          <img src="./images/Arendatorkg.png" alt="Arendator.kg" class="w-7 h-7 rounded-full object-contain">
+          <span class="font-semibold">Arendator.kg</span>
+        </div>
+        <p class="text-neutral-600 mt-2 max-w-[60ch]">
+          Автоматически мониторим только свежие объявления от владельцев и проверенных источников, чтобы вы нашли жильё быстрее и без посредников.
+        </p>
+      </div>
+      <div>
+        <div class="font-semibold">Навигация</div>
+        <ul class="mt-2 space-y-1 text-neutral-600">
+          <li><a href="post.html" class="hover:text-blue-600">Добавить объявление</a></li>
+          <li><a href="#sell" class="hover:text-blue-600">Продажа</a></li>
+          <li><a href="blog.html" class="hover:text-blue-600">Блог</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="font-semibold">Правовое</div>
+        <ul class="mt-2 space-y-1 text-neutral-600">
+          <li><a class="hover:text-blue-600" href="#">Пользовательское соглашение</a></li>
+          <li><a class="hover:text-blue-600" href="#">Политика конфиденциальности</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="text-center text-xs text-neutral-500 pb-6">© 2025 — Arendator.kg</div>
+  </footer>
+
+  <!-- Modals -->
+  <div id="modalLogin" class="fixed inset-0 hidden items-center justify-center bg-black/40 p-4">
+    <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-soft">
+      <div class="text-lg font-semibold">Вход без пароля</div>
+      <p class="text-sm text-neutral-600 mt-1">Войдите по номеру — отправим код в SMS.</p>
+      <input id="loginPhone" placeholder="0(555) 123-456" class="mt-4 w-full px-3 py-2 rounded-xl border border-neutral-200" />
+      <div class="mt-3 grid grid-cols-2 gap-2">
+        <button id="btnSendCode" class="px-4 py-2 rounded-xl bg-neutral-900 text-white">Отправить код</button>
+        <button id="btnCloseLogin" class="px-4 py-2 rounded-xl border border-neutral-200">Закрыть</button>
+      </div>
+      <div id="loginStep2" class="hidden mt-4">
+        <input id="loginOtp" placeholder="Код из SMS" class="w-full px-3 py-2 rounded-xl border border-neutral-200" />
+        <button id="btnConfirmOtp" class="mt-3 w-full px-4 py-2 rounded-xl bg-blue-600 text-white">Войти</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modalPay" class="fixed inset-0 hidden items-center justify-center bg-black/40 p-4">
+    <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-soft">
+      <div class="text-lg font-semibold">Открой номера владельцев</div>
+      <p class="text-sm text-neutral-600 mt-1">После оплаты доступ активируется автоматически. Никаких автопродлений.</p>
+      <div class="mt-4 grid grid-cols-3 gap-2 text-sm">
+        <button class="pay-method px-3 py-2 rounded-xl border border-neutral-200 hover:bg-neutral-50" data-method="mbank">MBank QR</button>
+        <button class="pay-method px-3 py-2 rounded-xl border border-neutral-200 hover:bg-neutral-50" data-method="elqr">ELQR</button>
+        <button class="pay-method px-3 py-2 rounded-xl border border-neutral-200 hover:bg-neutral-50" data-method="card">Карта</button>
+      </div>
+      <div id="paySelected" class="mt-4 text-sm text-neutral-700 hidden">Вы выбрали: <span class="font-medium" id="payMethodName"></span></div>
+      <div class="mt-4 grid grid-cols-2 gap-2">
+        <button id="btnSimulatePaid" class="px-4 py-2 rounded-xl bg-blue-600 text-white">Оплата прошла (демо)</button>
+        <button id="btnClosePay" class="px-4 py-2 rounded-xl border border-neutral-200">Отмена</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 hidden px-4 py-2 rounded-xl bg-neutral-900 text-white text-sm"></div>
+
+  <script>
+    // demo-данные
+    const listings = [
+      { id:'l1', title:'2к, Центр, свежий ремонт', price:35000, district:'Центр', rooms:'2', daily:false, owner:true, img:'https://images.unsplash.com/photo-1505691938895-1758d7feb511?q=80&w=1200&auto=format&fit=crop', phone:'+996555123456', expiresAt: Date.now()+23*3600e3+30*60e3 },
+      { id:'l2', title:'1к, Майевка, уютная',      price:18000, district:'Майевка', rooms:'1', daily:false, owner:true, img:'https://images.unsplash.com/photo-1502005229762-cf1b2da7cda7?q=80&w=1200&auto=format&fit=crop', phone:'+996700222333', expiresAt: Date.now()+10*3600e3 },
+      { id:'l3', title:'3к, Асанбай, вид на горы', price:55000, district:'Асанбай', rooms:'3+',daily:false, owner:false,img:'https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=1200&auto=format&fit=crop', phone:'+996777444555', expiresAt: Date.now()+6*3600e3 },
+      { id:'l4', title:'Студия, Московский',       price:22000, district:'Московский',rooms:'1', daily:false, owner:true, img:'https://images.unsplash.com/photo-1493809842364-78817add7ffb?q=80&w=1200&auto=format&fit=crop', phone:'+996555987654', expiresAt: Date.now()+12*3600e3 },
+      { id:'l5', title:'Посуточно 2к, Центр',      price:3000,  district:'Центр', rooms:'2', daily:true,  owner:true, img:'https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?q=80&w=1200&auto=format&fit=crop', phone:'+996709111222', expiresAt: Date.now()+20*3600e3 },
+      { id:'l6', title:'3к, Свердловский, новая мебель', price:45000, district:'Свердловский', rooms:'3+', daily:false, owner:true, img:'https://images.unsplash.com/photo-1494526585095-c41746248156?q=80&w=1200&auto=format&fit=crop', phone:'+996500321654', expiresAt: Date.now()+5*3600e3 },
+    ];
+
+    // утилиты
+    const qs=(s,el=document)=>el.querySelector(s);
+    const qsa=(s,el=document)=>Array.from(el.querySelectorAll(s));
+    const showToast=(m)=>{const t=qs('#toast'); t.textContent=m; t.classList.remove('hidden'); clearTimeout(showToast.t); showToast.t=setTimeout(()=>t.classList.add('hidden'),2200);};
+    const hasAccess=()=>Date.now() < Number(localStorage.getItem('accessUntil')||0);
+    const setAccess=(h=24)=>{ localStorage.setItem('accessUntil', String(Date.now()+h*3600e3)); showToast('Доступ открыт на 24 часа'); render(); };
+
+    function countdown(el, ts){
+      function tick(){ const d=ts-Date.now(); if(d<=0){ el.textContent='0ч 00м'; return; }
+        const h=Math.floor(d/3600000), m=Math.floor((d%3600000)/60000); el.textContent=`${h}ч ${String(m).padStart(2,'0')}м`; }
+      tick(); return setInterval(tick,60000);
+    }
+
+    // Лучший (≤25к или первый)
+    function renderBest(){
+      const best = listings.find(it=>!it.daily && it.price<=25000) || listings[0];
+      qs('#bestImg').src = best.img;
+      qs('#bestTitle').textContent = best.title;
+      qs('#bestPrice').textContent = best.price.toLocaleString('ru-RU') + ' сом';
+      qs('#bestDistrict').textContent = best.district;
+      qs('#bestRooms').textContent = 'Комнат: ' + best.rooms;
+    }
+
+    // карточки
+    function cardHTML(it){
+      const priceUnit = it.daily ? 'сом/сут' : 'сом/мес';
+      return `
+      <article class="rounded-2xl border border-neutral-200 bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
+        <div class="aspect-[4/3] overflow-hidden">
+          <img src="${it.img}" alt="${it.title}" class="w-full h-full object-cover">
+        </div>
+        <div class="p-4 flex-1 flex flex-col gap-3">
+          <div class="flex items-start gap-2">
+            <h3 class="font-semibold leading-snug">${it.title}</h3>
+            <span class="ml-auto inline-flex items-center text-xs px-2 py-1 rounded-full whitespace-nowrap ${it.owner?'bg-emerald-100 text-emerald-700':'bg-neutral-100 text-neutral-700'}">
+              ${it.owner?'Без посредников':'Источник'}
+            </span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="text-2xl font-bold">${it.price.toLocaleString('ru-RU')} <span class="text-sm font-medium text-neutral-500">${priceUnit}</span></div>
+            <div class="ml-auto text-xs text-neutral-600">осталось <span class="countdown" data-ts="${it.expiresAt}"></span></div>
+          </div>
+          <div class="flex items-center gap-2 text-sm text-neutral-600">
+            <div>${it.district}</div><div>·</div><div>Комнат: ${it.rooms}</div>
+          </div>
+          <div class="mt-auto card-actions">
+            <input readonly class="flex-1 px-3 py-2 rounded-xl border border-neutral-200 bg-neutral-50 ${hasAccess()?'':'mask-blur'}" value="${it.phone}">
+            <button class="px-3 py-2 rounded-xl bg-blue-600 text-white text-sm reveal-btn" data-id="${it.id}">${hasAccess()?'Скопировать':'Показать номер'}</button>
+          </div>
+          <div class="flex items-center justify-between text-xs text-neutral-500 pt-1">
+            <span></span>
+            <button class="fav-btn hover:text-blue-600 inline-flex items-center gap-1" data-id="${it.id}" title="В избранное"><span class="heart">♡</span> В избранное</button>
+          </div>
+        </div>
+      </article>`;
+    }
+
+    function renderListings(data){
+      const grid=qs('#listGrid'); grid.innerHTML='';
+      if(!data.length){ qs('#emptyState').classList.remove('hidden'); return; }
+      qs('#emptyState').classList.add('hidden');
+      data.forEach(it=> grid.insertAdjacentHTML('beforeend', cardHTML(it)));
+      qsa('.countdown').forEach(el=>countdown(el, Number(el.dataset.ts)));
+      qsa('.reveal-btn').forEach(btn=>btn.addEventListener('click', onRevealClick));
+      qsa('.fav-btn').forEach(btn=>btn.addEventListener('click', onFavClick));
+    }
+
+    function onRevealClick(e){
+      const btn=e.currentTarget;
+      if(!localStorage.getItem('userLogged')){ openLogin(); return; }
+      if(!hasAccess()){ openPay(); return; }
+      const input=btn.closest('article').querySelector('input');
+      navigator.clipboard.writeText(input.value).then(()=>showToast('Номер скопирован'));
+    }
+
+    function onFavClick(e){
+      if(!localStorage.getItem('userLogged')){ openLogin(); return; }
+      const id=e.currentTarget.dataset.id;
+      const favs=new Set(JSON.parse(localStorage.getItem('favs')||'[]'));
+      const heart=e.currentTarget.querySelector('.heart');
+      if(favs.has(id)){ favs.delete(id); heart.textContent='♡'; showToast('Убрано из избранного'); }
+      else{ favs.add(id); heart.textContent='❤'; showToast('Добавлено в избранное'); }
+      localStorage.setItem('favs', JSON.stringify([...favs]));
+    }
+
+    // фильтры (простая имитация)
+    function applyFilters(){
+      const priceMin = Number(qs('#pMin').value || 0);
+      const priceMax = Number(qs('#pMax').value || Infinity);
+      const onlyOwn = qs('#own').checked;
+      const onlyDaily = qs('#daily').checked;
+      const onlyLong = qs('#long').checked; // демо
+
+      let out=listings.filter(it=>(
+        it.price>=priceMin &&
+        it.price<=priceMax &&
+        (!onlyOwn || it.owner) &&
+        (!onlyDaily || it.daily) &&
+        (!onlyLong || !it.daily)
+      ));
+      out.sort((a,b)=>b.expiresAt-a.expiresAt);
+      renderListings(out);
+    }
+
+    // модалки
+    const modalLogin=qs('#modalLogin'), modalPay=qs('#modalPay');
+    function openLogin(){ modalLogin.classList.remove('hidden'); modalLogin.classList.add('flex'); }
+    function closeLogin(){ modalLogin.classList.add('hidden'); modalLogin.classList.remove('flex'); }
+    function openPay(){ modalPay.classList.remove('hidden'); modalPay.classList.add('flex'); }
+    function closePay(){ modalPay.classList.add('hidden'); modalPay.classList.remove('flex'); }
+
+    // события
+    qs('#btnAuth').addEventListener('click', openLogin);
+    qs('#btnCloseLogin').addEventListener('click', closeLogin);
+    qs('#btnSendCode').addEventListener('click', ()=>{ qs('#loginStep2').classList.remove('hidden'); showToast('Код отправлен (демо)'); });
+    qs('#btnConfirmOtp').addEventListener('click', ()=>{ localStorage.setItem('userLogged', '1'); closeLogin(); showToast('Вход выполнен'); });
+
+    qs('#btnPayPrimary').addEventListener('click', openPay);
+    qsa('.pay').forEach(b=>b.addEventListener('click', openPay));
+    qsa('.pay-method').forEach(b=> b.addEventListener('click', ()=>{ qs('#paySelected').classList.remove('hidden'); qs('#payMethodName').textContent=b.textContent; }));
+    qs('#btnClosePay').addEventListener('click', closePay);
+    qs('#btnSimulatePaid').addEventListener('click', ()=>{ setAccess(24); closePay(); });
+
+    qs('#btnApplyFiltersTop').addEventListener('click', applyFilters);
+    qs('#btnResetTop').addEventListener('click', ()=>{['#pMin','#pMax','#own','#daily','#long'].forEach(id=>{const el=qs(id); if(el.type==='checkbox') el.checked=false; else el.value='';}); applyFilters();});
+    qs('#navFav').addEventListener('click', ()=>{ if(!localStorage.getItem('userLogged')) openLogin(); else showToast('Открыл «Избранное» (демо)'); });
+
+    function render(){ renderBest(); applyFilters(); }
+    render();
+  </script>
+</body>
+</html>
