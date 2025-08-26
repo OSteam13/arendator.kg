@@ -262,15 +262,16 @@
         <div class="h-px flex-1 bg-neutral-200"></div>
       </div>
 
-      <!-- Telegram Login Widget -->
-      <div class="flex justify-center" id="tgLoginContainer">
-        <script async src="https://telegram.org/js/telegram-widget.js?22"
-                data-telegram-login="ArendatorKGbot"
-                data-size="large"
-                data-userpic="false"
-                data-request-access="write"
-                data-auth-url="/api/tg-login"></script>
-      </div>
+     <!-- Кнопка Telegram (виджет) — JS callback -->
+<div class="mt-4 flex justify-center">
+  <script async src="https://telegram.org/js/telegram-widget.js?22"
+    data-telegram-login="ArendatorKGbot"
+    data-size="large"
+    data-userpic="false"
+    data-request-access="write"
+    data-onauth="onTelegramAuth">
+  </script>
+</div>
 
       <div class="mt-3 text-center text-xs text-neutral-500">
         Не пришло уведомление? <a class="text-blue-600 hover:underline" href="https://t.me/ArendatorKGbot" target="_blank">Откройте бота</a> и нажмите <b>Start</b>, затем повторите.
@@ -442,3 +443,4 @@
   </script>
 </body>
 </html>
+
