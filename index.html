@@ -302,6 +302,20 @@
     const hasAccess=()=>Date.now() < Number(localStorage.getItem('accessUntil')||0);
     const setAccess=(h=24)=>{ localStorage.setItem('accessUntil', String(Date.now()+h*3600e3)); showToast('Доступ открыт на 24 часа'); render(); };
 
+    function hasAuthCookie(){
+  return document.cookie.split("; ").some(c => c.trim().startsWith("auth="));
+}
+
+function syncAuthFromCookieAndQuery(){
+  const p = new URLSearchParams(location.search);
+  if (p.get("tg") === "ok" || hasAuthCookie()) {
+    try { localStorage.setItem("userLogged", "1"); } catch(e){}
+    // уберём tg=ok из адреса
+    if (p.get("tg") === "ok") {
+      history.replaceState(null, "", location.pathname);
+    }
+  }
+}
     function countdown(el, ts){
       function tick(){
         const d=ts-Date.now(); if(d<=0){ el.textContent='0ч 00м'; return; }
@@ -473,9 +487,51 @@
       renderListings(out);
     }
 
-    function render(){ renderBest(); applyFilters(); updateAuthUI(); }
-    render();
+    /* === вспомогательные функции авторизации === */
+      function hasAuthCookie(){
+        return document.cookie.split("; ").some(c => c.trim().startsWith("auth="));
+      }
+
+      function syncAuthFromCookieAndQuery(){
+        const p = new URLSearchParams(location.search);
+        if (p.get("tg") === "ok" || hasAuthCookie()) {
+          try { localStorage.setItem("userLogged", "1"); } catch(e){}
+          // убираем tg=ok из адреса (чтобы не мозолил глаза при обновлении)
+          if (p.get("tg") === "ok") {
+            history.replaceState(null, "", location.pathname);
+          }
+        }
+      }
+
+      /* === UI в зависимости от авторизации === */
+      function updateAuthUI(){
+        const logged = !!localStorage.getItem('userLogged');
+        const btn  = document.querySelector('#btnAuth');
+        const btnM = document.querySelector('#btnAuthMobile');
+        if (btn)  btn.textContent  = logged ? 'Мой аккаунт' : 'Вход / регистрация';
+        if (btnM) btnM.textContent = logged ? 'Аккаунт'      : 'Войти';
+      }
+
+      /* === основной рендер === */
+      function render(){
+        renderBest();
+        applyFilters();
+        updateAuthUI();
+      }
+
+      /* === делегирование кликов по кнопкам Войти (десктоп/мобилка) === */
+      document.addEventListener('click', (ev) => {
+        const btn = ev.target.closest('#btnAuth, #btnAuthMobile');
+        if (!btn) return;
+        ev.preventDefault();
+        try { openLogin(); } catch(_) {}
+      });
+
+      /* === запуск при загрузке === */
+      syncAuthFromCookieAndQuery();
+      render();
 
   </script>
 </body>
 </html>
+
