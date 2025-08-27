@@ -12,6 +12,10 @@
     .container{max-width:var(--container)}
     .shadow-soft{box-shadow:0 8px 30px rgba(0,0,0,.08)}
     html,body{overflow-x:hidden}
+    header .container > * { 
+  position: relative; 
+  z-index: 10; 
+}
     .side-ads{position:fixed;top:60px;bottom:0;width:var(--ads);display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:10}
     .side-ads>div{writing-mode:vertical-rl;transform:rotate(180deg);opacity:.75}
     @media (max-width:1400px){.side-ads{display:none}}
@@ -465,6 +469,17 @@
 
     function render(){ renderBest(); applyFilters(); updateAuthUI(); }
     render();
+
+    // Фолбэк: делегирование клика — сработает всегда
+document.addEventListener('click', (ev) => {
+  const btn = ev.target.closest('#btnAuth, #btnAuthMobile');
+  if (btn) {
+    ev.preventDefault();
+    try { openLogin(); } catch(_) {}
+  }
+});
+  
   </script>
 </body>
 </html>
+
