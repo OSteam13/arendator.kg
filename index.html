@@ -74,7 +74,7 @@
       s.setAttribute('data-size','large');
       s.setAttribute('data-userpic','false');
       s.setAttribute('data-request-access','write');
-      s.setAttribute('data-onauth','onTelegramAuth(user)');
+      s.setAttribute('data-auth-url','/api/tg-login');
       qs('#tgLoginContainer').appendChild(s);
     }
     mountTelegramWidget();
@@ -93,3 +93,4 @@
   </script>
 </body>
 </html>
+
