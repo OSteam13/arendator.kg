@@ -20,24 +20,19 @@
     }
     .hero-title{ font-weight: 800; }
 
-    /* кликабельность хедера */
     header .container > * { position: relative; z-index: 10; }
 
-    /* боковые баннеры */
     .side-ads{position:fixed;top:60px;bottom:0;width:var(--ads);display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:5}
     .side-ads>div{writing-mode:vertical-rl;transform:rotate(180deg);opacity:.75}
     @media (max-width:1400px){.side-ads{display:none}}
 
-    /* карточки */
     .card-actions{display:flex;gap:.5rem;align-items:center}
     .card-actions>input{min-width:0}
     .mask-blur{filter:blur(3px)}
 
-    /* Mobile bottom bar */
     @media (min-width: 768px){ .mobile-actions{display:none} }
     .mobile-actions{position:fixed;left:0;right:0;bottom:0;z-index:40;background:#fff;border-top:1px solid #e5e7eb;padding:.5rem}
 
-    /* Аватары */
     .user-avatar{
       width: 32px; height: 32px;
       border-radius: 9999px;
@@ -98,13 +93,12 @@
           <a class="hover:text-blue-600" href="#" aria-label="Кыр">Кыр</a>
         </div>
 
-        <!-- Бейдж пользователя с аватаркой -->
-        <div id="userBadge" class="hidden items-center gap-2">
-          <div id="userAvatar" class="user-avatar" title="Мой аккаунт"></div>
-        </div>
-
         <button id="btnAuth" class="text-blue-600 hover:underline">Вход / регистрация</button>
-        <button id="btnPayPrimary" class="px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700">Открыть номера владельцев</button>
+
+        <!-- Бейдж пользователя (аватар теперь справа от текста) -->
+        <div id="userBadge" class="hidden items-center">
+          <div id="userAvatar" class="user-avatar ml-2 cursor-pointer" title="Мой аккаунт"></div>
+        </div>
       </div>
     </div>
   </header>
@@ -160,10 +154,20 @@
         </h3>
 
         <div class="rounded-xl overflow-hidden border border-neutral-200">
-          <div class="aspect-[16/9] bg-neutral-100">
+          <!-- медиазона -->
+          <div class="aspect-[16/9] bg-neutral-100 grid place-items-center relative">
             <img id="bestImg" src="" alt="Лучшее объявление" class="w-full h-full object-cover">
+            <div id="bestNoPhoto" class="hidden absolute inset-0 bg-neutral-100 grid place-items-center text-neutral-500 text-sm select-none">Нет фото</div>
           </div>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 p-3">
+
+          <!-- быстрые действия под медиазоной -->
+          <div class="p-3 flex items-center justify-center">
+            <button id="bestCallBtn" class="px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 text-sm">
+              Позвонить · <span id="bestMasked">+996 ••• •• •••</span>
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 px-3 pb-3">
             <div class="p-3 rounded-xl bg-neutral-50 border border-neutral-200">
               <div class="font-semibold" id="bestTitle"></div>
               <div class="text-neutral-600" id="bestPrice"></div>
@@ -351,7 +355,7 @@
   <script>
     /* ======= Данные (демо) ======= */
     const listings = [
-      { id:'l1', title:'2к, Центр, свежий ремонт', price:35000, district:'Центр', rooms:'2', daily:false, owner:true, img:'https://images.unsplash.com/photo-1505691938895-1758d7feb511?q=80&w=1200&auto=format&fit=crop', phone:'+996555123456', expiresAt: Date.now()+23*3600e3+30*60e3 },
+      { id:'l1', title:'2к, Центр, свежий ремонт', price:35000, district:'Центр', rooms:'2', daily:false, owner:true, img:'', phone:'+996555123456', expiresAt: Date.now()+23*3600e3+30*60e3 }, /* специально без фото для проверки */
       { id:'l2', title:'1к, Майевка, уютная',      price:18000, district:'Майевка', rooms:'1', daily:false, owner:true, img:'https://images.unsplash.com/photo-1502005229762-cf1b2da7cda7?q=80&w=1200&auto=format&fit=crop', phone:'+996700222333', expiresAt: Date.now()+10*3600e3 },
       { id:'l3', title:'3к, Асанбай, вид на горы', price:55000, district:'Асанбай', rooms:'3+',daily:false, owner:false,img:'https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=1200&auto=format&fit=crop', phone:'+996777444555', expiresAt: Date.now()+6*3600e3 },
       { id:'l4', title:'Студия, Московский',       price:22000, district:'Московский',rooms:'1', daily:false, owner:true, img:'https://images.unsplash.com/photo-1493809842364-78817add7ffb?q=80&w=1200&auto=format&fit=crop', phone:'+996555987654', expiresAt: Date.now()+12*3600e3 },
@@ -365,6 +369,7 @@
     const showToast=(m)=>{const t=qs('#toast'); t.textContent=m; t.classList.remove('hidden'); clearTimeout(showToast.t); showToast.t=setTimeout(()=>t.classList.add('hidden'),2200);};
     const hasAccess=()=>Date.now() < Number(localStorage.getItem('accessUntil')||0);
     const setAccess=(h=24)=>{ localStorage.setItem('accessUntil', String(Date.now()+h*3600e3)); showToast('Доступ открыт на 24 часа'); render(); };
+    const maskPhone=(p)=> p ? p.replace(/(\+\d{3})\d+/, '$1 ••• •• •••') : '•••';
 
     function countdown(el, ts){
       function tick(){
@@ -376,18 +381,39 @@
     }
 
     /* ======= Лучший блок ======= */
+    let bestItem = null;
     function renderBest(){
-      const best = listings.find(it=>!it.daily && it.price<=25000) || listings[0];
+      bestItem = listings.find(it=>!it.daily && it.price<=25000) || listings[0];
+
       const imgEl = qs('#bestImg');
-      if (best && best.img) {
-        imgEl.src = best.img;
-        imgEl.alt = best.title || 'Лучшее объявление';
-        imgEl.onerror = ()=>{ imgEl.removeAttribute('src'); };
+      const noPhoto = qs('#bestNoPhoto');
+      const btn = qs('#bestCallBtn');
+      const masked = qs('#bestMasked');
+
+      // картинка / заглушка
+      if (bestItem.img) {
+        imgEl.src = bestItem.img;
+        imgEl.alt = bestItem.title || 'Лучшее объявление';
+        imgEl.classList.remove('hidden');
+        noPhoto.classList.add('hidden');
+      } else {
+        imgEl.removeAttribute('src');
+        imgEl.classList.add('hidden');
+        noPhoto.classList.remove('hidden');
       }
-      qs('#bestTitle').textContent = best.title || '';
-      qs('#bestPrice').textContent = (best.price || 0).toLocaleString('ru-RU') + ' сом';
-      qs('#bestDistrict').textContent = best.district || '';
-      qs('#bestRooms').textContent = 'Комнат: ' + (best.rooms || '');
+
+      masked.textContent = maskPhone(bestItem.phone || '');
+
+      qs('#bestTitle').textContent = bestItem.title || '';
+      qs('#bestPrice').textContent = (bestItem.price || 0).toLocaleString('ru-RU') + ' сом';
+      qs('#bestDistrict').textContent = bestItem.district || '';
+      qs('#bestRooms').textContent = 'Комнат: ' + (bestItem.rooms || '');
+
+      btn.onclick = () => {
+        if(!localStorage.getItem('userLogged')){ openLogin(); return; }
+        if(!hasAccess()){ openPay(); return; }
+        if(bestItem?.phone){ location.href = `tel:${bestItem.phone}`; }
+      };
     }
 
     /* ======= Карточки ======= */
@@ -395,8 +421,11 @@
       const priceUnit = it.daily ? 'сом/сут' : 'сом/мес';
       return `
       <article class="rounded-2xl border border-neutral-200 bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
-        <div class="aspect-[4/3] overflow-hidden">
-          <img src="${it.img}" alt="${it.title}" class="w-full h-full object-cover" onerror="this.removeAttribute('src'); this.parentElement.style.background='#f3f4f6'; this.parentElement.style.display='grid'; this.parentElement.style.placeItems='center'; this.parentElement.textContent='Нет фото'; this.remove();">
+        <div class="aspect-[4/3] overflow-hidden grid place-items-center bg-neutral-100">
+          ${it.img
+            ? `<img src="${it.img}" alt="${it.title}" class="w-full h-full object-cover" onerror="this.removeAttribute('src'); this.parentElement.textContent='Нет фото';">`
+            : `<div class="text-neutral-500 text-sm">Нет фото</div>`
+          }
         </div>
         <div class="p-4 flex-1 flex flex-col gap-3">
           <div class="flex items-start gap-2">
@@ -517,7 +546,6 @@
         if (btn)  btn.textContent  = 'Мой аккаунт';
         if (btnM) btnM.textContent = 'Аккаунт';
 
-        // данные телеграма + локальный аватар
         let u = {};
         try { u = JSON.parse(localStorage.getItem('tg_user')||'{}'); } catch(_){}
         const localAvatar = localStorage.getItem('avatar_url');
@@ -548,13 +576,12 @@
     qs('#btnSendCode').addEventListener('click', ()=>{ qs('#loginStep2').classList.remove('hidden'); showToast('Код отправлен (демо)'); });
     qs('#btnConfirmOtp').addEventListener('click', ()=>{ localStorage.setItem('userLogged', '1'); closeLogin(); updateAuthUI(); showToast('Вход выполнен'); });
 
-    qs('#btnPayPrimary').addEventListener('click', openPay);
     qsa('.pay').forEach(b=>b.addEventListener('click', openPay));
     qsa('.pay-method').forEach(b=> b.addEventListener('click', ()=>{ qs('#paySelected').classList.remove('hidden'); qs('#payMethodName').textContent=b.textContent; }));
     qs('#btnClosePay').addEventListener('click', closePay);
     qs('#btnSimulatePaid').addEventListener('click', ()=>{ setAccess(24); closePay(); });
 
-    // Клик по "Вход/регистрация" или "Аккаунт"
+    // клик по логину/аккаунту/аватару
     document.addEventListener('click', (ev) => {
       const trigger = ev.target.closest('#btnAuth, #btnAuthMobile, #userAvatar');
       if (!trigger) return;
@@ -568,19 +595,19 @@
       }
     });
 
-    // Профиль: кнопки
+    // Профиль
     qs('#btnCloseProfile').addEventListener('click', closeProfile);
     qs('#btnSaveProfile').addEventListener('click', ()=>{ closeProfile(); showToast('Профиль сохранён'); updateAuthUI(); });
 
-    // Профиль: загрузка/удаление аватара
+    // Аватар: загрузка/удаление
     qs('#avatarFile').addEventListener('change', async (e)=>{
       const file = e.target.files?.[0];
       if (!file) return;
       try{
-        const dataUrl = await fileToAvatarDataURL(file, 256); // 256x256
+        const dataUrl = await fileToAvatarDataURL(file, 256);
         localStorage.setItem('avatar_url', dataUrl);
-        syncProfileModal(); // обновим превью в модалке
-        updateAuthUI();     // и в хедере
+        syncProfileModal();
+        updateAuthUI();
         showToast('Аватар обновлён');
       }catch(err){
         showToast('Не удалось обработать изображение');
@@ -612,12 +639,10 @@
       }
     }
 
-    // Сжатие/обрезка аватара на клиенте
     function fileToAvatarDataURL(file, size=256){
       return new Promise((resolve, reject)=>{
         const img = new Image();
         img.onload = ()=>{
-          // квадратная обрезка по центру
           const s = Math.min(img.width, img.height);
           const sx = (img.width - s)/2;
           const sy = (img.height - s)/2;
@@ -627,7 +652,6 @@
           canvas.height = size;
           const ctx = canvas.getContext('2d');
           ctx.drawImage(img, sx, sy, s, s, 0, 0, size, size);
-          // JPEG сжатие
           const out = canvas.toDataURL('image/jpeg', 0.85);
           resolve(out);
         };
@@ -660,6 +684,9 @@
 
     /* ======= Запуск ======= */
     function render(){ renderBest(); applyFilters(); updateAuthUI(); }
+
+    // монтируем Избранное
+    qs('#navFav').addEventListener('click', ()=>{ if(!localStorage.getItem('userLogged')) openLogin(); else showToast('Открыл «Избранное» (демо)'); });
 
     syncAuthFromCookieAndQuery();
     render();
