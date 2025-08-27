@@ -12,19 +12,23 @@
     .container{max-width:var(--container)}
     .shadow-soft{box-shadow:0 8px 30px rgba(0,0,0,.08)}
     html,body{overflow-x:hidden}
-    header .container > * { 
-  position: relative; 
-  z-index: 10; 
-}
-    .side-ads{position:fixed;top:60px;bottom:0;width:var(--ads);display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:10}
+
+    /* Гарантируем, что элементы в хедере кликабельны поверх прочего */
+    header .container > * { position: relative; z-index: 10; }
+
+    /* боковые баннеры (только фоновые заглушки) */
+    .side-ads{position:fixed;top:60px;bottom:0;width:var(--ads);display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:5}
     .side-ads>div{writing-mode:vertical-rl;transform:rotate(180deg);opacity:.75}
     @media (max-width:1400px){.side-ads{display:none}}
+
+    /* чтобы кнопка телефона не пропадала и не ломалась строка */
     .card-actions{display:flex;gap:.5rem;align-items:center}
     .card-actions>input{min-width:0}
     .mask-blur{filter:blur(3px)}
-    /* Mobile actions bar */
+
+    /* Mobile bottom bar */
     @media (min-width: 768px){ .mobile-actions{display:none} }
-    .mobile-actions{position:fixed;left:0;right:0;bottom:0;z-index:50;background:#fff;border-top:1px solid #e5e7eb;padding:.5rem}
+    .mobile-actions{position:fixed;left:0;right:0;bottom:0;z-index:40;background:#fff;border-top:1px solid #e5e7eb;padding:.5rem}
   </style>
 </head>
 <body class="bg-neutral-50 text-neutral-900">
@@ -39,7 +43,7 @@
   <aside class="side-ads right-0"><div class="rounded-2xl bg-white border border-neutral-200 shadow-soft px-2 py-4 text-sm">Реклама</div></aside>
 
   <!-- Хедер -->
-  <header class="bg-white sticky top-0 z-40 border-b border-neutral-100/80">
+  <header class="bg-white sticky top-0 z-30 border-b border-neutral-100/80">
     <div class="container mx-auto px-4 py-3 flex items-center gap-3">
       <a href="/" class="flex items-center gap-2 shrink-0">
         <img src="./images/Arendatorkg.png" alt="Arendator.kg" class="w-8 h-8 rounded-full object-contain">
@@ -99,7 +103,7 @@
 
         <div class="mt-3 flex items-center gap-6 text-sm text-neutral-600">
           <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Анти-агент фильтр</div>
-          <div class="flex items-center gap-2"><span class="w-2 х-2 rounded-full bg-blue-600"></span> Пуш-уведомления</div>
+          <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-blue-600"></span> Пуш-уведомления</div>
         </div>
 
         <div class="mt-auto pt-4 flex gap-3">
@@ -201,7 +205,7 @@
     <div class="container mx-auto px-4 py-8 grid md:grid-cols-4 gap-6 text-sm">
       <div class="md:col-span-2">
         <div class="flex items-center gap-2">
-          <img src="./images/Arendatorkg.png" alt="Arendator.kg" class="w-7 х-7 rounded-full object-contain">
+          <img src="./images/Arendatorkg.png" alt="Arendator.kg" class="w-7 h-7 rounded-full object-contain">
           <span class="font-semibold">Arendator.kg</span>
         </div>
         <p class="text-neutral-600 mt-2 max-w-[60ch]">
@@ -227,7 +231,7 @@
     <div class="text-center text-xs text-neutral-500 pb-6">© 2025 — Arendator.kg</div>
   </footer>
 
-  <!-- Modals -->
+  <!-- Модалки -->
   <div id="modalLogin" class="fixed inset-0 hidden items-center justify-center bg-black/40 p-4">
     <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-soft">
       <div class="text-lg font-semibold">Вход без пароля</div>
@@ -281,30 +285,33 @@
   <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 hidden px-4 py-2 rounded-xl bg-neutral-900 text-white text-sm"></div>
 
   <script>
-    // demo-данные
+    /* ======= Данные (демо) ======= */
     const listings = [
       { id:'l1', title:'2к, Центр, свежий ремонт', price:35000, district:'Центр', rooms:'2', daily:false, owner:true, img:'https://images.unsplash.com/photo-1505691938895-1758d7feb511?q=80&w=1200&auto=format&fit=crop', phone:'+996555123456', expiresAt: Date.now()+23*3600e3+30*60e3 },
       { id:'l2', title:'1к, Майевка, уютная',      price:18000, district:'Майевка', rooms:'1', daily:false, owner:true, img:'https://images.unsplash.com/photo-1502005229762-cf1b2da7cda7?q=80&w=1200&auto=format&fit=crop', phone:'+996700222333', expiresAt: Date.now()+10*3600e3 },
       { id:'l3', title:'3к, Асанбай, вид на горы', price:55000, district:'Асанбай', rooms:'3+',daily:false, owner:false,img:'https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=1200&auto=format&fit=crop', phone:'+996777444555', expiresAt: Date.now()+6*3600e3 },
-      { id:'l4', title:'Студия, Московский',       price:22000, district:'Московский', rooms:'1', daily:false, owner:true, img:'https://images.unsplash.com/photo-1493809842364-78817add7ffb?q=80&w=1200&auto=format&fit=crop', phone:'+996555987654', expiresAt: Date.now()+12*3600e3 },
+      { id:'l4', title:'Студия, Московский',       price:22000, district:'Московский',rooms:'1', daily:false, owner:true, img:'https://images.unsplash.com/photo-1493809842364-78817add7ffb?q=80&w=1200&auto=format&fit=crop', phone:'+996555987654', expiresAt: Date.now()+12*3600e3 },
       { id:'l5', title:'Посуточно 2к, Центр',      price:3000,  district:'Центр', rooms:'2', daily:true,  owner:true, img:'https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?q=80&w=1200&auto=format&fit=crop', phone:'+996709111222', expiresAt: Date.now()+20*3600e3 },
       { id:'l6', title:'3к, Свердловский, новая мебель', price:45000, district:'Свердловский', rooms:'3+', daily:false, owner:true, img:'https://images.unsplash.com/photo-1494526585095-c41746248156?q=80&w=1200&auto=format&fit=crop', phone:'+996500321654', expiresAt: Date.now()+5*3600e3 },
     ];
 
-    // утилиты
-    const qs=(s,el=document)=>el.querySelector(s);
-    const qsa=(s,el=document)=>Array.from(el.querySelectorAll(s));
+    /* ======= Утилиты ======= */
+    const qs  = (s,el=document)=>el.querySelector(s);
+    const qsa = (s,el=document)=>Array.from(el.querySelectorAll(s));
     const showToast=(m)=>{const t=qs('#toast'); t.textContent=m; t.classList.remove('hidden'); clearTimeout(showToast.t); showToast.t=setTimeout(()=>t.classList.add('hidden'),2200);};
     const hasAccess=()=>Date.now() < Number(localStorage.getItem('accessUntil')||0);
     const setAccess=(h=24)=>{ localStorage.setItem('accessUntil', String(Date.now()+h*3600e3)); showToast('Доступ открыт на 24 часа'); render(); };
 
     function countdown(el, ts){
-      function tick(){ const d=ts-Date.now(); if(d<=0){ el.textContent='0ч 00м'; return; }
-        const h=Math.floor(d/3600000), m=Math.floor((d%3600000)/60000); el.textContent=\`\${h}ч \${String(m).padStart(2,'0')}м\`; }
+      function tick(){
+        const d=ts-Date.now(); if(d<=0){ el.textContent='0ч 00м'; return; }
+        const h=Math.floor(d/3600000), m=Math.floor((d%3600000)/60000);
+        el.textContent = `${h}ч ${String(m).padStart(2,'0')}м`;
+      }
       tick(); return setInterval(tick,60000);
     }
 
-    // Лучший (≤25к или первый)
+    /* ======= Лучший блок ======= */
     function renderBest(){
       const best = listings.find(it=>!it.daily && it.price<=25000) || listings[0];
       qs('#bestImg').src = best.img;
@@ -314,7 +321,7 @@
       qs('#bestRooms').textContent = 'Комнат: ' + best.rooms;
     }
 
-    // карточки
+    /* ======= Карточки ======= */
     function cardHTML(it){
       const priceUnit = it.daily ? 'сом/сут' : 'сом/мес';
       return `
@@ -376,13 +383,85 @@
       localStorage.setItem('favs', JSON.stringify([...favs]));
     }
 
-    // фильтры (простая имитация)
+    /* ======= Модалки ======= */
+    const modalLogin=qs('#modalLogin'), modalPay=qs('#modalPay');
+    function openLogin(){ modalLogin.classList.remove('hidden'); modalLogin.classList.add('flex'); }
+    function closeLogin(){ modalLogin.classList.add('hidden'); modalLogin.classList.remove('flex'); }
+    function openPay(){ modalPay.classList.remove('hidden'); modalPay.classList.add('flex'); }
+    function closePay(){ modalPay.classList.add('hidden'); modalPay.classList.remove('flex'); }
+
+    /* ======= Telegram Login — монтируем виджет лениво ======= */
+    function mountTelegramWidget(){
+      if (qs('#tgLoginContainer script')) return; // уже подключён
+      const s=document.createElement('script');
+      s.src='https://telegram.org/js/telegram-widget.js?22';
+      s.async=true;
+      s.setAttribute('data-telegram-login','ArendatorKGbot'); // <— имя твоего бота
+      s.setAttribute('data-size','large');
+      s.setAttribute('data-userpic','false');
+      s.setAttribute('data-request-access','write');
+      s.setAttribute('data-auth-url','/api/tg-login');       // <— наш серверный обработчик
+      qs('#tgLoginContainer').appendChild(s);
+    }
+
+    /* ======= Слушаем ответ из попапа /api/tg-login ======= */
+    window.addEventListener('message', (ev) => {
+      const msg = ev.data || {};
+      if (msg && msg.type === 'tg-auth') {
+        if (msg.ok) {
+          try{ localStorage.setItem('userLogged','1'); }catch(_){}
+          try{ localStorage.setItem('tg_user', JSON.stringify(msg.user||{})); }catch(_){}
+          try{ closeLogin(); }catch(_){}
+          try{ showToast('Вход через Telegram выполнен'); }catch(_){}
+          try{ updateAuthUI(); render(); }catch(_){}
+        } else {
+          try{ showToast('Не удалось войти через Telegram'); }catch(_){}
+        }
+      }
+    }, false);
+
+    /* ======= Обновляем вид кнопок входа ======= */
+    function updateAuthUI(){
+      const logged = !!localStorage.getItem('userLogged');
+      const btn = qs('#btnAuth');
+      const btnM= qs('#btnAuthMobile');
+      if (btn)  btn.textContent  = logged ? 'Мой аккаунт' : 'Вход / регистрация';
+      if (btnM) btnM.textContent = logged ? 'Аккаунт' : 'Войти';
+    }
+
+    /* ======= События ======= */
+    qs('#btnCloseLogin').addEventListener('click', closeLogin);
+    qs('#btnSendCode').addEventListener('click', ()=>{ qs('#loginStep2').classList.remove('hidden'); showToast('Код отправлен (демо)'); });
+    qs('#btnConfirmOtp').addEventListener('click', ()=>{ localStorage.setItem('userLogged', '1'); closeLogin(); updateAuthUI(); showToast('Вход выполнен'); });
+
+    qs('#btnPayPrimary').addEventListener('click', openPay);
+    qsa('.pay').forEach(b=>b.addEventListener('click', openPay));
+    qsa('.pay-method').forEach(b=> b.addEventListener('click', ()=>{ qs('#paySelected').classList.remove('hidden'); qs('#payMethodName').textContent=b.textContent; }));
+    qs('#btnClosePay').addEventListener('click', closePay);
+    qs('#btnSimulatePaid').addEventListener('click', ()=>{ setAccess(24); closePay(); });
+
+    qs('#btnApplyFiltersTop').addEventListener('click', applyFilters);
+    qs('#btnResetTop').addEventListener('click', ()=>{['#pMin','#pMax','#own','#daily','#long'].forEach(id=>{const el=qs(id); if(el.type==='checkbox') el.checked=false; else el.value='';}); applyFilters();});
+    qs('#navFav').addEventListener('click', ()=>{ if(!localStorage.getItem('userLogged')) openLogin(); else showToast('Открыл «Избранное» (демо)'); });
+
+    // Делегирование клика — надёжно сработает даже если слой перекроется
+    document.addEventListener('click', (ev) => {
+      const trigger = ev.target.closest('#btnAuth, #btnAuthMobile');
+      if (trigger) {
+        ev.preventDefault();
+        openLogin();
+        mountTelegramWidget();
+      }
+    });
+
+    /* ======= Фильтры / Рендер ======= */
     function applyFilters(){
       const priceMin = Number(qs('#pMin').value || 0);
       const priceMax = Number(qs('#pMax').value || Infinity);
       const onlyOwn = qs('#own').checked;
       const onlyDaily = qs('#daily').checked;
-      const onlyLong = qs('#long').checked; // демо
+      const onlyLong = qs('#long').checked;
+
       let out=listings.filter(it=>(
         it.price>=priceMin &&
         it.price<=priceMax &&
@@ -394,92 +473,9 @@
       renderListings(out);
     }
 
-    // модалки
-    const modalLogin=qs('#modalLogin'), modalPay=qs('#modalPay');
-    function openLogin(){ modalLogin.classList.remove('hidden'); modalLogin.classList.add('flex'); mountTelegramWidget(); }
-    function closeLogin(){ modalLogin.classList.add('hidden'); modalLogin.classList.remove('flex'); }
-    function openPay(){ modalPay.classList.remove('hidden'); modalPay.classList.add('flex'); }
-    function closePay(){ modalPay.classList.add('hidden'); modalPay.classList.remove('flex'); }
-
-    // события
-    qs('#btnAuth').addEventListener('click', openLogin);
-    qs('#btnAuthMobile').addEventListener('click', openLogin);
-    qs('#btnCloseLogin').addEventListener('click', closeLogin);
-    qs('#btnSendCode').addEventListener('click', ()=>{ qs('#loginStep2').classList.remove('hidden'); showToast('Код отправлен (демо)'); });
-    qs('#btnConfirmOtp').addEventListener('click', ()=>{ localStorage.setItem('userLogged', '1'); closeLogin(); showToast('Вход выполнен'); updateAuthUI(); });
-
-    qs('#btnPayPrimary').addEventListener('click', openPay);
-    qs('#btnPayMobile').addEventListener('click', openPay);
-    qsa('.pay').forEach(b=>b.addEventListener('click', openPay));
-    qsa('.pay-method').forEach(b=> b.addEventListener('click', ()=>{ qs('#paySelected').classList.remove('hidden'); qs('#payMethodName').textContent=b.textContent; }));
-    qs('#btnClosePay').addEventListener('click', closePay);
-    qs('#btnSimulatePaid').addEventListener('click', ()=>{ setAccess(24); closePay(); });
-
-    // ====== Telegram Login (виджет + колбэк + фолбэк) ======
-    let tgWidgetMounted = false;
-    function mountTelegramWidget(){
-      if (tgWidgetMounted) return;
-      const s = document.createElement('script');
-      s.src = 'https://telegram.org/js/telegram-widget.js?22';
-      s.async = true;
-      s.setAttribute('data-telegram-login','ArendatorKGbot'); // <- укажи точный username бота
-      s.setAttribute('data-size','large');
-      s.setAttribute('data-userpic','false');
-      s.setAttribute('data-request-access','write');
-      // popup-режим: сразу шлёт user в onTelegramAuth
-      s.setAttribute('data-onauth','onTelegramAuth(user)');
-      qs('#tgLoginContainer').appendChild(s);
-      tgWidgetMounted = true;
-    }
-
-    // основной колбэк (popup)
-    async function onTelegramAuth(user){
-      try{
-        localStorage.setItem('userLogged','1');
-        localStorage.setItem('tg_user', JSON.stringify(user||{}));
-        closeLogin();
-        showToast('Вход через Telegram выполнен');
-        updateAuthUI();
-      }catch(e){
-        alert('Ошибка авторизации: '+e.message);
-      }
-    }
-
-    // фолбэк: ловим postMessage из /api/tg-login (redirect-режим)
-    window.addEventListener('message', (ev) => {
-      const msg = ev && ev.data || {};
-      if (msg && msg.type === 'tg-auth' && msg.ok) {
-        localStorage.setItem('userLogged', '1');
-        localStorage.setItem('tg_user', JSON.stringify(msg.user || {}));
-        try { closeLogin(); } catch(e){}
-        try { showToast('Вход через Telegram выполнен'); } catch(e){}
-        updateAuthUI();
-      }
-    });
-
-    function updateAuthUI(){
-      const logged = !!localStorage.getItem('userLogged');
-      const btn = qs('#btnAuth');
-      const btnM = qs('#btnAuthMobile');
-      if (btn) btn.textContent = logged ? 'Мой аккаунт' : 'Вход / регистрация';
-      if (btnM) btnM.textContent = logged ? 'Аккаунт' : 'Войти';
-      // размаскируем телефоны если есть доступ
-      // (список ререндерится отдельно)
-    }
-
     function render(){ renderBest(); applyFilters(); updateAuthUI(); }
     render();
 
-    // Фолбэк: делегирование клика — сработает всегда
-document.addEventListener('click', (ev) => {
-  const btn = ev.target.closest('#btnAuth, #btnAuthMobile');
-  if (btn) {
-    ev.preventDefault();
-    try { openLogin(); } catch(_) {}
-  }
-});
-  
   </script>
 </body>
 </html>
-
