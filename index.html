@@ -13,22 +13,25 @@
     .shadow-soft{box-shadow:0 8px 30px rgba(0,0,0,.08)}
     html,body{overflow-x:hidden}
 
-    /* Гарантируем, что элементы в хедере кликабельны поверх прочего */
+    /* кликабельность хедера */
     header .container > * { position: relative; z-index: 10; }
 
-    /* боковые баннеры (только фоновые заглушки) */
+    /* боковые заглушки */
     .side-ads{position:fixed;top:60px;bottom:0;width:var(--ads);display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:5}
     .side-ads>div{writing-mode:vertical-rl;transform:rotate(180deg);opacity:.75}
     @media (max-width:1400px){.side-ads{display:none}}
 
-    /* чтобы кнопка телефона не пропадала и не ломалась строка */
+    /* карточки */
     .card-actions{display:flex;gap:.5rem;align-items:center}
     .card-actions>input{min-width:0}
     .mask-blur{filter:blur(3px)}
 
-    /* Mobile bottom bar */
+    /* mobile bottom bar */
     @media (min-width: 768px){ .mobile-actions{display:none} }
     .mobile-actions{position:fixed;left:0;right:0;bottom:0;z-index:40;background:#fff;border-top:1px solid #e5e7eb;padding:.5rem}
+
+    /* скрываем верхний "Открыть номера" в хедере (п.3) */
+    #btnPayPrimary{ display:none; }
   </style>
 </head>
 <body class="bg-neutral-50 text-neutral-900">
@@ -68,6 +71,31 @@
     </div>
   </header>
 
+  <!-- DROPDOWN: Мой аккаунт -->
+  <div id="accountMenu"
+       class="hidden absolute right-4 top-[76px] z-50 w-56 rounded-xl border border-neutral-200 bg-white shadow-soft">
+    <button id="accMyAds" class="w-full text-left px-4 py-2 hover:bg-neutral-50">Мои объявления</button>
+    <button id="accEditProfile" class="w-full text-left px-4 py-2 hover:bg-neutral-50">Редактировать профиль</button>
+    <button id="accChangeAvatar" class="w-full text-left px-4 py-2 hover:bg-neutral-50">Изменить аватарку</button>
+  </div>
+
+  <!-- MODAL: Редактировать профиль -->
+  <div id="modalProfile" class="fixed inset-0 hidden items-center justify-center bg-black/40 p-4">
+    <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-soft">
+      <div class="text-lg font-semibold">Редактировать профиль</div>
+      <div class="mt-4 space-y-3 text-sm">
+        <input id="profName" class="w-full px-3 py-2 rounded-xl border border-neutral-200" placeholder="Моё имя">
+        <input id="profEmail" type="email" class="w-full px-3 py-2 rounded-xl border border-neutral-200" placeholder="Электронная почта">
+        <input id="profPhone" class="w-full px-3 py-2 rounded-xl border border-neutral-200" placeholder="Телефон">
+        <textarea id="profAbout" rows="3" class="w-full px-3 py-2 rounded-xl border border-neutral-200" placeholder="Обо мне"></textarea>
+      </div>
+      <div class="mt-4 grid grid-cols-2 gap-2">
+        <button id="btnSaveProfile" class="px-4 py-2 rounded-xl bg-blue-600 text-white">Сохранить</button>
+        <button id="btnCloseProfile" class="px-4 py-2 rounded-xl border border-neutral-200">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Герой -->
   <section class="container mx-auto px-4 pt-8">
     <div class="grid md:grid-cols-2 gap-8 items-stretch">
@@ -79,8 +107,9 @@
         </p>
 
         <div class="mt-5 grid grid-cols-2 gap-3">
+          <!-- п.4: Снять / Купить -->
           <select id="s1" class="px-3 py-2 rounded-xl border border-neutral-200">
-            <option>Снять</option><option>Сдать</option>
+            <option>Снять</option><option>Купить</option>
           </select>
           <select id="s2" class="px-3 py-2 rounded-xl border border-neutral-200">
             <option>Квартира</option><option>Комната</option><option>Дом</option>
@@ -120,7 +149,10 @@
 
         <div class="rounded-xl overflow-hidden border border-neutral-200">
           <div class="aspect-[16/9] bg-neutral-100">
-            <img id="bestImg" src="" alt="Лучшее объявление" class="w-full h-full object-cover">
+            <!-- п.2: заглушка, если картинка не грузится -->
+            <img id="bestImg" src="" alt="Лучшее объявление"
+                 class="w-full h-full object-cover"
+                 onerror="this.onerror=null;this.classList.add('object-contain','bg-neutral-100');this.src='data:image/svg+xml;utf8,<?xml version=%221.0%22?><svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22800%22 height=%22450%22><rect width=%22100%25%22 height=%22100%25%22 fill=%22%23f3f4f6%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%239ca3af%22 font-size=%2224%22>Фото не добавлено</text></svg>';">
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 p-3">
             <div class="p-3 rounded-xl bg-neutral-50 border border-neutral-200">
@@ -273,7 +305,7 @@
     </div>
   </div>
 
-  <!-- Mobile actions (только телефоны) -->
+  <!-- Mobile actions -->
   <div class="mobile-actions">
     <div class="flex gap-2">
       <button id="btnAuthMobile" class="flex-1 px-4 py-2 rounded-xl border border-neutral-200">Войти</button>
@@ -284,11 +316,13 @@
   <!-- Toast -->
   <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 hidden px-4 py-2 rounded-xl bg-neutral-900 text-white text-sm"></div>
 
+  <input id="avatarFile" type="file" accept="image/*" class="hidden">
+
   <script>
     /* ======= Данные (демо) ======= */
     const listings = [
       { id:'l1', title:'2к, Центр, свежий ремонт', price:35000, district:'Центр', rooms:'2', daily:false, owner:true, img:'https://images.unsplash.com/photo-1505691938895-1758d7feb511?q=80&w=1200&auto=format&fit=crop', phone:'+996555123456', expiresAt: Date.now()+23*3600e3+30*60e3 },
-      { id:'l2', title:'1к, Майевка, уютная',      price:18000, district:'Майевка', rooms:'1', daily:false, owner:true, img:'https://images.unsplash.com/photo-1502005229762-cf1b2da7cda7?q=80&w=1200&auto=format&fit=crop', phone:'+996700222333', expiresAt: Date.now()+10*3600e3 },
+      { id:'l2', title:'1к, Майевка, уютная',      price:18000, district:'Майевка', rooms:'1', daily:false, owner:true, img:'', phone:'+996700222333', expiresAt: Date.now()+10*3600e3 },
       { id:'l3', title:'3к, Асанбай, вид на горы', price:55000, district:'Асанбай', rooms:'3+',daily:false, owner:false,img:'https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=1200&auto=format&fit=crop', phone:'+996777444555', expiresAt: Date.now()+6*3600e3 },
       { id:'l4', title:'Студия, Московский',       price:22000, district:'Московский',rooms:'1', daily:false, owner:true, img:'https://images.unsplash.com/photo-1493809842364-78817add7ffb?q=80&w=1200&auto=format&fit=crop', phone:'+996555987654', expiresAt: Date.now()+12*3600e3 },
       { id:'l5', title:'Посуточно 2к, Центр',      price:3000,  district:'Центр', rooms:'2', daily:true,  owner:true, img:'https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?q=80&w=1200&auto=format&fit=crop', phone:'+996709111222', expiresAt: Date.now()+20*3600e3 },
@@ -302,33 +336,23 @@
     const hasAccess=()=>Date.now() < Number(localStorage.getItem('accessUntil')||0);
     const setAccess=(h=24)=>{ localStorage.setItem('accessUntil', String(Date.now()+h*3600e3)); showToast('Доступ открыт на 24 часа'); render(); };
 
+    /* === вспомогательные функции авторизации === */
     function hasAuthCookie(){
-  return document.cookie.split("; ").some(c => c.trim().startsWith("auth="));
-}
-
-function syncAuthFromCookieAndQuery(){
-  const p = new URLSearchParams(location.search);
-  if (p.get("tg") === "ok" || hasAuthCookie()) {
-    try { localStorage.setItem("userLogged", "1"); } catch(e){}
-    // уберём tg=ok из адреса
-    if (p.get("tg") === "ok") {
-      history.replaceState(null, "", location.pathname);
+      return document.cookie.split("; ").some(c => c.trim().startsWith("auth="));
     }
-  }
-}
-    function countdown(el, ts){
-      function tick(){
-        const d=ts-Date.now(); if(d<=0){ el.textContent='0ч 00м'; return; }
-        const h=Math.floor(d/3600000), m=Math.floor((d%3600000)/60000);
-        el.textContent = `${h}ч ${String(m).padStart(2,'0')}м`;
+    function syncAuthFromCookieAndQuery(){
+      const p = new URLSearchParams(location.search);
+      if (p.get("tg") === "ok" || hasAuthCookie()) {
+        try { localStorage.setItem("userLogged", "1"); } catch(e){}
+        if (p.get("tg") === "ok") history.replaceState(null, "", location.pathname);
       }
-      tick(); return setInterval(tick,60000);
     }
 
     /* ======= Лучший блок ======= */
     function renderBest(){
       const best = listings.find(it=>!it.daily && it.price<=25000) || listings[0];
-      qs('#bestImg').src = best.img;
+      const img = qs('#bestImg');
+      img.src = best.img || 'about:blank';
       qs('#bestTitle').textContent = best.title;
       qs('#bestPrice').textContent = best.price.toLocaleString('ru-RU') + ' сом';
       qs('#bestDistrict').textContent = best.district;
@@ -341,7 +365,8 @@ function syncAuthFromCookieAndQuery(){
       return `
       <article class="rounded-2xl border border-neutral-200 bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
         <div class="aspect-[4/3] overflow-hidden">
-          <img src="${it.img}" alt="${it.title}" class="w-full h-full object-cover">
+          <img src="${it.img || ''}" alt="${it.title}" class="w-full h-full object-cover"
+               onerror="this.onerror=null;this.classList.add('object-contain','bg-neutral-100');this.src='data:image/svg+xml;utf8,<?xml version=%221.0%22?><svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22800%22 height=%22600%22><rect width=%22100%25%22 height=%22100%25%22 fill=%22%23f3f4f6%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%239ca3af%22 font-size=%2222%22>Фото не добавлено</text></svg>';">
         </div>
         <div class="p-4 flex-1 flex flex-col gap-3">
           <div class="flex items-start gap-2">
@@ -367,6 +392,15 @@ function syncAuthFromCookieAndQuery(){
           </div>
         </div>
       </article>`;
+    }
+
+    function countdown(el, ts){
+      function tick(){
+        const d=ts-Date.now(); if(d<=0){ el.textContent='0ч 00м'; return; }
+        const h=Math.floor(d/3600000), m=Math.floor((d%3600000)/60000);
+        el.textContent = `${h}ч ${String(m).padStart(2,'0')}м`;
+      }
+      tick(); return setInterval(tick,60000);
     }
 
     function renderListings(data){
@@ -404,21 +438,21 @@ function syncAuthFromCookieAndQuery(){
     function openPay(){ modalPay.classList.remove('hidden'); modalPay.classList.add('flex'); }
     function closePay(){ modalPay.classList.add('hidden'); modalPay.classList.remove('flex'); }
 
-    /* ======= Telegram Login — монтируем виджет лениво ======= */
+    /* ======= Telegram Login — ленивый виджет ======= */
     function mountTelegramWidget(){
-      if (qs('#tgLoginContainer script')) return; // уже подключён
+      if (qs('#tgLoginContainer script')) return;
       const s=document.createElement('script');
       s.src='https://telegram.org/js/telegram-widget.js?22';
       s.async=true;
-      s.setAttribute('data-telegram-login','ArendatorKGbot'); // <— имя твоего бота
+      s.setAttribute('data-telegram-login','ArendatorKGbot');
       s.setAttribute('data-size','large');
       s.setAttribute('data-userpic','false');
       s.setAttribute('data-request-access','write');
-      s.setAttribute('data-auth-url','/api/tg-login');       // <— наш серверный обработчик
+      s.setAttribute('data-auth-url','/api/tg-login');
       qs('#tgLoginContainer').appendChild(s);
     }
 
-    /* ======= Слушаем ответ из попапа /api/tg-login ======= */
+    /* ======= Сообщение из /api/tg-login ======= */
     window.addEventListener('message', (ev) => {
       const msg = ev.data || {};
       if (msg && msg.type === 'tg-auth') {
@@ -426,21 +460,85 @@ function syncAuthFromCookieAndQuery(){
           try{ localStorage.setItem('userLogged','1'); }catch(_){}
           try{ localStorage.setItem('tg_user', JSON.stringify(msg.user||{})); }catch(_){}
           try{ closeLogin(); }catch(_){}
-          try{ showToast('Вход через Telegram выполнен'); }catch(_){}
-          try{ updateAuthUI(); render(); }catch(_){}
+          showToast('Вход через Telegram выполнен');
+          render();
         } else {
-          try{ showToast('Не удалось войти через Telegram'); }catch(_){}
+          showToast('Не удалось войти через Telegram');
         }
       }
     }, false);
 
-    /* ======= Обновляем вид кнопок входа ======= */
+    /* ======= АККАУНТ: меню и профиль ======= */
+    function toggleAccountMenu(show){
+      const m = document.getElementById('accountMenu');
+      if (!m) return;
+      if (typeof show === 'boolean') m.classList.toggle('hidden', !show);
+      else m.classList.toggle('hidden');
+    }
+    function openProfile(){
+      const p = JSON.parse(localStorage.getItem('profile') || '{}');
+      (document.getElementById('profName') || {}).value  = p.name || '';
+      (document.getElementById('profEmail')|| {}).value  = p.email || '';
+      (document.getElementById('profPhone')|| {}).value  = p.phone || '';
+      (document.getElementById('profAbout')|| {}).value  = p.about || '';
+      const modal = document.getElementById('modalProfile');
+      modal.classList.remove('hidden'); modal.classList.add('flex');
+    }
+    function closeProfile(){
+      const modal = document.getElementById('modalProfile');
+      modal.classList.add('hidden'); modal.classList.remove('flex');
+    }
+    function saveProfile(){
+      const data = {
+        name:  (document.getElementById('profName')  || {}).value || '',
+        email: (document.getElementById('profEmail') || {}).value || '',
+        phone: (document.getElementById('profPhone') || {}).value || '',
+        about: (document.getElementById('profAbout') || {}).value || ''
+      };
+      localStorage.setItem('profile', JSON.stringify(data));
+      showToast('Профиль сохранён');
+      closeProfile();
+      updateAuthUI();
+    }
+    function pickAvatar(){
+      const f = document.getElementById('avatarFile');
+      if (!f) return;
+      f.value = '';
+      f.onchange = () => {
+        const file = f.files && f.files[0];
+        if (!file) return;
+        const fr = new FileReader();
+        fr.onload = () => {
+          localStorage.setItem('profile_avatar', fr.result);
+          showToast('Аватар обновлён');
+        };
+        fr.readAsDataURL(file);
+      };
+      f.click();
+    }
+
+    /* ======= Обновление подписей кнопок ======= */
     function updateAuthUI(){
       const logged = !!localStorage.getItem('userLogged');
-      const btn = qs('#btnAuth');
-      const btnM= qs('#btnAuthMobile');
-      if (btn)  btn.textContent  = logged ? 'Мой аккаунт' : 'Вход / регистрация';
-      if (btnM) btnM.textContent = logged ? 'Аккаунт' : 'Войти';
+      const btn  = qs('#btnAuth');
+      const btnM = qs('#btnAuthMobile');
+      if (!btn && !btnM) return;
+
+      if (logged){
+        let label = 'Мой аккаунт';
+        try{
+          const prof = JSON.parse(localStorage.getItem('profile') || '{}');
+          const tg   = JSON.parse(localStorage.getItem('tg_user') || '{}');
+          if (prof.name) label = prof.name;
+          else if (tg.first_name) label = tg.first_name;
+          else if (tg.username) label = '@' + tg.username;
+        }catch(e){}
+        if (btn)  btn.textContent  = label;
+        if (btnM) btnM.textContent = label;
+      } else {
+        if (btn)  btn.textContent  = 'Вход / регистрация';
+        if (btnM) btnM.textContent = 'Войти';
+      }
     }
 
     /* ======= События ======= */
@@ -448,7 +546,6 @@ function syncAuthFromCookieAndQuery(){
     qs('#btnSendCode').addEventListener('click', ()=>{ qs('#loginStep2').classList.remove('hidden'); showToast('Код отправлен (демо)'); });
     qs('#btnConfirmOtp').addEventListener('click', ()=>{ localStorage.setItem('userLogged', '1'); closeLogin(); updateAuthUI(); showToast('Вход выполнен'); });
 
-    qs('#btnPayPrimary').addEventListener('click', openPay);
     qsa('.pay').forEach(b=>b.addEventListener('click', openPay));
     qsa('.pay-method').forEach(b=> b.addEventListener('click', ()=>{ qs('#paySelected').classList.remove('hidden'); qs('#payMethodName').textContent=b.textContent; }));
     qs('#btnClosePay').addEventListener('click', closePay);
@@ -458,14 +555,33 @@ function syncAuthFromCookieAndQuery(){
     qs('#btnResetTop').addEventListener('click', ()=>{['#pMin','#pMax','#own','#daily','#long'].forEach(id=>{const el=qs(id); if(el.type==='checkbox') el.checked=false; else el.value='';}); applyFilters();});
     qs('#navFav').addEventListener('click', ()=>{ if(!localStorage.getItem('userLogged')) openLogin(); else showToast('Открыл «Избранное» (демо)'); });
 
-    // Делегирование клика — надёжно сработает даже если слой перекроется
+    // Делегирование кликов по "войти" (и открытие Telegram-виджета)
     document.addEventListener('click', (ev) => {
       const trigger = ev.target.closest('#btnAuth, #btnAuthMobile');
       if (trigger) {
+        const logged = !!localStorage.getItem('userLogged');
         ev.preventDefault();
-        openLogin();
-        mountTelegramWidget();
+        if (logged){
+          toggleAccountMenu(); // открыть/закрыть меню
+        } else {
+          openLogin();
+          mountTelegramWidget();
+        }
       }
+
+      // клики вне меню — закрыть
+      if (!ev.target.closest('#accountMenu') && !ev.target.closest('#btnAuth') && !ev.target.closest('#btnAuthMobile')) {
+        toggleAccountMenu(false);
+      }
+
+      // пункты меню
+      if (ev.target.id === 'accMyAds'){ showToast('Мои объявления (демо)'); toggleAccountMenu(false); }
+      if (ev.target.id === 'accEditProfile'){ toggleAccountMenu(false); openProfile(); }
+      if (ev.target.id === 'accChangeAvatar'){ toggleAccountMenu(false); pickAvatar(); }
+
+      // модалка профиля
+      if (ev.target.id === 'btnSaveProfile') saveProfile();
+      if (ev.target.id === 'btnCloseProfile') closeProfile();
     });
 
     /* ======= Фильтры / Рендер ======= */
@@ -487,51 +603,15 @@ function syncAuthFromCookieAndQuery(){
       renderListings(out);
     }
 
-    /* === вспомогательные функции авторизации === */
-      function hasAuthCookie(){
-        return document.cookie.split("; ").some(c => c.trim().startsWith("auth="));
-      }
+    function render(){
+      renderBest();
+      applyFilters();
+      updateAuthUI();
+    }
 
-      function syncAuthFromCookieAndQuery(){
-        const p = new URLSearchParams(location.search);
-        if (p.get("tg") === "ok" || hasAuthCookie()) {
-          try { localStorage.setItem("userLogged", "1"); } catch(e){}
-          // убираем tg=ok из адреса (чтобы не мозолил глаза при обновлении)
-          if (p.get("tg") === "ok") {
-            history.replaceState(null, "", location.pathname);
-          }
-        }
-      }
-
-      /* === UI в зависимости от авторизации === */
-      function updateAuthUI(){
-        const logged = !!localStorage.getItem('userLogged');
-        const btn  = document.querySelector('#btnAuth');
-        const btnM = document.querySelector('#btnAuthMobile');
-        if (btn)  btn.textContent  = logged ? 'Мой аккаунт' : 'Вход / регистрация';
-        if (btnM) btnM.textContent = logged ? 'Аккаунт'      : 'Войти';
-      }
-
-      /* === основной рендер === */
-      function render(){
-        renderBest();
-        applyFilters();
-        updateAuthUI();
-      }
-
-      /* === делегирование кликов по кнопкам Войти (десктоп/мобилка) === */
-      document.addEventListener('click', (ev) => {
-        const btn = ev.target.closest('#btnAuth, #btnAuthMobile');
-        if (!btn) return;
-        ev.preventDefault();
-        try { openLogin(); } catch(_) {}
-      });
-
-      /* === запуск при загрузке === */
-      syncAuthFromCookieAndQuery();
-      render();
-
+    /* === запуск при загрузке === */
+    syncAuthFromCookieAndQuery();
+    render();
   </script>
 </body>
 </html>
-
