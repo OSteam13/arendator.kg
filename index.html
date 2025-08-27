@@ -12,6 +12,7 @@
     .container{max-width:var(--container)}
     .shadow-soft{box-shadow:0 8px 30px rgba(0,0,0,.08)}
     html,body{overflow-x:hidden}
+    /* боковые баннеры (только фоновые заглушки, не мешают кликам) */
     .side-ads{position:fixed;top:60px;bottom:0;width:var(--ads);display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:10}
     .side-ads>div{writing-mode:vertical-rl;transform:rotate(180deg);opacity:.75}
     @media (max-width:1400px){.side-ads{display:none}}
@@ -22,32 +23,150 @@
 </head>
 <body class="bg-neutral-50 text-neutral-900">
 
-  <!-- Хедер -->
+  <!-- Верхняя зелёная плашка -->
+  <div class="bg-emerald-600 text-white text-center text-xs sm:text-sm py-2">
+    Объявления живут 24 часа · Анти-агент фильтр включён
+  </div>
+
+  <!-- Боковые «Реклама» -->
+  <aside class="side-ads left-0"><div class="rounded-2xl bg-white border border-neutral-200 shadow-soft px-2 py-4 text-sm">Реклама</div></aside>
+  <aside class="side-ads right-0"><div class="rounded-2xl bg-white border border-neutral-200 shadow-soft px-2 py-4 text-sm">Реклама</div></aside>
+
+  <!-- Хедер (логотип НЕ трогаю) -->
   <header class="bg-white sticky top-0 z-40 border-b border-neutral-100/80">
     <div class="container mx-auto px-4 py-3 flex items-center gap-3">
       <a href="/" class="flex items-center gap-2 shrink-0">
         <img src="./images/Arendatorkg.png" alt="Arendator.kg" class="w-8 h-8 rounded-full object-contain">
       </a>
-      <nav class="ml-2 flex items-center gap-5 text-sm">
+
+      <nav class="ml-2 hidden md:flex items-center gap-5 text-sm">
         <a href="post.html" class="px-3 py-1.5 rounded-xl bg-neutral-900 text-white hover:bg-neutral-800">Добавить объявление</a>
         <a href="#sell" class="hover:text-blue-600">Продажа</a>
         <a href="blog.html" class="hover:text-blue-600">Блог</a>
         <button id="navFav" class="hover:text-blue-600">Избранное</button>
       </nav>
-      <div class="ml-auto flex items-center gap-4 text-sm">
-        <button id="btnAuth" class="text-blue-600 hover:underline">Вход / регистрация</button>
+
+      <div class="ml-auto flex items-center gap-3 text-sm">
+        <button id="btnAuth" class="px-3 py-2 rounded-xl border border-neutral-200 hover:bg-neutral-50">
+          Вход / регистрация
+        </button>
+        <button id="btnPayPrimary" class="px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700">
+          Открыть номера владельцев
+        </button>
       </div>
     </div>
   </header>
 
-  <!-- Модалка логина -->
+  <!-- Герой: поиск + «Лучший вариант» (сократил контент чтобы не грузить ответ) -->
+  <section class="container mx-auto px-4 pt-8">
+    <div class="grid md:grid-cols-2 gap-8 items-stretch">
+      <!-- Левая панель: Поиск -->
+      <div class="bg-white border border-neutral-200 rounded-2xl shadow-soft p-4 sm:p-5 h-full flex flex-col">
+        <h1 class="text-3xl md:text-5xl font-extrabold leading-tight text-blue-600">Ищете квартиру в аренду?</h1>
+        <p class="mt-3 text-base md:text-lg text-neutral-600">
+          Объявления обновляются каждую секунду из 30 источников. Только свежие — жильё за день!
+        </p>
+        <div class="mt-5 grid grid-cols-2 gap-3">
+          <input id="pMin" type="number" placeholder="Цена от" class="px-3 py-2 rounded-xl border border-neutral-200">
+          <input id="pMax" type="number" placeholder="Цена до" class="px-3 py-2 rounded-xl border border-neutral-200">
+        </div>
+        <div class="mt-auto pt-4 flex gap-3">
+          <button id="btnApplyFiltersTop" class="px-4 py-2 rounded-xl bg-neutral-900 text-white hover:bg-neutral-800">Показать объявления</button>
+          <button id="btnResetTop" class="px-4 py-2 rounded-xl border border-neutral-200 hover:bg-neutral-50">Сбросить</button>
+        </div>
+      </div>
+
+      <!-- Правая панель: Лучший вариант -->
+      <div class="bg-white border border-neutral-200 rounded-2xl shadow-soft p-4 sm:p-5 h-full flex flex-col">
+        <h3 class="text-xl md:text-2xl font-semibold text-blue-600 text-center mb-3">
+          Лучший вариант на данную минуту — успей купить!!!
+        </h3>
+        <div class="rounded-xl overflow-hidden border border-neutral-200 aspect-[16/9] bg-neutral-100 grid place-items-center">
+          <span class="text-neutral-500 text-sm">демо-картинка</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Межстраничный рекламный блок -->
+  <div class="container mx-auto px-4">
+    <div id="ad-mid" class="my-6 rounded-2xl border border-neutral-200 bg-white shadow-soft grid place-items-center min-h-[100px]">
+      <span class="text-sm text-neutral-500">Место для рекламы (банк · мебель · интернет)</span>
+    </div>
+  </div>
+
+  <!-- Список объявлений (демо) -->
+  <main id="listings" class="container mx-auto px-4 py-1">
+    <div id="listGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"></div>
+    <div id="emptyState" class="hidden text-center py-16 text-neutral-600">По этим фильтрам нет свежих объявлений.</div>
+  </main>
+
+  <!-- Футер (логотип НЕ трогаю) -->
+  <footer class="border-t border-neutral-100 bg-white">
+    <div class="container mx-auto px-4 py-8 grid md:grid-cols-4 gap-6 text-sm">
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-2">
+          <img src="./images/Arendatorkg.png" alt="Arendator.kg" class="w-7 h-7 rounded-full object-contain">
+          <span class="font-semibold">Arendator.kg</span>
+        </div>
+        <p class="text-neutral-600 mt-2 max-w-[60ch]">
+          Автоматически мониторим только свежие объявления от владельцев и проверенных источников.
+        </p>
+      </div>
+      <div>
+        <div class="font-semibold">Навигация</div>
+        <ul class="mt-2 space-y-1 text-neutral-600">
+          <li><a href="post.html" class="hover:text-blue-600">Добавить объявление</a></li>
+          <li><a href="#sell" class="hover:text-blue-600">Продажа</a></li>
+          <li><a href="blog.html" class="hover:text-blue-600">Блог</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="font-semibold">Правовое</div>
+        <ul class="mt-2 space-y-1 text-neutral-600">
+          <li><a class="hover:text-blue-600" href="#">Пользовательское соглашение</a></li>
+          <li><a class="hover:text-blue-600" href="#">Политика конфиденциальности</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="text-center text-xs text-neutral-500 pb-6">© 2025 — Arendator.kg</div>
+  </footer>
+
+  <!-- ==== МОДАЛКИ ==== -->
+
+  <!-- Login: Telegram Login + запасной SMS -->
   <div id="modalLogin" class="fixed inset-0 hidden items-center justify-center bg-black/40 p-4">
     <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-soft">
       <div class="text-lg font-semibold">Вход</div>
       <p class="text-sm text-neutral-600 mt-1">Быстрее и надёжнее всего — через Telegram.</p>
 
-      <!-- Кнопка Telegram -->
-      <div id="tgLoginContainer" class="mt-4 flex justify-center"></div>
+      <!-- Разделитель -->
+      <div class="my-4 flex items-center gap-3">
+        <div class="h-px flex-1 bg-neutral-200"></div>
+        <div class="text-xs text-neutral-500">через Telegram</div>
+        <div class="h-px flex-1 bg-neutral-200"></div>
+      </div>
+
+      <!-- Контейнер, куда динамически вставим виджет -->
+      <div id="tgLoginContainer" class="flex justify-center"></div>
+
+      <!-- Кнопки -->
+      <div class="mt-5 grid grid-cols-2 gap-2">
+        <button id="btnCloseLogin" class="px-4 py-2 rounded-xl border border-neutral-200">Закрыть</button>
+        <button id="btnSimulateLogin" class="px-4 py-2 rounded-xl bg-neutral-900 text-white">Демо-вход</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Оплата (заглушка) -->
+  <div id="modalPay" class="fixed inset-0 hidden items-center justify-center bg-black/40 p-4">
+    <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-soft">
+      <div class="text-lg font-semibold">Открой номера владельцев</div>
+      <p class="text-sm text-neutral-600 mt-1">После оплаты доступ активируется автоматически. Никаких автопродлений.</p>
+      <div class="mt-4 grid grid-cols-2 gap-2">
+        <button id="btnSimulatePaid" class="px-4 py-2 rounded-xl bg-blue-600 text-white">Оплата прошла (демо)</button>
+        <button id="btnClosePay" class="px-4 py-2 rounded-xl border border-neutral-200">Отмена</button>
+      </div>
     </div>
   </div>
 
@@ -55,42 +174,109 @@
   <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 hidden px-4 py-2 rounded-xl bg-neutral-900 text-white text-sm"></div>
 
   <script>
+    // ======== УТИЛИТЫ ========
     const qs=(s,el=document)=>el.querySelector(s);
     const qsa=(s,el=document)=>Array.from(el.querySelectorAll(s));
     const showToast=(m)=>{const t=qs('#toast'); t.textContent=m; t.classList.remove('hidden'); clearTimeout(showToast.t); showToast.t=setTimeout(()=>t.classList.add('hidden'),2200);};
 
-    const modalLogin=qs('#modalLogin');
-    function openLogin(){ modalLogin.classList.remove('hidden'); modalLogin.classList.add('flex'); }
-    function closeLogin(){ modalLogin.classList.add('hidden'); modalLogin.classList.remove('flex'); }
+    function openLogin(){ const m=qs('#modalLogin'); m.classList.remove('hidden'); m.classList.add('flex'); mountTelegramWidget(); }
+    function closeLogin(){ const m=qs('#modalLogin'); m.classList.add('hidden'); m.classList.remove('flex'); }
+    function openPay(){ const m=qs('#modalPay'); m.classList.remove('hidden'); m.classList.add('flex'); }
+    function closePay(){ const m=qs('#modalPay'); m.classList.add('hidden'); m.classList.remove('flex'); }
+
+    // ======== ДАННЫЕ (демо) ========
+    const listings = [
+      { id:'l1', title:'2к, Центр, свежий ремонт', price:35000, district:'Центр', rooms:'2', daily:false, owner:true, phone:'+996555123456' },
+      { id:'l2', title:'1к, Майевка, уютная',      price:18000, district:'Майевка', rooms:'1', daily:false, owner:true, phone:'+996700222333' },
+    ];
+    const hasAccess=()=>Date.now() < Number(localStorage.getItem('accessUntil')||0);
+    const setAccess=(h=24)=>{ localStorage.setItem('accessUntil', String(Date.now()+h*3600e3)); showToast('Доступ открыт на 24 часа'); render(); };
+
+    // ======== РЕНДЕР ========
+    function cardHTML(it){
+      return `
+      <article class="rounded-2xl border border-neutral-200 bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
+        <div class="p-4 flex-1 flex flex-col gap-3">
+          <div class="flex items-start gap-2">
+            <h3 class="font-semibold leading-snug">${it.title}</h3>
+            <span class="ml-auto inline-flex items-center text-xs px-2 py-1 rounded-full ${it.owner?'bg-emerald-100 text-emerald-700':'bg-neutral-100 text-neutral-700'}">
+              ${it.owner?'Без посредников':'Источник'}
+            </span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="text-2xl font-bold">${it.price.toLocaleString('ru-RU')} <span class="text-sm font-medium text-neutral-500">сом/мес</span></div>
+          </div>
+          <div class="mt-auto card-actions">
+            <input readonly class="flex-1 px-3 py-2 rounded-xl border border-neutral-200 bg-neutral-50 ${hasAccess()?'':'mask-blur'}" value="${it.phone}">
+            <button class="px-3 py-2 rounded-xl bg-blue-600 text-white text-sm reveal-btn" data-id="${it.id}">${hasAccess()?'Скопировать':'Показать номер'}</button>
+          </div>
+        </div>
+      </article>`;
+    }
+
+    function renderListings(data){
+      const grid=qs('#listGrid'); grid.innerHTML='';
+      if(!data.length){ qs('#emptyState').classList.remove('hidden'); return; }
+      qs('#emptyState').classList.add('hidden');
+      data.forEach(it=> grid.insertAdjacentHTML('beforeend', cardHTML(it)));
+      qsa('.reveal-btn').forEach(btn=>btn.addEventListener('click', onRevealClick));
+    }
+
+    function render(){ renderListings(listings); }
+    render();
+
+    // ======== КЛИКИ ========
+    function onRevealClick(e){
+      const btn=e.currentTarget;
+      if(!localStorage.getItem('userLogged')){ openLogin(); return; }
+      if(!hasAccess()){ openPay(); return; }
+      const input=btn.closest('article').querySelector('input');
+      navigator.clipboard.writeText(input.value).then(()=>showToast('Номер скопирован'));
+    }
 
     qs('#btnAuth').addEventListener('click', openLogin);
+    qs('#btnCloseLogin').addEventListener('click', closeLogin);
+    qs('#btnSimulateLogin').addEventListener('click', ()=>{ localStorage.setItem('userLogged','1'); closeLogin(); showToast('Демо-вход выполнен'); });
 
-    // Динамически вставляем Telegram Widget
+    qs('#btnPayPrimary').addEventListener('click', openPay);
+    qs('#btnClosePay').addEventListener('click', closePay);
+    qs('#btnSimulatePaid').addEventListener('click', ()=>{ setAccess(24); closePay(); });
+
+    qs('#btnApplyFiltersTop').addEventListener('click', ()=>render());
+    qs('#btnResetTop').addEventListener('click', ()=>{['#pMin','#pMax'].forEach(id=>qs(id).value=''); render();});
+    qs('#navFav').addEventListener('click', ()=>{ if(!localStorage.getItem('userLogged')) openLogin(); else showToast('Открыл «Избранное» (демо)'); });
+
+    // ======== TELEGRAM LOGIN (redirect/pop-up → /api/tg-login) ========
+    let tgWidgetMounted = false;
     function mountTelegramWidget(){
-      if (qs('#tgLoginContainer script')) return;
-      const s=document.createElement('script');
-      s.src="https://telegram.org/js/telegram-widget.js?22";
-      s.setAttribute('data-telegram-login','ArendatorKGbot'); // имя твоего бота
+      if (tgWidgetMounted) return;
+      const s = document.createElement('script');
+      s.src = "https://telegram.org/js/telegram-widget.js?22";
+      s.async = true;
+      // ИМЯ БОТА — ТОЧНО как в @BotFather (у тебя: @ArendatorKGbot)
+      s.setAttribute('data-telegram-login','ArendatorKGbot');
       s.setAttribute('data-size','large');
       s.setAttribute('data-userpic','false');
       s.setAttribute('data-request-access','write');
+      // ВАЖНО: пусть Telegram редиректит к нашему бэкенду
       s.setAttribute('data-auth-url','/api/tg-login');
       qs('#tgLoginContainer').appendChild(s);
+      tgWidgetMounted = true;
     }
-    mountTelegramWidget();
 
-    // Обработчик авторизации
-    window.onTelegramAuth = async function(user){
-      try {
-        localStorage.setItem('userLogged','1');
-        localStorage.setItem('tg_user',JSON.stringify(user));
+    // Принимаем ответ из /api/tg-login (поп-ап шлёт postMessage)
+    window.addEventListener('message', function(e){
+      const d = e.data || {};
+      if (d.type === 'tg-auth' && d.ok) {
+        try {
+          localStorage.setItem('userLogged', '1');
+          localStorage.setItem('tg_user', JSON.stringify(d.user || {}));
+        } catch(_) {}
         closeLogin();
         showToast('Вход через Telegram выполнен');
-      } catch(e){
-        alert('Ошибка авторизации: '+e.message);
+        render();
       }
-    };
+    });
   </script>
 </body>
 </html>
-
