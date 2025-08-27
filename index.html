@@ -95,7 +95,7 @@
 
         <div class="mt-3 flex items-center gap-6 text-sm text-neutral-600">
           <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Анти-агент фильтр</div>
-          <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-blue-600"></span> Пуш-уведомления</div>
+          <div class="flex items-center gap-2"><span class="w-2 х-2 rounded-full bg-blue-600"></span> Пуш-уведомления</div>
         </div>
 
         <div class="mt-auto pt-4 flex gap-3">
@@ -193,4 +193,278 @@
   </section>
 
   <!-- Футер -->
-  <footer class="border-t border-neutral-
+  <footer class="border-t border-neutral-100 bg-white">
+    <div class="container mx-auto px-4 py-8 grid md:grid-cols-4 gap-6 text-sm">
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-2">
+          <img src="./images/Arendatorkg.png" alt="Arendator.kg" class="w-7 х-7 rounded-full object-contain">
+          <span class="font-semibold">Arendator.kg</span>
+        </div>
+        <p class="text-neutral-600 mt-2 max-w-[60ch]">
+          Автоматически мониторим только свежие объявления от владельцев и проверенных источников, чтобы вы нашли жильё быстрее и без посредников.
+        </p>
+      </div>
+      <div>
+        <div class="font-semibold">Навигация</div>
+        <ul class="mt-2 space-y-1 text-neutral-600">
+          <li><a href="post.html" class="hover:text-blue-600">Добавить объявление</a></li>
+          <li><a href="#sell" class="hover:text-blue-600">Продажа</a></li>
+          <li><a href="blog.html" class="hover:text-blue-600">Блог</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="font-semibold">Правовое</div>
+        <ul class="mt-2 space-y-1 text-neutral-600">
+          <li><a class="hover:text-blue-600" href="#">Пользовательское соглашение</a></li>
+          <li><a class="hover:text-blue-600" href="#">Политика конфиденциальности</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="text-center text-xs text-neutral-500 pb-6">© 2025 — Arendator.kg</div>
+  </footer>
+
+  <!-- Modals -->
+  <div id="modalLogin" class="fixed inset-0 hidden items-center justify-center bg-black/40 p-4">
+    <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-soft">
+      <div class="text-lg font-semibold">Вход без пароля</div>
+      <p class="text-sm text-neutral-600 mt-1">Войдите по номеру — отправим код в SMS.<br>Или через Telegram одним нажатием.</p>
+      <input id="loginPhone" placeholder="0(555) 123-456" class="mt-4 w-full px-3 py-2 rounded-xl border border-neutral-200" />
+      <div class="mt-3 grid grid-cols-2 gap-2">
+        <button id="btnSendCode" class="px-4 py-2 rounded-xl bg-neutral-900 text-white">Отправить код</button>
+        <button id="btnCloseLogin" class="px-4 py-2 rounded-xl border border-neutral-200">Закрыть</button>
+      </div>
+      <div id="loginStep2" class="hidden mt-4">
+        <input id="loginOtp" placeholder="Код из SMS" class="w-full px-3 py-2 rounded-xl border border-neutral-200" />
+        <button id="btnConfirmOtp" class="mt-3 w-full px-4 py-2 rounded-xl bg-blue-600 text-white">Войти</button>
+      </div>
+
+      <!-- Разделитель и контейнер виджета Telegram -->
+      <div class="my-4 flex items-center gap-3">
+        <div class="h-px flex-1 bg-neutral-200"></div>
+        <div class="text-xs text-neutral-500">или Telegram</div>
+        <div class="h-px flex-1 bg-neutral-200"></div>
+      </div>
+      <div id="tgLoginContainer" class="flex justify-center"></div>
+    </div>
+  </div>
+
+  <div id="modalPay" class="fixed inset-0 hidden items-center justify-center bg-black/40 p-4">
+    <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-soft">
+      <div class="text-lg font-semibold">Открой номера владельцев</div>
+      <p class="text-sm text-neutral-600 mt-1">После оплаты доступ активируется автоматически. Никаких автопродлений.</p>
+      <div class="mt-4 grid grid-cols-3 gap-2 text-sm">
+        <button class="pay-method px-3 py-2 rounded-xl border border-neutral-200 hover:bg-neutral-50" data-method="mbank">MBank QR</button>
+        <button class="pay-method px-3 py-2 rounded-xl border border-neutral-200 hover:bg-neutral-50" data-method="elqr">ELQR</button>
+        <button class="pay-method px-3 py-2 rounded-xl border border-neutral-200 hover:bg-neutral-50" data-method="card">Карта</button>
+      </div>
+      <div id="paySelected" class="mt-4 text-sm text-neutral-700 hidden">Вы выбрали: <span class="font-medium" id="payMethodName"></span></div>
+      <div class="mt-4 grid grid-cols-2 gap-2">
+        <button id="btnSimulatePaid" class="px-4 py-2 rounded-xl bg-blue-600 text-white">Оплата прошла (демо)</button>
+        <button id="btnClosePay" class="px-4 py-2 rounded-xl border border-neutral-200">Отмена</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile actions (только телефоны) -->
+  <div class="mobile-actions">
+    <div class="flex gap-2">
+      <button id="btnAuthMobile" class="flex-1 px-4 py-2 rounded-xl border border-neutral-200">Войти</button>
+      <button id="btnPayMobile" class="flex-1 px-4 py-2 rounded-xl bg-blue-600 text-white">Открыть номера</button>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 hidden px-4 py-2 rounded-xl bg-neutral-900 text-white text-sm"></div>
+
+  <script>
+    // demo-данные
+    const listings = [
+      { id:'l1', title:'2к, Центр, свежий ремонт', price:35000, district:'Центр', rooms:'2', daily:false, owner:true, img:'https://images.unsplash.com/photo-1505691938895-1758d7feb511?q=80&w=1200&auto=format&fit=crop', phone:'+996555123456', expiresAt: Date.now()+23*3600e3+30*60e3 },
+      { id:'l2', title:'1к, Майевка, уютная',      price:18000, district:'Майевка', rooms:'1', daily:false, owner:true, img:'https://images.unsplash.com/photo-1502005229762-cf1b2da7cda7?q=80&w=1200&auto=format&fit=crop', phone:'+996700222333', expiresAt: Date.now()+10*3600e3 },
+      { id:'l3', title:'3к, Асанбай, вид на горы', price:55000, district:'Асанбай', rooms:'3+',daily:false, owner:false,img:'https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=1200&auto=format&fit=crop', phone:'+996777444555', expiresAt: Date.now()+6*3600e3 },
+      { id:'l4', title:'Студия, Московский',       price:22000, district:'Московский', rooms:'1', daily:false, owner:true, img:'https://images.unsplash.com/photo-1493809842364-78817add7ffb?q=80&w=1200&auto=format&fit=crop', phone:'+996555987654', expiresAt: Date.now()+12*3600e3 },
+      { id:'l5', title:'Посуточно 2к, Центр',      price:3000,  district:'Центр', rooms:'2', daily:true,  owner:true, img:'https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?q=80&w=1200&auto=format&fit=crop', phone:'+996709111222', expiresAt: Date.now()+20*3600e3 },
+      { id:'l6', title:'3к, Свердловский, новая мебель', price:45000, district:'Свердловский', rooms:'3+', daily:false, owner:true, img:'https://images.unsplash.com/photo-1494526585095-c41746248156?q=80&w=1200&auto=format&fit=crop', phone:'+996500321654', expiresAt: Date.now()+5*3600e3 },
+    ];
+
+    // утилиты
+    const qs=(s,el=document)=>el.querySelector(s);
+    const qsa=(s,el=document)=>Array.from(el.querySelectorAll(s));
+    const showToast=(m)=>{const t=qs('#toast'); t.textContent=m; t.classList.remove('hidden'); clearTimeout(showToast.t); showToast.t=setTimeout(()=>t.classList.add('hidden'),2200);};
+    const hasAccess=()=>Date.now() < Number(localStorage.getItem('accessUntil')||0);
+    const setAccess=(h=24)=>{ localStorage.setItem('accessUntil', String(Date.now()+h*3600e3)); showToast('Доступ открыт на 24 часа'); render(); };
+
+    function countdown(el, ts){
+      function tick(){ const d=ts-Date.now(); if(d<=0){ el.textContent='0ч 00м'; return; }
+        const h=Math.floor(d/3600000), m=Math.floor((d%3600000)/60000); el.textContent=\`\${h}ч \${String(m).padStart(2,'0')}м\`; }
+      tick(); return setInterval(tick,60000);
+    }
+
+    // Лучший (≤25к или первый)
+    function renderBest(){
+      const best = listings.find(it=>!it.daily && it.price<=25000) || listings[0];
+      qs('#bestImg').src = best.img;
+      qs('#bestTitle').textContent = best.title;
+      qs('#bestPrice').textContent = best.price.toLocaleString('ru-RU') + ' сом';
+      qs('#bestDistrict').textContent = best.district;
+      qs('#bestRooms').textContent = 'Комнат: ' + best.rooms;
+    }
+
+    // карточки
+    function cardHTML(it){
+      const priceUnit = it.daily ? 'сом/сут' : 'сом/мес';
+      return `
+      <article class="rounded-2xl border border-neutral-200 bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
+        <div class="aspect-[4/3] overflow-hidden">
+          <img src="${it.img}" alt="${it.title}" class="w-full h-full object-cover">
+        </div>
+        <div class="p-4 flex-1 flex flex-col gap-3">
+          <div class="flex items-start gap-2">
+            <h3 class="font-semibold leading-snug">${it.title}</h3>
+            <span class="ml-auto inline-flex items-center text-xs px-2 py-1 rounded-full whitespace-nowrap ${it.owner?'bg-emerald-100 text-emerald-700':'bg-neutral-100 text-neutral-700'}">
+              ${it.owner?'Без посредников':'Источник'}
+            </span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="text-2xl font-bold">${it.price.toLocaleString('ru-RU')} <span class="text-sm font-medium text-neutral-500">${priceUnit}</span></div>
+            <div class="ml-auto text-xs text-neutral-600">осталось <span class="countdown" data-ts="${it.expiresAt}"></span></div>
+          </div>
+          <div class="flex items-center gap-2 text-sm text-neutral-600">
+            <div>${it.district}</div><div>·</div><div>Комнат: ${it.rooms}</div>
+          </div>
+          <div class="mt-auto card-actions">
+            <input readonly class="flex-1 px-3 py-2 rounded-xl border border-neutral-200 bg-neutral-50 ${hasAccess()?'':'mask-blur'}" value="${it.phone}">
+            <button class="px-3 py-2 rounded-xl bg-blue-600 text-white text-sm reveal-btn" data-id="${it.id}">${hasAccess()?'Скопировать':'Показать номер'}</button>
+          </div>
+          <div class="flex items-center justify-between text-xs text-neutral-500 pt-1">
+            <span></span>
+            <button class="fav-btn hover:text-blue-600 inline-flex items-center gap-1" data-id="${it.id}" title="В избранное"><span class="heart">♡</span> В избранное</button>
+          </div>
+        </div>
+      </article>`;
+    }
+
+    function renderListings(data){
+      const grid=qs('#listGrid'); grid.innerHTML='';
+      if(!data.length){ qs('#emptyState').classList.remove('hidden'); return; }
+      qs('#emptyState').classList.add('hidden');
+      data.forEach(it=> grid.insertAdjacentHTML('beforeend', cardHTML(it)));
+      qsa('.countdown').forEach(el=>countdown(el, Number(el.dataset.ts)));
+      qsa('.reveal-btn').forEach(btn=>btn.addEventListener('click', onRevealClick));
+      qsa('.fav-btn').forEach(btn=>btn.addEventListener('click', onFavClick));
+    }
+
+    function onRevealClick(e){
+      const btn=e.currentTarget;
+      if(!localStorage.getItem('userLogged')){ openLogin(); return; }
+      if(!hasAccess()){ openPay(); return; }
+      const input=btn.closest('article').querySelector('input');
+      navigator.clipboard.writeText(input.value).then(()=>showToast('Номер скопирован'));
+    }
+
+    function onFavClick(e){
+      if(!localStorage.getItem('userLogged')){ openLogin(); return; }
+      const id=e.currentTarget.dataset.id;
+      const favs=new Set(JSON.parse(localStorage.getItem('favs')||'[]'));
+      const heart=e.currentTarget.querySelector('.heart');
+      if(favs.has(id)){ favs.delete(id); heart.textContent='♡'; showToast('Убрано из избранного'); }
+      else{ favs.add(id); heart.textContent='❤'; showToast('Добавлено в избранное'); }
+      localStorage.setItem('favs', JSON.stringify([...favs]));
+    }
+
+    // фильтры (простая имитация)
+    function applyFilters(){
+      const priceMin = Number(qs('#pMin').value || 0);
+      const priceMax = Number(qs('#pMax').value || Infinity);
+      const onlyOwn = qs('#own').checked;
+      const onlyDaily = qs('#daily').checked;
+      const onlyLong = qs('#long').checked; // демо
+      let out=listings.filter(it=>(
+        it.price>=priceMin &&
+        it.price<=priceMax &&
+        (!onlyOwn || it.owner) &&
+        (!onlyDaily || it.daily) &&
+        (!onlyLong || !it.daily)
+      ));
+      out.sort((a,b)=>b.expiresAt-a.expiresAt);
+      renderListings(out);
+    }
+
+    // модалки
+    const modalLogin=qs('#modalLogin'), modalPay=qs('#modalPay');
+    function openLogin(){ modalLogin.classList.remove('hidden'); modalLogin.classList.add('flex'); mountTelegramWidget(); }
+    function closeLogin(){ modalLogin.classList.add('hidden'); modalLogin.classList.remove('flex'); }
+    function openPay(){ modalPay.classList.remove('hidden'); modalPay.classList.add('flex'); }
+    function closePay(){ modalPay.classList.add('hidden'); modalPay.classList.remove('flex'); }
+
+    // события
+    qs('#btnAuth').addEventListener('click', openLogin);
+    qs('#btnAuthMobile').addEventListener('click', openLogin);
+    qs('#btnCloseLogin').addEventListener('click', closeLogin);
+    qs('#btnSendCode').addEventListener('click', ()=>{ qs('#loginStep2').classList.remove('hidden'); showToast('Код отправлен (демо)'); });
+    qs('#btnConfirmOtp').addEventListener('click', ()=>{ localStorage.setItem('userLogged', '1'); closeLogin(); showToast('Вход выполнен'); updateAuthUI(); });
+
+    qs('#btnPayPrimary').addEventListener('click', openPay);
+    qs('#btnPayMobile').addEventListener('click', openPay);
+    qsa('.pay').forEach(b=>b.addEventListener('click', openPay));
+    qsa('.pay-method').forEach(b=> b.addEventListener('click', ()=>{ qs('#paySelected').classList.remove('hidden'); qs('#payMethodName').textContent=b.textContent; }));
+    qs('#btnClosePay').addEventListener('click', closePay);
+    qs('#btnSimulatePaid').addEventListener('click', ()=>{ setAccess(24); closePay(); });
+
+    // ====== Telegram Login (виджет + колбэк + фолбэк) ======
+    let tgWidgetMounted = false;
+    function mountTelegramWidget(){
+      if (tgWidgetMounted) return;
+      const s = document.createElement('script');
+      s.src = 'https://telegram.org/js/telegram-widget.js?22';
+      s.async = true;
+      s.setAttribute('data-telegram-login','ArendatorKGbot'); // <- укажи точный username бота
+      s.setAttribute('data-size','large');
+      s.setAttribute('data-userpic','false');
+      s.setAttribute('data-request-access','write');
+      // popup-режим: сразу шлёт user в onTelegramAuth
+      s.setAttribute('data-onauth','onTelegramAuth(user)');
+      qs('#tgLoginContainer').appendChild(s);
+      tgWidgetMounted = true;
+    }
+
+    // основной колбэк (popup)
+    async function onTelegramAuth(user){
+      try{
+        localStorage.setItem('userLogged','1');
+        localStorage.setItem('tg_user', JSON.stringify(user||{}));
+        closeLogin();
+        showToast('Вход через Telegram выполнен');
+        updateAuthUI();
+      }catch(e){
+        alert('Ошибка авторизации: '+e.message);
+      }
+    }
+
+    // фолбэк: ловим postMessage из /api/tg-login (redirect-режим)
+    window.addEventListener('message', (ev) => {
+      const msg = ev && ev.data || {};
+      if (msg && msg.type === 'tg-auth' && msg.ok) {
+        localStorage.setItem('userLogged', '1');
+        localStorage.setItem('tg_user', JSON.stringify(msg.user || {}));
+        try { closeLogin(); } catch(e){}
+        try { showToast('Вход через Telegram выполнен'); } catch(e){}
+        updateAuthUI();
+      }
+    });
+
+    function updateAuthUI(){
+      const logged = !!localStorage.getItem('userLogged');
+      const btn = qs('#btnAuth');
+      const btnM = qs('#btnAuthMobile');
+      if (btn) btn.textContent = logged ? 'Мой аккаунт' : 'Вход / регистрация';
+      if (btnM) btnM.textContent = logged ? 'Аккаунт' : 'Войти';
+      // размаскируем телефоны если есть доступ
+      // (список ререндерится отдельно)
+    }
+
+    function render(){ renderBest(); applyFilters(); updateAuthUI(); }
+    render();
+  </script>
+</body>
+</html>
