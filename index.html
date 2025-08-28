@@ -20,6 +20,7 @@
     }
     .hero-title{ font-weight: 800; }
 
+    /* элементы хедера поверх всего */
     header .container > * { position: relative; z-index: 10; }
 
     .side-ads{position:fixed;top:60px;bottom:0;width:var(--ads);display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:5}
@@ -331,7 +332,7 @@
     </div>
   </div>
 
-  <!-- Модалка: Редактировать профиль (email, телефон, имя, обо мне) -->
+  <!-- Модалка: Редактировать профиль -->
   <div id="modalEditProfile" class="fixed inset-0 hidden items-center justify-center bg-black/40 p-4">
     <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-soft">
       <div class="text-lg font-semibold">Редактировать профиль</div>
@@ -559,7 +560,7 @@
       }
     }, false);
 
-    /* === вспомогательные функции авторизации === */
+    /* === авторизация: кука/квери === */
     function hasAuthCookie(){
       return document.cookie.split("; ").some(c => c.trim().startsWith("auth="));
     }
@@ -575,70 +576,48 @@
 
     /* === UI: хедер, кнопки, аватар, меню === */
     function updateAuthUI(){
-      function updateAuthUI(){
-    const logged  = !!localStorage.getItem('userLogged');
-    const btn     = document.querySelector('#btnAuth');
-    const btnM    = document.querySelector('#btnAuthMobile');
-    const badge   = document.querySelector('#userBadge');
-    const avatar  = document.querySelector('#userAvatar');
-    const menu = qs('#accountMenu');
+      const logged  = !!localStorage.getItem('userLogged');
+      const btn     = qs('#btnAuth');
+      const btnM    = qs('#btnAuthMobile');
+      const badge   = qs('#userBadge');
+      const avatar  = qs('#userAvatar');
+      const menu    = qs('#accountMenu');
 
-       if (!btn || !badge || !avatar) return;
+      if (!btn || !badge || !avatar) return;
 
-    if (!logged) {
-      btn.textContent  = 'Вход / регистрация';
-      if (btnM) btnM.textContent = 'Войти';
-      badge.classList.add('hidden');
-      avatar.style.backgroundImage = '';
-      avatar.textContent = '';
-
-      // 1) при загрузке страницы тянем куку/локалсторадж и сразу обновляем UI
-document.addEventListener('DOMContentLoaded', () => {
-  try { syncAuthFromCookieAndQuery(); } catch(e){}
-  try { updateAuthUI(); } catch(e){}
-});
-
-// 2) если в другой вкладке сменили аватар/логин — обновим текущую
-window.addEventListener('storage', (e) => {
-  if (['userLogged', 'avatar_url', 'tg_user'].includes(e.key)) {
-    try { updateAuthUI(); } catch(e){}
-  }
-});
-    
-      return;
-    }
-
-    // текст кнопок при авторизации
-    btn.textContent  = 'Мой аккаунт';
-    if (btnM) btnM.textContent = 'Аккаунт';
-
-    // данные пользователя
-    let u = {};
-    try { u = JSON.parse(localStorage.getItem('tg_user') || '{}'); } catch(e){}
-
-    const localAvatar = localStorage.getItem('avatar_url') || '';
-    const initial = (u.first_name?.trim()?.[0] || u.username?.trim()?.[0] || 'U').toUpperCase();
-
-    // сперва заглушка-буква
-    avatar.style.backgroundImage = '';
-    avatar.textContent = initial;
-
-    // затем реальная картинка (приоритет — локально загруженная)
-    const imgUrl = localAvatar || u.photo_url || '';
-    if (imgUrl) {
-      avatar.style.backgroundImage = `url("${imgUrl}")`;
-      avatar.textContent = '';
-    }
-
-    badge.classList.remove('hidden');
-  }
-      } else {
-        if (btn)  btn.textContent  = 'Вход / регистрация';
+      if (!logged) {
+        btn.textContent  = 'Вход / регистрация';
         if (btnM) btnM.textContent = 'Войти';
-        badge?.classList.add('hidden');
-        if (avatar){ avatar.style.backgroundImage = ''; avatar.textContent = ''; }
+        badge.classList.add('hidden');
+        avatar.style.backgroundImage = '';
+        avatar.textContent = '';
         menu?.classList.add('hidden');
+        return;
       }
+
+      // текст кнопок при авторизации
+      btn.textContent  = 'Мой аккаунт';
+      if (btnM) btnM.textContent = 'Аккаунт';
+
+      // данные пользователя
+      let u = {};
+      try { u = JSON.parse(localStorage.getItem('tg_user') || '{}'); } catch(e){}
+
+      const localAvatar = localStorage.getItem('avatar_url') || '';
+      const initial = (u.first_name?.trim()?.[0] || u.username?.trim()?.[0] || 'U').toUpperCase();
+
+      // заглушка-буква
+      avatar.style.backgroundImage = '';
+      avatar.textContent = initial;
+
+      // затем картинка, если есть (приоритет — локально загруженная)
+      const imgUrl = localAvatar || u.photo_url || '';
+      if (imgUrl) {
+        avatar.style.backgroundImage = `url("${imgUrl}")`;
+        avatar.textContent = '';
+      }
+
+      badge.classList.remove('hidden');
     }
 
     /* ======= События ======= */
@@ -651,9 +630,8 @@ window.addEventListener('storage', (e) => {
     qs('#btnClosePay').addEventListener('click', closePay);
     qs('#btnSimulatePaid').addEventListener('click', ()=>{ setAccess(24); closePay(); });
 
-    // Хедер: кнопка входа / аватар — открывают логин или меню
+    // Хедер: кнопка входа / аватар — логин или меню
     document.addEventListener('click', (ev) => {
-      const accArea = qs('#accountArea');
       const menu = qs('#accountMenu');
       const trigger = ev.target.closest('#btnAuth, #btnAuthMobile, #userAvatar');
 
@@ -661,7 +639,6 @@ window.addEventListener('storage', (e) => {
         ev.preventDefault();
         const logged = !!localStorage.getItem('userLogged');
         if (logged) {
-          // переключаем меню
           menu.classList.toggle('hidden');
         } else {
           openLogin();
@@ -677,19 +654,9 @@ window.addEventListener('storage', (e) => {
     });
 
     // Пункты меню
-    qs('#menuMyAds').addEventListener('click', ()=>{
-      qs('#accountMenu').classList.add('hidden');
-      showToast('Мои объявления (демо)');
-      // location.href = 'my-ads.html' // когда появится страница
-    });
-    qs('#menuEditProfile').addEventListener('click', ()=>{
-      qs('#accountMenu').classList.add('hidden');
-      openEdit();
-    });
-    qs('#menuChangeAvatar').addEventListener('click', ()=>{
-      qs('#accountMenu').classList.add('hidden');
-      openProfile();
-    });
+    qs('#menuMyAds').addEventListener('click', ()=>{ qs('#accountMenu').classList.add('hidden'); showToast('Мои объявления (демо)'); });
+    qs('#menuEditProfile').addEventListener('click', ()=>{ qs('#accountMenu').classList.add('hidden'); openEdit(); });
+    qs('#menuChangeAvatar').addEventListener('click', ()=>{ qs('#accountMenu').classList.add('hidden'); openProfile(); });
 
     // Редактировать профиль — запись/чтение
     function fillEditProfileModal(){
@@ -802,11 +769,18 @@ window.addEventListener('storage', (e) => {
     /* ======= Запуск ======= */
     function render(){ renderBest(); applyFilters(); updateAuthUI(); }
 
-    qs('#navFav').addEventListener('click', ()=>{ if(!localStorage.getItem('userLogged')) openLogin(); else showToast('Открыл «Избранное» (демо)'); });
+    // 1) при загрузке — подтянуть куки/локалсторадж и отрисовать
+    document.addEventListener('DOMContentLoaded', () => {
+      try { syncAuthFromCookieAndQuery(); } catch(e){}
+      try { render(); } catch(e){}
+    });
 
-    syncAuthFromCookieAndQuery();
-    render();
+    // 2) синхронизация между вкладками (аватар/логин)
+    window.addEventListener('storage', (e) => {
+      if (['userLogged', 'avatar_url', 'tg_user'].includes(e.key)) {
+        try { updateAuthUI(); } catch(e){}
+      }
+    });
   </script>
 </body>
 </html>
-
