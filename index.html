@@ -148,7 +148,7 @@
       </div>
 
       <!-- Правая: Лучший вариант -->
-      <div class="bg-white border border-neutral-200 rounded-2xl shadow-soft p-4 sm:p-5 h-full flex flex-col">
+      <div class="bg-white border border-neutral-200 rounded-2xl shadow-soft p-4 sm:p-5 h-full flex.flex-col">
         <h3 class="text-xl md:text-2xl font-semibold text-blue-600 text-center mb-3">
           Лучший вариант на данную минуту — успей купить!!!
         </h3>
@@ -293,7 +293,7 @@
       <div class="my-4 flex items-center gap-3">
         <div class="h-px flex-1 bg-neutral-200"></div>
         <div class="text-xs text-neutral-500">или Telegram</div>
-        <div class="h-px flex-1 bg-neutral-200"></div>
+        <div class="h-пx flex-1 bg-neutral-200"></div>
       </div>
       <div id="tgLoginContainer" class="flex justify-center"></div>
     </div>
@@ -416,16 +416,17 @@
       };
     }
 
-    /* ======= Карточки ======= */
+    /* ======= Карточки (исправлено избранное) ======= */
     function cardHTML(it){
       const priceUnit = it.daily ? 'сом/сут' : 'сом/мес';
+      const favs = new Set(JSON.parse(localStorage.getItem('favs')||'[]'));
+      const isFav = favs.has(it.id);
       return `
       <article class="rounded-2xl border border-neutral-200 bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
         <div class="aspect-[4/3] overflow-hidden grid place-items-center bg-neutral-100">
           ${it.img
-            ? `<img src="${it.img}" alt="${it.title}" class="w-full h-full object-cover" onerror="this.removeAttribute('src'); this.parentElement.textContent='Нет фото';">`
-            : `<div class="text-neutral-500 text-sm">Нет фото</div>`
-          }
+            ? `<img src="${it.img}" alt="${it.title}" class="w-full h-full object-cover">`
+            : `<div class="text-neutral-500 text-sm">Нет фото</div>`}
         </div>
         <div class="p-4 flex-1 flex flex-col gap-3">
           <div class="flex items-start gap-2">
@@ -447,7 +448,9 @@
           </div>
           <div class="flex items-center justify-between text-xs text-neutral-500 pt-1">
             <span></span>
-            <button class="fav-btn hover:text-blue-600 inline-flex items-center gap-1" data-id="${it.id}" title="В избранное"><span class="heart">♡</span> В избранное</button>
+            <button class="fav-btn hover:text-blue-600 inline-flex items-center gap-1" data-id="${it.id}" title="В избранное">
+              <span class="heart ${isFav?'text-red-600':''}">${isFav?'❤':'♡'}</span> В избранное
+            </button>
           </div>
         </div>
       </article>`;
@@ -471,13 +474,24 @@
       navigator.clipboard.writeText(input.value).then(()=>showToast('Номер скопирован'));
     }
 
+    /* ======= Избранное (исправлено) ======= */
     function onFavClick(e){
       if(!localStorage.getItem('userLogged')){ openLogin(); return; }
       const id=e.currentTarget.dataset.id;
       const favs=new Set(JSON.parse(localStorage.getItem('favs')||'[]'));
       const heart=e.currentTarget.querySelector('.heart');
-      if(favs.has(id)){ favs.delete(id); heart.textContent='♡'; showToast('Убрано из избранного'); }
-      else{ favs.add(id); heart.textContent='❤'; showToast('Добавлено в избранное'); }
+
+      if(favs.has(id)){
+        favs.delete(id);
+        heart.textContent='♡';
+        heart.classList.remove('text-red-600');
+        showToast('Убрано из избранного');
+      } else {
+        favs.add(id);
+        heart.textContent='❤';
+        heart.classList.add('text-red-600');
+        showToast('Добавлено в избранное');
+      }
       localStorage.setItem('favs', JSON.stringify([...favs]));
     }
 
@@ -685,7 +699,7 @@
     /* ======= Запуск ======= */
     function render(){ renderBest(); applyFilters(); updateAuthUI(); }
 
-    // монтируем Избранное
+    // клик по «Избранное» (оставил как было — демо)
     qs('#navFav').addEventListener('click', ()=>{ if(!localStorage.getItem('userLogged')) openLogin(); else showToast('Открыл «Избранное» (демо)'); });
 
     syncAuthFromCookieAndQuery();
