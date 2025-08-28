@@ -3,46 +3,127 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>О сервисе — Arendator.kg</title>
-  <link rel="icon" href="./Arendatorkg.png" />
+  <title>Arendator.kg — Блог</title>
+  <link rel="icon" href="./images/Arendatorkg.png">
+  <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>.container{max-width:900px}</style>
+  <style>
+    :root{--container:1180px}
+    html,body{overflow-x:hidden;font-family:'Onest',system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+    .container{max-width:var(--container)}
+    header .container>*{position:relative;z-index:10}
+    .user-avatar{width:32px;height:32px;border-radius:9999px;background:#e5e7eb;color:#374151;display:grid;place-items:center;font-weight:700;overflow:hidden;background-size:cover;background-position:center;flex-shrink:0}
+  </style>
 </head>
 <body class="bg-neutral-50 text-neutral-900">
-  <header class="bg-white border-b">
+  <div class="bg-emerald-600 text-white text-center text-xs sm:text-sm py-2">Объявления живут 24 часа · Анти-агент фильтр включён</div>
+
+  <header class="bg-white sticky top-0 z-30 border-b border-neutral-100/80">
     <div class="container mx-auto px-4 py-3 flex items-center gap-3">
-      <a href="index.html" class="flex items-center gap-2"><img src="./Arendatorkg.png" alt="Arendator.kg" class="w-8 h-8 rounded-full object-contain"><span class="font-medium">Arendator.kg</span></a>
-      <nav class="ml-auto text-sm flex gap-3">
-        <a href="post.html" class="px-3 py-2 rounded-xl border border-neutral-200 hover:bg-neutral-50">Добавить объявление</a>
-        <a href="sell.html" class="px-3 py-2 rounded-xl border border-neutral-200 hover:bg-neutral-50">Продажа</a>
-        <a href="favorites.html" class="px-3 py-2 rounded-xl border border-neutral-200 hover:bg-neutral-50">Избранное</a>
+      <a href="index.html" class="flex items-center gap-2 shrink-0">
+        <img src="./images/Arendatorkg.png" alt="Arendator.kg" class="w-8 h-8 rounded-full object-contain">
+      </a>
+
+      <nav class="ml-2 flex items-center gap-5 text-sm">
+        <a href="post.html" class="px-3 py-1.5 rounded-xl bg-neutral-900 text-white hover:bg-neutral-800">Добавить объявление</a>
+        <a href="sell.html" class="hover:text-blue-600">Продажа</a>
+        <a href="blog.html" class="text-blue-600 font-medium">Блог</a>
+        <a id="navFav" href="favorites.html" class="hover:text-blue-600">Избранное</a>
       </nav>
+
+      <div class="ml-auto flex items-center gap-3 text-sm">
+        <div class="hidden sm:flex items-center gap-2 text-neutral-600 mr-1">
+          <a class="hover:text-blue-600" href="#">Рус</a><span>·</span><a class="hover:text-blue-600" href="#">Кыр</a>
+        </div>
+        <button id="btnAuth" class="text-blue-600 hover:underline">Вход / регистрация</button>
+        <div id="userBadge" class="hidden items-center"><div id="userAvatar" class="user-avatar ml-2 cursor-pointer" title="Мой аккаунт"></div></div>
+      </div>
     </div>
   </header>
 
-  <main class="container mx-auto px-4 py-8 prose prose-neutral">
-    <h1>О сервисе Arendator.kg</h1>
-    <p><strong>Arendator.kg</strong> — сервис поиска аренды без посредников. Мы через ботов парсим разные площадки и Telegram-каналы, чтобы собрать свежие объявления в одном месте. Объявления живут 24 часа.</p>
+  <section class="container mx-auto px-4 pt-8">
+    <h1 class="text-3xl md:text-5xl font-extrabold leading-tight text-blue-600">Блог о поиске жилья</h1>
+    <p class="mt-3 text-neutral-600">Советы арендаторам и покупателям, разбор районов и цен.</p>
 
-    <h2>Как мы зарабатываем</h2>
-    <ul>
-      <li>Подписка: <strong>неделя — 200 сом</strong>, <strong>месяц — 500 сом</strong></li>
-      <li>Реклама на сайте и в Telegram-группе</li>
-    </ul>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+      <article class="rounded-2xl border border-neutral-200 bg-white overflow-hidden shadow-sm">
+        <img src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?q=80&w=1200&auto=format&fit=crop" class="w-full h-44 object-cover" alt="">
+        <div class="p-4">
+          <h3 class="font-semibold">Как снять квартиру за 1–2 дня</h3>
+          <p class="text-sm text-neutral-600 mt-1">Чек-лист из 7 шагов: от фильтров до звонка владельцу.</p>
+          <a href="#" class="inline-block mt-3 text-blue-600">Читать →</a>
+        </div>
+      </article>
+      <article class="rounded-2xl border border-neutral-200 bg-white overflow-hidden shadow-sm">
+        <img src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?q=80&w=1200&auto=format&fit=crop" class="w-full h-44 object-cover" alt="">
+        <div class="p-4">
+          <h3 class="font-semibold">Районы Бишкека: быстрый гид</h3>
+          <p class="text-sm text-neutral-600 mt-1">Сильные стороны Центра, Асанбая, Учкуна и др.</p>
+          <a href="#" class="inline-block mt-3 text-blue-600">Читать →</a>
+        </div>
+      </article>
+      <article class="rounded-2xl border border-neutral-200 bg-white overflow-hidden shadow-sm">
+        <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=1200&auto=format&fit=crop" class="w-full h-44 object-cover" alt="">
+        <div class="p-4">
+          <h3 class="font-semibold">Как отличить агента от владельца</h3>
+          <p class="text-sm text-neutral-600 mt-1">Признаки объявлений-посредников и как их фильтровать.</p>
+          <a href="#" class="inline-block mt-3 text-blue-600">Читать →</a>
+        </div>
+      </article>
+    </div>
+  </section>
 
-    <h2>Регистрация и вход</h2>
-    <p>Аккаунт создаётся по номеру телефона, вход — через СМС-код.</p>
-
-    <h2>Контакты и реклама</h2>
-    <p><strong>E-mail:</strong> hello@arendator.kg<br/>
-       <strong>Телеграм:</strong> @arendator_kg</p>
-
-    <h2>Юридическая информация</h2>
-    <p>Пользовательское соглашение и Политика конфиденциальности доступны на главной странице в футере.</p>
-  </main>
-
-  <footer class="border-t bg-white">
-    <div class="container mx-auto px-4 py-6 text-sm text-neutral-600">© 2025 — Arendator.kg</div>
+  <footer class="border-t border-neutral-100 bg-white mt-10">
+    <div class="container mx-auto px-4 py-8 grid md:grid-cols-4 gap-6 text-sm">
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-2">
+          <img src="./images/Arendatorkg.png" class="w-7 h-7 rounded-full object-contain" alt="">
+          <span class="font-semibold">Arendator.kg</span>
+        </div>
+        <p class="text-neutral-600 mt-2">Подбираем лучшие предложения и убираем посредников.</p>
+      </div>
+      <div><div class="font-semibold">Навигация</div>
+        <ul class="mt-2 space-y-1 text-neutral-600">
+          <li><a href="index.html" class="hover:text-blue-600">Аренда</a></li>
+          <li><a href="sell.html" class="hover:text-blue-600">Продажа</a></li>
+          <li><a href="blog.html" class="hover:text-blue-600">Блог</a></li>
+        </ul>
+      </div>
+      <div><div class="font-semibold">Правовое</div>
+        <ul class="mt-2 space-y-1 text-neutral-600">
+          <li><a href="#" class="hover:text-blue-600">Пользовательское соглашение</a></li>
+          <li><a href="#" class="hover:text-blue-600">Политика конфиденциальности</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="text-center text-xs text-neutral-500 pb-6">© 2025 — Arendator.kg</div>
   </footer>
+
+  <!-- лёгкий auth как на sell.html -->
+  <div id="modalLogin" class="fixed inset-0 hidden items-center justify-center bg-black/40 p-4">
+    <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-soft">
+      <div class="text-lg font-semibold">Вход</div>
+      <div class="my-4 flex items-center gap-3">
+        <div class="h-px flex-1 bg-neutral-200"></div>
+        <div class="text-xs text-neutral-500">Telegram</div>
+        <div class="h-px flex-1 bg-neutral-200"></div>
+      </div>
+      <div id="tgLoginContainer" class="flex justify-center"></div>
+      <div class="mt-4 text-right"><button id="btnCloseLogin" class="px-4 py-2 rounded-xl border border-neutral-200">Закрыть</button></div>
+    </div>
+  </div>
+
+  <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 hidden px-4 py-2 rounded-xl bg-neutral-900 text-white text-sm"></div>
+
+  <script>
+    const qs=(s,el=document)=>el.querySelector(s);
+    const showToast=(m)=>{const t=qs('#toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(showToast.t);showToast.t=setTimeout(()=>t.classList.add('hidden'),2200);};
+    function mountTelegramWidget(){ if(qs('#tgLoginContainer script'))return; const s=document.createElement('script'); s.src='https://telegram.org/js/telegram-widget.js?22'; s.async=true; s.setAttribute('data-telegram-login','ArendatorKGbot'); s.setAttribute('data-size','large'); s.setAttribute('data-userpic','false'); s.setAttribute('data-request-access','write'); s.setAttribute('data-auth-url','/api/tg-login'); qs('#tgLoginContainer').appendChild(s); }
+    function updateAuthUI(){ const logged=!!localStorage.getItem('userLogged'); qs('#btnAuth').textContent= logged?'Мой аккаунт':'Вход / регистрация'; const badge=qs('#userBadge'), av=qs('#userAvatar'); if(logged){badge?.classList.remove('hidden'); let u={}; try{u=JSON.parse(localStorage.getItem('tg_user')||'{}')}catch{} const loc=localStorage.getItem('avatar_url'); const L=(u.first_name?.[0]||u.username?.[0]||'U').toUpperCase(); av.style.backgroundImage=''; av.textContent=L; if(loc){av.style.backgroundImage=`url(${loc})`; av.textContent='';} else if(u.photo_url){av.style.backgroundImage=`url(${u.photo_url})`; av.textContent='';}} else {badge?.classList.add('hidden');}}
+    window.addEventListener('message',(ev)=>{const m=ev.data||{}; if(m.type==='tg-auth'&&m.ok){localStorage.setItem('userLogged','1'); localStorage.setItem('tg_user',JSON.stringify(m.user||{})); showToast('Вход через Telegram выполнен'); updateAuthUI();}});
+    document.addEventListener('click',(e)=>{const t=e.target.closest('#btnAuth,#userAvatar'); if(!t)return; e.preventDefault(); if(localStorage.getItem('userLogged')) location.href='index.html#account'; else {qs('#modalLogin').classList.remove('hidden');qs('#modalLogin').classList.add('flex'); mountTelegramWidget();}});
+    qs('#btnCloseLogin').onclick=()=>{qs('#modalLogin').classList.add('hidden');qs('#modalLogin').classList.remove('flex');};
+    updateAuthUI();
+  </script>
 </body>
 </html>
