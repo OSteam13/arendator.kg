@@ -3,22 +3,30 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Arendator.kg — Избранное</title>
+  <title>Избранное — Arendator.kg</title>
+
   <link rel="icon" href="./images/Arendatorkg.png">
   <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+
   <style>
     :root{--container:1180px}
     html,body{overflow-x:hidden;font-family:'Onest',system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
     .container{max-width:var(--container)}
     header .container>*{position:relative;z-index:10}
-    .user-avatar{width:32px;height:32px;border-radius:9999px;background:#e5e7eb;color:#374151;display:grid;place-items:center;font-weight:700;overflow:hidden;background-size:cover;background-position:center;flex-shrink:0}
-    .mask-blur{filter:blur(3px)}
+    .shadow-soft{box-shadow:0 8px 30px rgba(0,0,0,.08)}
+    .heart{transition:transform .15s}
+    .heart.active{color:#ef4444}
   </style>
 </head>
 <body class="bg-neutral-50 text-neutral-900">
-  <div class="bg-emerald-600 text-white text-center text-xs sm:text-sm py-2">Объявления живут 24 часа · Анти-агент фильтр включён</div>
 
+  <!-- верхняя зелёная плашка (как везде) -->
+  <div class="bg-emerald-600 text-white text-center text-xs sm:text-sm py-2">
+    Объявления живут 24 часа · Анти-агент фильтр включён
+  </div>
+
+  <!-- закреплённый общий хедер -->
   <header class="bg-white sticky top-0 z-30 border-b border-neutral-100/80">
     <div class="container mx-auto px-4 py-3 flex items-center gap-3">
       <a href="index.html" class="flex items-center gap-2 shrink-0">
@@ -29,122 +37,111 @@
         <a href="post.html" class="px-3 py-1.5 rounded-xl bg-neutral-900 text-white hover:bg-neutral-800">Добавить объявление</a>
         <a href="sell.html" class="hover:text-blue-600">Продажа</a>
         <a href="blog.html" class="hover:text-blue-600">Блог</a>
-        <a href="favorites.html" class="text-blue-600 font-medium">Избранное</a>
+        <a href="favorites.html" class="text-blue-600">Избранное</a>
       </nav>
 
       <div class="ml-auto flex items-center gap-3 text-sm">
         <div class="hidden sm:flex items-center gap-2 text-neutral-600 mr-1">
           <a class="hover:text-blue-600" href="#">Рус</a><span>·</span><a class="hover:text-blue-600" href="#">Кыр</a>
         </div>
-        <button id="btnAuth" class="text-blue-600 hover:underline">Вход / регистрация</button>
-        <div id="userBadge" class="hidden items-center"><div id="userAvatar" class="user-avatar ml-2 cursor-pointer" title="Мой аккаунт"></div></div>
+        <a id="btnAuth" href="index.html#login" class="text-blue-600 hover:underline">Мой аккаунт</a>
+        <div id="userBadge" class="hidden items-center"><div id="userAvatar" class="w-8 h-8 rounded-full bg-neutral-200"></div></div>
       </div>
     </div>
   </header>
 
-  <section class="container mx-auto px-4 pt-8">
-    <h1 class="text-3xl md:text-5xl font-extrabold leading-tight text-blue-600">Избранное</h1>
-    <p class="mt-3 text-neutral-600">Ваши сохранённые объекты за последние 24 часа.</p>
-  </section>
+  <main class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-extrabold text-blue-600">Избранное</h1>
+    <p class="text-neutral-600 mt-2">Ваши отмеченные объявления.</p>
 
-  <main class="container mx-auto px-4 py-6">
-    <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
-    <div id="empty" class="hidden text-center py-16 text-neutral-600">Пока пусто. Добавляйте объявления на главной.</div>
+    <!-- пустое состояние -->
+    <div id="empty" class="hidden mt-10 rounded-2xl border border-dashed border-neutral-300 p-10 text-center bg-white">
+      <div class="text-neutral-700 font-medium">Вы пока ничего не добавили</div>
+      <div class="text-neutral-500 mt-1 text-sm">Нажимайте «В избранное» на карточках — они появятся здесь.</div>
+      <a href="index.html" class="inline-block mt-4 px-4 py-2 rounded-xl bg-blue-600 text-white">На главную</a>
+    </div>
+
+    <!-- сетка избранного -->
+    <div id="grid" class="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
   </main>
 
-  <footer class="border-t border-neutral-100 bg-white">
-    <div class="container mx-auto px-4 py-8 grid md:grid-cols-4 gap-6 text-sm">
-      <div class="md:col-span-2">
-        <div class="flex items-center gap-2">
-          <img src="./images/Arendatorkg.png" class="w-7 h-7 rounded-full object-contain" alt="">
-          <span class="font-semibold">Arendator.kg</span>
-        </div>
-        <p class="text-neutral-600 mt-2">Подбираем лучшие предложения и убираем посредников.</p>
-      </div>
-      <div><div class="font-semibold">Навигация</div>
-        <ul class="mt-2 space-y-1 text-neutral-600">
-          <li><a href="index.html" class="hover:text-blue-600">Аренда</a></li>
-          <li><a href="sell.html" class="hover:text-blue-600">Продажа</a></li>
-          <li><a href="blog.html" class="hover:text-blue-600">Блог</a></li>
-        </ul>
-      </div>
-      <div><div class="font-semibold">Правовое</div>
-        <ul class="mt-2 space-y-1 text-neutral-600">
-          <li><a href="#" class="hover:text-blue-600">Пользовательское соглашение</a></li>
-          <li><a href="#" class="hover:text-blue-600">Политика конфиденциальности</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="text-center text-xs text-neutral-500 pb-6">© 2025 — Arendator.kg</div>
-  </footer>
-
-  <div id="modalLogin" class="fixed inset-0 hidden items-center justify-center bg-black/40 p-4">
-    <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-soft">
-      <div class="text-lg font-semibold">Вход</div>
-      <div class="my-4 flex items-center gap-3">
-        <div class="h-px flex-1 bg-neutral-200"></div>
-        <div class="text-xs text-neutral-500">Telegram</div>
-        <div class="h-px flex-1 bg-neutral-200"></div>
-      </div>
-      <div id="tgLoginContainer" class="flex justify-center"></div>
-      <div class="mt-4 text-right"><button id="btnCloseLogin" class="px-4 py-2 rounded-xl border border-neutral-200">Закрыть</button></div>
-    </div>
-  </div>
-
+  <!-- Toast -->
   <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 hidden px-4 py-2 rounded-xl bg-neutral-900 text-white text-sm"></div>
 
   <script>
-    const qs=(s,el=document)=>el.querySelector(s);
-    const qsa=(s,el=document)=>Array.from(el.querySelectorAll(s));
-    const showToast=(m)=>{const t=qs('#toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(showToast.t);showToast.t=setTimeout(()=>t.classList.add('hidden'),2200);};
+    const qs = (s,el=document)=>el.querySelector(s);
+    const qsa= (s,el=document)=>Array.from(el.querySelectorAll(s));
+    const showToast=(m)=>{const t=qs('#toast'); t.textContent=m; t.classList.remove('hidden'); clearTimeout(showToast.t); showToast.t=setTimeout(()=>t.classList.add('hidden'),2200);};
 
-    // те же помощники авторизации
-    function mountTelegramWidget(){ if(qs('#tgLoginContainer script'))return; const s=document.createElement('script'); s.src='https://telegram.org/js/telegram-widget.js?22'; s.async=true; s.setAttribute('data-telegram-login','ArendatorKGbot'); s.setAttribute('data-size','large'); s.setAttribute('data-userpic','false'); s.setAttribute('data-request-access','write'); s.setAttribute('data-auth-url','/api/tg-login'); qs('#tgLoginContainer').appendChild(s); }
-    function updateAuthUI(){ const logged=!!localStorage.getItem('userLogged'); const btn=qs('#btnAuth'); const badge=qs('#userBadge'); const av=qs('#userAvatar'); if(logged){ if(btn)btn.textContent='Мой аккаунт'; badge?.classList.remove('hidden'); let u={}; try{u=JSON.parse(localStorage.getItem('tg_user')||'{}')}catch{} const loc=localStorage.getItem('avatar_url'); const L=(u.first_name?.[0]||u.username?.[0]||'U').toUpperCase(); av.style.backgroundImage=''; av.textContent=L; if(loc){av.style.backgroundImage=`url(${loc})`; av.textContent='';} else if(u.photo_url){av.style.backgroundImage=`url(${u.photo_url})`; av.textContent='';}} else { if(btn)btn.textContent='Вход / регистрация'; badge?.classList.add('hidden'); } }
-    window.addEventListener('message',(ev)=>{const m=ev.data||{}; if(m.type==='tg-auth'&&m.ok){localStorage.setItem('userLogged','1'); localStorage.setItem('tg_user',JSON.stringify(m.user||{})); showToast('Вход через Telegram выполнен'); updateAuthUI();}});
-    document.addEventListener('click',(e)=>{const t=e.target.closest('#btnAuth,#userAvatar'); if(!t)return; e.preventDefault(); if(localStorage.getItem('userLogged')) location.href='index.html#account'; else {qs('#modalLogin').classList.remove('hidden');qs('#modalLogin').classList.add('flex'); mountTelegramWidget();}});
-    qs('#btnCloseLogin').onclick=()=>{qs('#modalLogin').classList.add('hidden');qs('#modalLogin').classList.remove('flex');};
-
-    // вытаскиваем избранное (из localStorage, как на главной)
-    // чтобы работало, на главной должны сохраняться id в localStorage.favs и храниться объявления в localStorage.listings (можно положить при первом рендере)
-    // если localStorage.listings нет, покажем только заглушку
-    let listings=[];
-    try{ listings = JSON.parse(localStorage.getItem('listings')||'[]'); }catch{}
-
-    function card(it){
-      return `<article class="rounded-2xl border border-neutral-200 bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-        <div class="aspect-[4/3] grid place-items-center bg-neutral-100 overflow-hidden">
-          ${it.img?`<img src="${it.img}" class="w-full h-full object-cover" onerror="this.remove()">`:`<div class="text-neutral-500">Нет фото</div>`}
+    // Рендер одной карточки (упрощённая версия, совпадает по стилю с главной)
+    function cardHTML(it){
+      const priceUnit = it.daily ? 'сом/сут' : 'сом/мес';
+      const fav = isFav(it.id);
+      return `
+      <article class="rounded-2xl border border-neutral-200 bg-white overflow-hidden shadow-sm flex flex-col">
+        <div class="aspect-[4/3] bg-neutral-100 overflow-hidden">
+          ${it.img
+            ? `<img src="${it.img}" alt="${it.title}" class="w-full h-full object-cover">`
+            : `<div class="w-full h-full grid place-items-center text-neutral-500">Фото не загружено</div>`}
         </div>
-        <div class="p-4">
-          <div class="text-lg font-semibold">${it.title}</div>
-          <div class="text-neutral-600 mt-1">${it.district||''} · Комнат: ${it.rooms||''}</div>
-          <div class="mt-2 text-2xl font-bold">${(it.price||0).toLocaleString('ru-RU')} <span class="text-sm font-medium text-neutral-500">${it.daily?'сом/сут':'сом/мес'}</span></div>
-          <div class="mt-3 flex gap-2">
-            <input readonly class="flex-1 px-3 py-2 rounded-xl border border-neutral-200 bg-neutral-50 ${Date.now() < Number(localStorage.getItem('accessUntil')||0)?'':'mask-blur'}" value="${it.phone||''}">
-            <button class="px-3 py-2 rounded-xl bg-blue-600 text-white text-sm" onclick="navigator.clipboard.writeText('${it.phone||''}')">Копировать</button>
+        <div class="p-4 flex-1 flex flex-col gap-3">
+          <div class="flex items-start gap-2">
+            <h3 class="font-semibold leading-snug line-clamp-2">${it.title}</h3>
+            <button class="ml-auto fav-btn text-sm text-neutral-600 hover:text-blue-600" data-id="${it.id}" title="Убрать из избранного">
+              <span class="heart ${fav?'active':''}">${fav?'❤':'♡'}</span>
+            </button>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="text-2xl font-bold">${Number(it.price||0).toLocaleString('ru-RU')}
+              <span class="text-sm font-medium text-neutral-500">${priceUnit}</span>
+            </div>
+            <div class="ml-auto text-sm text-neutral-600">${it.district||''}</div>
+          </div>
+          <div class="text-sm text-neutral-600">Комнат: ${it.rooms||''}</div>
+          <div class="mt-auto">
+            <a href="index.html" class="inline-block px-3 py-2 rounded-xl border border-neutral-200 hover:bg-neutral-50 text-sm">Открыть на главной</a>
           </div>
         </div>
       </article>`;
     }
 
-    function renderFavs(){
-      let favs=new Set(JSON.parse(localStorage.getItem('favs')||'[]'));
-      const data = listings.filter(x=>favs.has(x.id));
-      const grid=qs('#grid'); grid.innerHTML=data.map(card).join('');
-      qs('#empty').classList.toggle('hidden', data.length>0);
+    // работа с избранным
+    function getFavs(){ try{ return new Set(JSON.parse(localStorage.getItem('favs')||'[]')); }catch{ return new Set(); } }
+    function setFavs(set){ localStorage.setItem('favs', JSON.stringify([...set])); }
+    function isFav(id){ return getFavs().has(id); }
+
+    function render(){
+      const grid = qs('#grid');
+      grid.innerHTML = '';
+
+      // список объявлений пользователь хранит в localStorage.listings (так же делает постинг со страницы добавления)
+      let all = [];
+      try{ all = JSON.parse(localStorage.getItem('listings')||'[]'); }catch{}
+      const favs = getFavs();
+      const list = all.filter(x => favs.has(x.id));
+
+      if (!list.length){
+        qs('#empty').classList.remove('hidden');
+        return;
+      } else {
+        qs('#empty').classList.add('hidden');
+      }
+
+      list.forEach(it => grid.insertAdjacentHTML('beforeend', cardHTML(it)));
+
+      // обработчики удаления из избранного здесь же
+      qsa('.fav-btn').forEach(b => {
+        b.addEventListener('click', () => {
+          const id = b.dataset.id;
+          const s = getFavs();
+          if (s.has(id)){ s.delete(id); setFavs(s); showToast('Убрано из избранного'); }
+          render(); // перерисуем список
+        });
+      });
     }
 
-    // если на главной ещё не сохранили объявления — попробуем один раз подложить демо
-    if(!listings.length){
-      listings = [
-        { id:'l1', title:'2к, Центр, свежий ремонт', price:35000, district:'Центр', rooms:'2', daily:false, owner:true, img:'https://images.unsplash.com/photo-1505691938895-1758d7feb511?q=80&w=1200&auto=format&fit=crop', phone:'+996555123456' },
-        { id:'l2', title:'1к, Майевка, уютная',      price:18000, district:'Майевка', rooms:'1', daily:false, owner:true, img:'https://images.unsplash.com/photo-1502005229762-cf1b2da7cda7?q=80&w=1200&auto=format&fit=crop', phone:'+996700222333' },
-      ];
-    }
-
-    updateAuthUI();
-    renderFavs();
+    // сердце должно быть красным и на других страницах — делаем единый формат хранения, тут уже всё учтено
+    render();
   </script>
 </body>
 </html>
