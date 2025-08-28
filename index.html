@@ -575,34 +575,63 @@
 
     /* === UI: хедер, кнопки, аватар, меню === */
     function updateAuthUI(){
-      const logged = !!localStorage.getItem('userLogged');
-      const btn  = qs('#btnAuth');
-      const btnM = qs('#btnAuthMobile');
-      const badge= qs('#userBadge');
-      const avatar = qs('#userAvatar');
-      const menu = qs('#accountMenu');
+      function updateAuthUI(){
+    const logged  = !!localStorage.getItem('userLogged');
+    const btn     = document.querySelector('#btnAuth');
+    const btnM    = document.querySelector('#btnAuthMobile');
+    const badge   = document.querySelector('#userBadge');
+    const avatar  = document.querySelector('#userAvatar');
+    const menu = qs('#accountMenu');
 
-      if (logged) {
-        if (btn)  btn.textContent  = 'Мой аккаунт';
-        if (btnM) btnM.textContent = 'Аккаунт';
+       if (!btn || !badge || !avatar) return;
 
-        let u = {};
-        try { u = JSON.parse(localStorage.getItem('tg_user')||'{}'); } catch(_){}
-        const localAvatar = localStorage.getItem('avatar_url');
-        const initial = (u.first_name?.trim()?.[0] || u.username?.trim()?.[0] || 'U').toUpperCase();
+    if (!logged) {
+      btn.textContent  = 'Вход / регистрация';
+      if (btnM) btnM.textContent = 'Войти';
+      badge.classList.add('hidden');
+      avatar.style.backgroundImage = '';
+      avatar.textContent = '';
 
-        avatar.style.backgroundImage = '';
-        avatar.textContent = initial;
+      // 1) при загрузке страницы тянем куку/локалсторадж и сразу обновляем UI
+document.addEventListener('DOMContentLoaded', () => {
+  try { syncAuthFromCookieAndQuery(); } catch(e){}
+  try { updateAuthUI(); } catch(e){}
+});
 
-        if (localAvatar) {
-          avatar.style.backgroundImage = `url(${localAvatar})`;
-          avatar.textContent = '';
-        } else if (u.photo_url) {
-          avatar.style.backgroundImage = `url(${u.photo_url})`;
-          avatar.textContent = '';
-        }
+// 2) если в другой вкладке сменили аватар/логин — обновим текущую
+window.addEventListener('storage', (e) => {
+  if (['userLogged', 'avatar_url', 'tg_user'].includes(e.key)) {
+    try { updateAuthUI(); } catch(e){}
+  }
+});
+    
+      return;
+    }
 
-        badge?.classList.remove('hidden');
+    // текст кнопок при авторизации
+    btn.textContent  = 'Мой аккаунт';
+    if (btnM) btnM.textContent = 'Аккаунт';
+
+    // данные пользователя
+    let u = {};
+    try { u = JSON.parse(localStorage.getItem('tg_user') || '{}'); } catch(e){}
+
+    const localAvatar = localStorage.getItem('avatar_url') || '';
+    const initial = (u.first_name?.trim()?.[0] || u.username?.trim()?.[0] || 'U').toUpperCase();
+
+    // сперва заглушка-буква
+    avatar.style.backgroundImage = '';
+    avatar.textContent = initial;
+
+    // затем реальная картинка (приоритет — локально загруженная)
+    const imgUrl = localAvatar || u.photo_url || '';
+    if (imgUrl) {
+      avatar.style.backgroundImage = `url("${imgUrl}")`;
+      avatar.textContent = '';
+    }
+
+    badge.classList.remove('hidden');
+  }
       } else {
         if (btn)  btn.textContent  = 'Вход / регистрация';
         if (btnM) btnM.textContent = 'Войти';
@@ -780,4 +809,5 @@
   </script>
 </body>
 </html>
+
 
