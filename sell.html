@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Arendator.kg — Продажа квартир</title>
+  <link rel="icon" href="./images/Arendatorkg.png">
+  <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root{--container:1180px}
+    html,body{overflow-x:hidden;font-family:'Onest',system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+    .container{max-width:var(--container)}
+    .shadow-soft{box-shadow:0 8px 30px rgba(0,0,0,.08)}
+    header .container>*{position:relative;z-index:10}
+    .user-avatar{width:32px;height:32px;border-radius:9999px;background:#e5e7eb;color:#374151;display:grid;place-items:center;font-weight:700;overflow:hidden;background-size:cover;background-position:center;flex-shrink:0}
+    .avatar-lg{width:96px;height:96px;border-radius:9999px;background:#e5e7eb;display:grid;place-items:center;overflow:hidden;background-size:cover;background-position:center;font-weight:800;font-size:36px;color:#374151;margin:0 auto}
+  </style>
+</head>
+<body class="bg-neutral-50 text-neutral-900">
+  <div class="bg-emerald-600 text-white text-center text-xs sm:text-sm py-2">Объявления живут 24 часа · Анти-агент фильтр включён</div>
+
+  <header class="bg-white sticky top-0 z-30 border-b border-neutral-100/80">
+    <div class="container mx-auto px-4 py-3 flex items-center gap-3">
+      <a href="index.html" class="flex items-center gap-2 shrink-0">
+        <img src="./images/Arendatorkg.png" alt="Arendator.kg" class="w-8 h-8 rounded-full object-contain">
+      </a>
+
+      <nav class="ml-2 flex items-center gap-5 text-sm">
+        <a href="post.html" class="px-3 py-1.5 rounded-xl bg-neutral-900 text-white hover:bg-neutral-800">Добавить объявление</a>
+        <a href="sell.html" class="text-blue-600 font-medium">Продажа</a>
+        <a href="blog.html" class="hover:text-blue-600">Блог</a>
+        <a id="navFav" href="favorites.html" class="hover:text-blue-600">Избранное</a>
+      </nav>
+
+      <div class="ml-auto flex items-center gap-3 text-sm">
+        <div class="hidden sm:flex items-center gap-2 text-neutral-600 mr-1">
+          <a class="hover:text-blue-600" href="#">Рус</a><span>·</span><a class="hover:text-blue-600" href="#">Кыр</a>
+        </div>
+        <button id="btnAuth" class="text-blue-600 hover:underline">Вход / регистрация</button>
+        <div id="userBadge" class="hidden items-center"><div id="userAvatar" class="user-avatar ml-2 cursor-pointer" title="Мой аккаунт"></div></div>
+      </div>
+    </div>
+  </header>
+
+  <section class="container mx-auto px-4 pt-8">
+    <div class="bg-white border border-neutral-200 rounded-2xl shadow-soft p-4 sm:p-5">
+      <h1 class="text-3xl md:text-5xl font-extrabold leading-tight text-blue-600">Ищете квартиру для покупки?</h1>
+      <p class="mt-3 text-base md:text-lg text-neutral-600">Свежие варианты без посредников — обновляем c десятков источников.</p>
+
+      <div class="mt-5 grid grid-cols-2 md:grid-cols-4 gap-3">
+        <select id="city" class="px-3 py-2 rounded-xl border border-neutral-200">
+          <option>Бишкек</option><option>Ош</option><option>Каракол</option>
+        </select>
+        <select id="rooms" class="px-3 py-2 rounded-xl border border-neutral-200">
+          <option>Любая</option><option>1</option><option>2</option><option>3+</option>
+        </select>
+        <input id="priceMin" type="number" placeholder="Цена от" class="px-3 py-2 rounded-xl border border-neutral-200">
+        <input id="priceMax" type="number" placeholder="Цена до" class="px-3 py-2 rounded-xl border border-neutral-200">
+      </div>
+
+      <div class="mt-4 flex gap-3">
+        <button id="apply" class="px-4 py-2 rounded-xl bg-neutral-900 text-white hover:bg-neutral-800">Показать</button>
+        <button id="reset" class="px-4 py-2 rounded-xl border border-neutral-200 hover:bg-neutral-50">Сбросить</button>
+      </div>
+    </div>
+  </section>
+
+  <main class="container mx-auto px-4 py-6">
+    <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+    <div id="empty" class="hidden text-center py-16 text-neutral-600">По фильтрам ничего не найдено.</div>
+  </main>
+
+  <footer class="border-t border-neutral-100 bg-white">
+    <div class="container mx-auto px-4 py-8 grid md:grid-cols-4 gap-6 text-sm">
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-2">
+          <img src="./images/Arendatorkg.png" class="w-7 h-7 rounded-full object-contain" alt="">
+          <span class="font-semibold">Arendator.kg</span>
+        </div>
+        <p class="text-neutral-600 mt-2">Подбираем лучшие предложения и убираем посредников.</p>
+      </div>
+      <div><div class="font-semibold">Навигация</div>
+        <ul class="mt-2 space-y-1 text-neutral-600">
+          <li><a href="index.html" class="hover:text-blue-600">Аренда</a></li>
+          <li><a href="sell.html" class="hover:text-blue-600">Продажа</a></li>
+          <li><a href="blog.html" class="hover:text-blue-600">Блог</a></li>
+        </ul>
+      </div>
+      <div><div class="font-semibold">Правовое</div>
+        <ul class="mt-2 space-y-1 text-neutral-600">
+          <li><a href="#" class="hover:text-blue-600">Пользовательское соглашение</a></li>
+          <li><a href="#" class="hover:text-blue-600">Политика конфиденциальности</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="text-center text-xs text-neutral-500 pb-6">© 2025 — Arendator.kg</div>
+  </footer>
+
+  <!-- Модалки: вход / профиль (как на главной) -->
+  <div id="modalLogin" class="fixed inset-0 hidden items-center justify-center bg-black/40 p-4">
+    <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-soft">
+      <div class="text-lg font-semibold">Вход без пароля</div>
+      <p class="text-sm text-neutral-600 mt-1">Войдите по SMS или через Telegram.</p>
+      <input id="loginPhone" placeholder="0(555) 123-456" class="mt-4 w-full px-3 py-2 rounded-xl border border-neutral-200" />
+      <div class="mt-3 grid grid-cols-2 gap-2">
+        <button id="btnSendCode" class="px-4 py-2 rounded-xl bg-neutral-900 text-white">Отправить код</button>
+        <button id="btnCloseLogin" class="px-4 py-2 rounded-xl border border-neutral-200">Закрыть</button>
+      </div>
+      <div id="loginStep2" class="hidden mt-4">
+        <input id="loginOtp" placeholder="Код из SMS" class="w-full px-3 py-2 rounded-xl border border-neutral-200" />
+        <button id="btnConfirmOtp" class="mt-3 w-full px-4 py-2 rounded-xl bg-blue-600 text-white">Войти</button>
+      </div>
+      <div class="my-4 flex items-center gap-3">
+        <div class="h-px flex-1 bg-neutral-200"></div>
+        <div class="text-xs text-neutral-500">или Telegram</div>
+        <div class="h-px flex-1 bg-neutral-200"></div>
+      </div>
+      <div id="tgLoginContainer" class="flex justify-center"></div>
+    </div>
+  </div>
+
+  <div id="modalProfile" class="fixed inset-0 hidden items-center justify-center bg-black/40 p-4">
+    <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-soft">
+      <div class="text-lg font-semibold">Мой профиль</div>
+      <div class="mt-4">
+        <div id="profileAvatar" class="avatar-lg">U</div>
+        <div class="mt-4 grid grid-cols-2 gap-2">
+          <label class="px-4 py-2 rounded-xl bg-neutral-900 text-white text-center cursor-pointer">
+            <input id="avatarFile" type="file" accept="image/*" class="hidden">Загрузить
+          </label>
+          <button id="btnAvatarRemove" class="px-4 py-2 rounded-xl border border-neutral-200">Удалить</button>
+        </div>
+      </div>
+      <div class="mt-6 grid grid-cols-2 gap-2">
+        <button id="btnCloseProfile" class="px-4 py-2 rounded-xl border border-neutral-200">Закрыть</button>
+        <button id="btnSaveProfile" class="px-4 py-2 rounded-xl bg-blue-600 text-white">Сохранить</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 hidden px-4 py-2 rounded-xl bg-neutral-900 text-white text-sm"></div>
+
+  <script>
+    // демо-данные «продажи»
+    const sale = [
+      {id:'s1', title:'1к, Центр, кирпичный дом', price:52000, city:'Бишкек', rooms:'1', img:'https://images.unsplash.com/photo-1505691723518-36a5ac3b2c5b?q=80&w=1200&auto=format&fit=crop'},
+      {id:'s2', title:'2к, Асанбай, панорамные окна', price:82000, city:'Бишкек', rooms:'2', img:''},
+      {id:'s3', title:'3к+, мкр. Учкун', price:120000, city:'Бишкек', rooms:'3+', img:'https://images.unsplash.com/photo-1494526585095-c41746248156?q=80&w=1200&auto=format&fit=crop'},
+      {id:'s4', title:'2к, Ош, центр', price:60000, city:'Ош', rooms:'2', img:'https://images.unsplash.com/photo-1502005229762-cf1b2da7cda7?q=80&w=1200&auto=format&fit=crop'}
+    ];
+
+    const qs=(s,el=document)=>el.querySelector(s);
+    const qsa=(s,el=document)=>Array.from(el.querySelectorAll(s));
+    const showToast=(m)=>{const t=qs('#toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(showToast.t);showToast.t=setTimeout(()=>t.classList.add('hidden'),2200);};
+
+    // auth helpers (короткая версия, как на главной)
+    function mountTelegramWidget(){ if(qs('#tgLoginContainer script'))return; const s=document.createElement('script'); s.src='https://telegram.org/js/telegram-widget.js?22'; s.async=true; s.setAttribute('data-telegram-login','ArendatorKGbot'); s.setAttribute('data-size','large'); s.setAttribute('data-userpic','false'); s.setAttribute('data-request-access','write'); s.setAttribute('data-auth-url','/api/tg-login'); qs('#tgLoginContainer').appendChild(s); }
+    function updateAuthUI(){ const logged=!!localStorage.getItem('userLogged'); const btn=qs('#btnAuth'); const badge=qs('#userBadge'); const avatar=qs('#userAvatar'); if(logged){ if(btn)btn.textContent='Мой аккаунт'; badge?.classList.remove('hidden'); let u={}; try{u=JSON.parse(localStorage.getItem('tg_user')||'{}')}catch{} const localAvatar=localStorage.getItem('avatar_url'); const letter=(u.first_name?.[0]||u.username?.[0]||'U').toUpperCase(); avatar.style.backgroundImage=''; avatar.textContent=letter; if(localAvatar){avatar.style.backgroundImage=`url(${localAvatar})`;avatar.textContent='';} else if(u.photo_url){avatar.style.backgroundImage=`url(${u.photo_url})`;avatar.textContent='';} } else { if(btn)btn.textContent='Вход / регистрация'; badge?.classList.add('hidden'); } }
+    window.addEventListener('message',(ev)=>{const m=ev.data||{}; if(m.type==='tg-auth'&&m.ok){localStorage.setItem('userLogged','1'); localStorage.setItem('tg_user',JSON.stringify(m.user||{})); showToast('Вход через Telegram выполнен'); updateAuthUI();}});
+    document.addEventListener('click',(e)=>{const t=e.target.closest('#btnAuth,#userAvatar'); if(!t)return; e.preventDefault(); if(localStorage.getItem('userLogged')) openProfile(); else {openLogin(); mountTelegramWidget();}});
+    function openLogin(){qs('#modalLogin').classList.remove('hidden');qs('#modalLogin').classList.add('flex');}
+    function openProfile(){qs('#modalProfile').classList.remove('hidden');qs('#modalProfile').classList.add('flex'); syncProfile();}
+    function closeLogin(){qs('#modalLogin').classList.add('hidden');qs('#modalLogin').classList.remove('flex');}
+    function closeProfile(){qs('#modalProfile').classList.add('hidden');qs('#modalProfile').classList.remove('flex');}
+    qs('#btnCloseLogin').onclick=closeLogin;
+    qs('#btnSendCode').onclick=()=>{qs('#loginStep2').classList.remove('hidden'); showToast('Код отправлен (демо)');};
+    qs('#btnConfirmOtp').onclick=()=>{localStorage.setItem('userLogged','1'); closeLogin(); updateAuthUI(); showToast('Вход выполнен');};
+    qs('#btnCloseProfile').onclick=closeProfile;
+    qs('#btnSaveProfile').onclick=()=>{closeProfile(); showToast('Профиль сохранён');};
+    qs('#avatarFile').addEventListener('change', async (e)=>{const f=e.target.files?.[0]; if(!f)return; const url=await fileToAvatarDataURL(f,256); localStorage.setItem('avatar_url',url); syncProfile(); updateAuthUI();});
+    qs('#btnAvatarRemove').onclick=()=>{localStorage.removeItem('avatar_url'); syncProfile(); updateAuthUI();};
+    function syncProfile(){const box=qs('#profileAvatar'); let u={}; try{u=JSON.parse(localStorage.getItem('tg_user')||'{}')}catch{} const letter=(u.first_name?.[0]||u.username?.[0]||'U').toUpperCase(); const loc=localStorage.getItem('avatar_url'); box.style.backgroundImage=''; box.textContent=letter; if(loc){box.style.backgroundImage=`url(${loc})`; box.textContent='';} else if(u.photo_url){box.style.backgroundImage=`url(${u.photo_url})`; box.textContent='';}}
+    function fileToAvatarDataURL(file,size=256){return new Promise((res,rej)=>{const img=new Image(); img.onload=()=>{const s=Math.min(img.width,img.height),sx=(img.width-s)/2,sy=(img.height-s)/2; const c=document.createElement('canvas'); c.width=size;c.height=size; const ctx=c.getContext('2d'); ctx.drawImage(img,sx,sy,s,s,0,0,size,size); res(c.toDataURL('image/jpeg',0.85));}; img.onerror=rej; const r=new FileReader(); r.onload=()=>img.src=r.result; r.onerror=rej; r.readAsDataURL(file);});}
+
+    // список карточек продажи
+    function card(it){
+      return `<article class="rounded-2xl border border-neutral-200 bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+        <div class="aspect-[4/3] grid place-items-center bg-neutral-100 overflow-hidden">
+          ${it.img?`<img src="${it.img}" class="w-full h-full object-cover" onerror="this.remove()">`:`<div class="text-neutral-500">Нет фото</div>`}
+        </div>
+        <div class="p-4">
+          <div class="text-lg font-semibold">${it.title}</div>
+          <div class="text-neutral-600 mt-1">${it.city} · Комнат: ${it.rooms}</div>
+          <div class="mt-2 text-2xl font-bold">${it.price.toLocaleString('ru-RU')} <span class="text-sm font-medium text-neutral-500">сом</span></div>
+        </div>
+      </article>`;
+    }
+
+    function apply(){
+      const city=qs('#city').value, rooms=qs('#rooms').value;
+      const min=Number(qs('#priceMin').value||0), max=Number(qs('#priceMax').value||Infinity);
+      const out=sale.filter(x=>(!city||x.city===city)&&(!rooms||rooms==='Любая'||x.rooms===rooms|| (rooms==='3+'&&x.rooms==='3+'))&&(x.price>=min&&x.price<=max));
+      const grid=qs('#grid'); grid.innerHTML=out.map(card).join('');
+      qs('#empty').classList.toggle('hidden', out.length>0);
+    }
+    qs('#apply').onclick=apply;
+    qs('#reset').onclick=()=>{qs('#priceMin').value='';qs('#priceMax').value='';qs('#rooms').value='Любая';qs('#city').value='Бишкек';apply();};
+
+    updateAuthUI();
+    apply();
+  </script>
+</body>
+</html>
