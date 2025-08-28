@@ -45,7 +45,6 @@
           <a class="hover:text-blue-600" href="#">Рус</a><span>·</span><a class="hover:text-blue-600" href="#">Кыр</a>
         </div>
         <a id="btnAuth" href="index.html#login" class="text-blue-600 hover:underline">Мой аккаунт</a>
-        <div id="userBadge" class="hidden items-center"><div id="userAvatar" class="w-8 h-8 rounded-full bg-neutral-200"></div></div>
       </div>
     </div>
   </header>
@@ -73,10 +72,8 @@
     const qsa= (s,el=document)=>Array.from(el.querySelectorAll(s));
     const showToast=(m)=>{const t=qs('#toast'); t.textContent=m; t.classList.remove('hidden'); clearTimeout(showToast.t); showToast.t=setTimeout(()=>t.classList.add('hidden'),2200);};
 
-    // Рендер одной карточки (упрощённая версия, совпадает по стилю с главной)
     function cardHTML(it){
       const priceUnit = it.daily ? 'сом/сут' : 'сом/мес';
-      const fav = isFav(it.id);
       return `
       <article class="rounded-2xl border border-neutral-200 bg-white overflow-hidden shadow-sm flex flex-col">
         <div class="aspect-[4/3] bg-neutral-100 overflow-hidden">
@@ -87,8 +84,8 @@
         <div class="p-4 flex-1 flex flex-col gap-3">
           <div class="flex items-start gap-2">
             <h3 class="font-semibold leading-snug line-clamp-2">${it.title}</h3>
-            <button class="ml-auto fav-btn text-sm text-neutral-600 hover:text-blue-600" data-id="${it.id}" title="Убрать из избранного">
-              <span class="heart ${fav?'active':''}">${fav?'❤':'♡'}</span>
+            <button class="ml-auto fav-btn text-sm text-neutral-600 hover:text-blue-600" data-id="${it.id}">
+              <span class="heart active">❤</span>
             </button>
           </div>
           <div class="flex items-center gap-2">
@@ -105,16 +102,12 @@
       </article>`;
     }
 
-    // работа с избранным
     function getFavs(){ try{ return new Set(JSON.parse(localStorage.getItem('favs')||'[]')); }catch{ return new Set(); } }
     function setFavs(set){ localStorage.setItem('favs', JSON.stringify([...set])); }
-    function isFav(id){ return getFavs().has(id); }
 
     function render(){
       const grid = qs('#grid');
       grid.innerHTML = '';
-
-      // список объявлений пользователь хранит в localStorage.listings (так же делает постинг со страницы добавления)
       let all = [];
       try{ all = JSON.parse(localStorage.getItem('listings')||'[]'); }catch{}
       const favs = getFavs();
@@ -129,18 +122,17 @@
 
       list.forEach(it => grid.insertAdjacentHTML('beforeend', cardHTML(it)));
 
-      // обработчики удаления из избранного здесь же
+      // Удаление из избранного
       qsa('.fav-btn').forEach(b => {
         b.addEventListener('click', () => {
           const id = b.dataset.id;
           const s = getFavs();
           if (s.has(id)){ s.delete(id); setFavs(s); showToast('Убрано из избранного'); }
-          render(); // перерисуем список
+          render();
         });
       });
     }
 
-    // сердце должно быть красным и на других страницах — делаем единый формат хранения, тут уже всё учтено
     render();
   </script>
 </body>
