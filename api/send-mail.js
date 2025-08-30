@@ -1,39 +1,43 @@
-const nodemailer = require('nodemailer');
+// /api/send-mail.js
+import nodemailer from 'nodemailer';
 
-module.exports = async (req, res) => {
-  if (req.method !== 'POST') {
-    res.status(405).json({ ok: false, error: 'Method Not Allowed' });
-    return;
-  }
-
+export default async function handler(req, res) {
   try {
-    const { to, subject, html } = req.body || {};
-    if (!to || !subject || !html) {
-      res.status(400).json({ ok: false, error: 'to, subject, html are required' });
-      return;
-    }
+    // Разрешим быстрый тест через GET ?to=&subject=&text=
+    const { method } = req;
+
+    const to =
+      (method === 'GET' ? req.query.to : req.body?.to) ||
+      process.env.SMTP_FROM; // на всякий случай отправим себе
+
+    const subject =
+      (method === 'GET' ? req.query.subject : req.body?.subject) || 'Тест';
+
+    const html =
+      (method === 'GET' ? req.query.html : req.body?.html) ||
+      `<p>Привет! Это тестовое письмо с Vercel + Brevo SMTP.</p>`;
 
     const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: Number(process.env.SMTP_PORT || 587),
-      secure: false,      // для 587 — false
-      requireTLS: true,   // включаем TLS
+      host: process.env.SMTP_HOST,        // smtp-relay.brevo.com
+      port: Number(process.env.SMTP_PORT),// 587
+      secure: false,                      // для 587 — false
+      requireTLS: true,                   // принудительно TLS
       auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
+        user: process.env.SMTP_USER,      // 95e4...@smtp-brevo.com
+        pass: process.env.SMTP_PASS,      // мастер-ключ из Brevo
       },
     });
 
     await transporter.sendMail({
-      from: `"Arendator" <${process.env.SMTP_FROM}>`,
+      from: `"Arendator.kg" <${process.env.SMTP_FROM}>`,
       to,
       subject,
       html,
     });
 
-    res.status(200).json({ ok: true });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ ok: false, error: err.message });
+    return res.status(200).json({ ok: true });
+  } catch (e) {
+    console.error(e);
+    return res.status(500).json({ ok: false, error: e.message });
   }
-};
+}
