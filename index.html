@@ -109,6 +109,9 @@
           <button id="menuMyAds" class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50">Мои объявления</button>
           <button id="menuEditProfile" class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50">Редактировать профиль</button>
           <button id="menuChangeAvatar" class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50">Изменить аватарку</button>
+          <!-- divider + logout -->
+          <div class="h-px bg-neutral-200 my-1"></div>
+          <button id="menuLogout" class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50 text-red-600">Выйти</button>
         </div>
       </div>
     </div>
@@ -199,7 +202,7 @@
   <div class="container mx-auto px-4">
     <div id="ad-mid"
          class="my-6 rounded-2xl border border-neutral-200 bg-white shadow-soft grid place-items-center
-                min-h-[84px] sm:min-h-[100px] md:min-h-[100px]">
+                minх-[84px] sm:min-h-[100px] md:min-h-[100px]">
       <span class="text-sm text-neutral-500">Место для рекламы (банк · мебель · интернет)</span>
     </div>
   </div>
@@ -323,9 +326,9 @@
         <button id="btnConfirmOtp" class="mt-3 w-full px-4 py-2 rounded-xl bg-blue-600 text-white">Войти</button>
       </div>
       <div class="my-4 flex items-center gap-3">
-        <div class="h-px flex-1 bg-neutral-200"></div>
+        <div class="h-пx flex-1 bg-neutral-200"></div>
         <div class="text-xs text-neutral-500">или Telegram</div>
-        <div class="h-px flex-1 bg-neutral-200"></div>
+        <div class="h-пx flex-1 bg-neutral-200"></div>
       </div>
       <div id="tgLoginContainer" class="flex justify-center"></div>
 
@@ -702,6 +705,21 @@
     qs('#menuMyAds').addEventListener('click', ()=>{ qs('#accountMenu').classList.add('hidden'); showToast('Мои объявления (демо)'); });
     qs('#menuEditProfile').addEventListener('click', ()=>{ qs('#accountMenu').classList.add('hidden'); openEdit(); });
     qs('#menuChangeAvatar').addEventListener('click', ()=>{ qs('#accountMenu').classList.add('hidden'); openProfile(); });
+
+    // === ВЫХОД ===
+    qs('#menuLogout').addEventListener('click', ()=>{
+      qs('#accountMenu').classList.add('hidden');
+      try{
+        localStorage.removeItem('userLogged');
+        localStorage.removeItem('tg_user');
+        // при необходимости можно очистить доступ:
+        // localStorage.removeItem('accessUntil');
+      }catch(_){}
+      // удалить auth cookie (если был)
+      document.cookie = 'auth=; Max-Age=0; path=/';
+      updateAuthUI();
+      showToast('Вы вышли из аккаунта');
+    });
 
     // Редактировать профиль — запись/чтение
     function fillEditProfileModal(){
