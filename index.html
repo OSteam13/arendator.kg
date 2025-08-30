@@ -254,6 +254,29 @@
     </details>
   </section>
 
+  <!-- START: Contact form -->
+  <section id="contact" class="container mx-auto px-4 pb-10">
+    <h2 class="text-2xl font-bold mb-3">Связаться с нами</h2>
+    <p class="text-neutral-700 mb-4 text-sm">Задайте вопрос — ответим на почту в течение дня.</p>
+
+    <form id="contactForm" class="bg-white border border-neutral-200 rounded-2xl shadow-soft p-5 grid gap-3 max-w-2xl">
+      <div class="grid sm:grid-cols-2 gap-3">
+        <input type="text" name="name" placeholder="Ваше имя" required class="px-3 py-2 rounded-xl border border-neutral-200">
+        <input type="email" name="email" placeholder="Ваш email" required class="px-3 py-2 rounded-xl border border-neutral-200">
+      </div>
+
+      <!-- honeypot -->
+      <input type="text" name="website" style="display:none">
+      <!-- timestamp -->
+      <input type="hidden" name="ts" id="tsField">
+
+      <textarea name="message" rows="5" placeholder="Сообщение" required class="px-3 py-2 rounded-xl border border-neutral-200"></textarea>
+      <button type="submit" class="px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700">Отправить</button>
+      <div id="contactNote" class="text-xs text-neutral-500"></div>
+    </form>
+  </section>
+  <!-- END: Contact form -->
+
   <!-- Футер -->
   <footer class="border-t border-neutral-100 bg-white">
     <div class="container mx-auto px-4 py-8 grid md:grid-cols-4 gap-6 text-sm">
@@ -305,6 +328,28 @@
         <div class="h-px flex-1 bg-neutral-200"></div>
       </div>
       <div id="tgLoginContainer" class="flex justify-center"></div>
+
+      <!-- START: extra auth buttons -->
+      <div class="mt-3 text-xs text-neutral-500 text-center">или:</div>
+      <div class="mt-2 grid grid-cols-2 gap-2">
+        <button id="btnLoginWhatsApp" class="px-3 py-2 rounded-xl border border-neutral-200 hover:bg-neutral-50">
+          Войти через WhatsApp
+        </button>
+        <button id="btnLoginEmail" class="px-3 py-2 rounded-xl border border-neutral-200 hover:bg-neutral-50">
+          Войти по e-mail
+        </button>
+      </div>
+
+      <!-- Появляется при выборе e-mail -->
+      <div id="loginEmailBlock" class="hidden mt-3 space-y-2">
+        <input id="loginEmail" type="email" placeholder="you@email.com"
+               class="w-full px-3 py-2 rounded-xl border border-neutral-200">
+        <button id="btnSendEmailLink" class="w-full px-4 py-2 rounded-xl bg-neutral-900 text-white">
+          Отправить ссылку для входа
+        </button>
+        <div class="text-xs text-neutral-500">Мы пришлём «магическую» ссылку на почту.</div>
+      </div>
+      <!-- END: extra auth buttons -->
     </div>
   </div>
 
@@ -781,6 +826,139 @@
         try { updateAuthUI(); } catch(e){}
       }
     });
+  </script>
+
+  <!-- SECOND SCRIPT: логика WhatsApp / Email + форма контакта -->
+  <script>
+  (() => {
+    // ===== WhatsApp / Email login =====
+    const waBtn   = document.getElementById('btnLoginWhatsApp');
+    const emBtn   = document.getElementById('btnLoginEmail');
+    const emBox   = document.getElementById('loginEmailBlock');
+    const emInput = document.getElementById('loginEmail');
+    const emSend  = document.getElementById('btnSendEmailLink');
+
+    // Укажи свой WA Business номер без + (пример: 996555123456)
+    const WA_NUMBER = '996555123456';
+
+    if (waBtn) {
+      waBtn.addEventListener('click', () => {
+        const text = encodeURIComponent('Здравствуйте! Хочу войти в Arendator.kg');
+        window.open(`https://wa.me/${WA_NUMBER}?text=${text}`, '_blank');
+      });
+    }
+
+    if (emBtn) {
+      emBtn.addEventListener('click', () => {
+        emBox?.classList.toggle('hidden');
+      });
+    }
+
+    if (emSend) {
+      emSend.addEventListener('click', async () => {
+        const email = (emInput?.value || '').trim();
+        if (!email) { alert('Укажи e-mail'); return; }
+
+        // простая «магическая» ссылка (демо без сервера пользователей)
+        const magic = Math.random().toString(36).slice(2);
+        try { localStorage.setItem('email_magic_' + email, magic); } catch(_){}
+
+        const link = `${location.origin}/?login=${encodeURIComponent(email)}&magic=${magic}`;
+        const html = `
+          <p>Привет! Для входа в Arendator.kg нажми ссылку:</p>
+          <p><a href="${link}">Войти</a></p>
+          <p>Если это были не вы — просто игнорируйте письмо.</p>
+        `;
+
+        try {
+          const res = await fetch('/api/send-mail', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+              to: email,
+              subject: 'Вход в Arendator.kg',
+              html
+            })
+          });
+          const data = await res.json();
+          if (data.ok) {
+            alert('Ссылка отправлена на почту.');
+          } else {
+            alert('Не удалось отправить: ' + (data.error || 'ошибка'));
+          }
+        } catch (e) {
+          alert('Сеть недоступна, попробуй ещё раз.');
+        }
+      });
+    }
+
+    // Автовход по ссылке из письма (демо)
+    (function emailMagicAutoLogin(){
+      const p = new URLSearchParams(location.search);
+      const email = p.get('login');
+      const magic = p.get('magic');
+      if (!email || !magic) return;
+
+      try {
+        const saved = localStorage.getItem('email_magic_' + email);
+        if (saved && saved === magic) {
+          localStorage.setItem('userLogged', '1');
+          // почистим URL
+          history.replaceState(null, '', location.pathname);
+          // обновим UI, если функция есть
+          try { updateAuthUI(); } catch(_){}
+          try { document.getElementById('modalLogin')?.classList.add('hidden'); } catch(_){}
+          try {
+            const t = document.getElementById('toast');
+            if (t){ t.textContent='Вход по email выполнен'; t.classList.remove('hidden'); setTimeout(()=>t.classList.add('hidden'), 2000); }
+          } catch(_){}
+        }
+      } catch(_){}
+    })();
+
+    // ===== Форма «Связаться с нами» =====
+    const ts = document.getElementById('tsField');
+    if (ts) ts.value = Date.now();
+
+    const form = document.getElementById('contactForm');
+    const note = document.getElementById('contactNote');
+
+    if (form) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const fd = new FormData(form);
+        const payload = Object.fromEntries(fd.entries());
+
+        // honeypot: если заполнен — молча «успех»
+        if (payload.website && payload.website.trim() !== '') {
+          form.reset();
+          if (note) note.textContent = 'Спасибо!';
+          return;
+        }
+
+        // получатель фиксируем на клиенте (на сервере всё равно проверяй)
+        payload.to = 'reply@arendator.kg';
+
+        try {
+          const res = await fetch('/api/send-mail', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payload)
+          });
+          const data = await res.json();
+          if (data.ok) {
+            form.reset();
+            if (note) note.textContent = 'Сообщение отправлено.';
+            if (ts) ts.value = Date.now();
+          } else {
+            if (note) note.textContent = 'Ошибка: ' + (data.error || 'не удалось отправить');
+          }
+        } catch (err) {
+          if (note) note.textContent = 'Ошибка сети. Попробуйте ещё раз.';
+        }
+      });
+    }
+  })();
   </script>
 </body>
 </html>
