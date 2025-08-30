@@ -31,35 +31,6 @@
     .card-actions>input{min-width:0}
     .mask-blur{filter:blur(3px)}
 
-    @media (min-width: 768px){ .mobile-actions{display:none} }
-    .mobile-actions{position:fixed;left:0;right:0;bottom:0;z-index:40;background:#fff;border-top:1px solid #e5e7eb;padding:.5rem}
-
-    .user-avatar{
-      width: 32px; height: 32px;
-      border-radius: 9999px;
-      background: #e5e7eb;
-      color:#374151;
-      display:grid; place-items:center;
-      font-weight: 700;
-      overflow:hidden;
-      background-size: cover;
-      background-position: center;
-      flex-shrink:0;
-      font-size: 14px;
-    }
-    .avatar-lg{
-      width: 96px; height: 96px;
-      border-radius: 9999px;
-      background:#e5e7eb;
-      display:grid; place-items:center;
-      overflow:hidden;
-      background-size: cover;
-      background-position: center;
-      font-weight: 800;
-      font-size: 36px;
-      color:#374151;
-      margin: 0 auto;
-    }
     /* dropdown */
     .dropdown{position:relative}
     .dropdown-menu{position:absolute; right:0; top:calc(100% + .5rem); min-width:220px}
@@ -78,19 +49,24 @@
 
   <!-- Хедер -->
   <header class="bg-white sticky top-0 z-30 border-b border-neutral-100/80">
-    <div class="container mx-auto px-4 py-3 flex items-center gap-3">
-      <a href="/" class="flex items-center gap-2 shrink-0">
-        <img src="./images/Arendatorkg.png" alt="Arendator.kg" class="w-8 h-8 rounded-full object-contain">
-      </a>
+    <div class="container mx-auto px-4 py-2 md:py-3 flex flex-col gap-2 md:flex-row md:items-center">
 
-      <nav class="ml-2 flex items-center gap-5 text-sm">
-        <a href="post.html" class="px-3 py-1.5 rounded-xl bg-neutral-900 text-white hover:bg-neutral-800">Добавить объявление</a>
-        <a href="sell.html" class="hover:text-blue-600">Продажа</a>
-        <a href="blog.html" class="hover:text-blue-600">Блог</a>
-        <a href="favorites.html" class="hover:text-blue-600">Избранное</a>
-      </nav>
+      <!-- Строка 1: логотип + навигация -->
+      <div class="flex items-center gap-3">
+        <a href="/" class="flex items-center gap-2 shrink-0">
+          <img src="./images/Arendatorkg.png" alt="Arendator.kg" class="w-8 h-8 rounded-full object-contain">
+        </a>
 
-      <div class="ml-auto flex items-center gap-3 text-sm dropdown" id="accountArea">
+        <nav class="ml-1 flex flex-wrap items-center gap-3 text-sm">
+          <a href="post.html" class="px-3 py-1.5 rounded-xl bg-neutral-900 text-white hover:bg-neutral-800 whitespace-nowrap">Добавить объявление</a>
+          <a href="sell.html" class="hover:text-blue-600 whitespace-nowrap">Продажа</a>
+          <a href="blog.html" class="hover:text-blue-600 whitespace-nowrap">Блог</a>
+          <a href="favorites.html" class="hover:text-blue-600 whitespace-nowrap">Избранное</a>
+        </nav>
+      </div>
+
+      <!-- Строка 2: языки + вход/аккаунт -->
+      <div class="md:ml-auto flex items-center gap-3 text-sm dropdown" id="accountArea">
         <div class="hidden sm:flex items-center gap-2 text-neutral-600 mr-1">
           <a class="hover:text-blue-600" href="#" aria-label="Рус">Рус</a>
           <span>·</span>
@@ -109,7 +85,6 @@
           <button id="menuMyAds" class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50">Мои объявления</button>
           <button id="menuEditProfile" class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50">Редактировать профиль</button>
           <button id="menuChangeAvatar" class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50">Изменить аватарку</button>
-          <!-- divider + logout -->
           <div class="h-px bg-neutral-200 my-1"></div>
           <button id="menuLogout" class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50 text-red-600">Выйти</button>
         </div>
@@ -331,6 +306,9 @@
         <div class="h-пx flex-1 bg-neutral-200"></div>
       </div>
       <div id="tgLoginContainer" class="flex justify-center"></div>
+      <div class="text-xs text-neutral-500 text-center mt-2">
+        После нажатия появится окно Telegram — откройте Telegram и нажмите «Принять / Allow», чтобы завершить вход.
+      </div>
 
       <!-- START: extra auth buttons -->
       <div class="mt-3 text-xs text-neutral-500 text-center">или:</div>
@@ -412,14 +390,6 @@
         <button id="btnSimulatePaid" class="px-4 py-2 rounded-xl bg-blue-600 text-white">Оплата прошла (демо)</button>
         <button id="btnClosePay" class="px-4 py-2 rounded-xl border border-neutral-200">Отмена</button>
       </div>
-    </div>
-  </div>
-
-  <!-- Mobile actions -->
-  <div class="mobile-actions">
-    <div class="flex gap-2">
-      <button id="btnAuthMobile" class="flex-1 px-4 py-2 rounded-xl border border-neutral-200">Войти</button>
-      <button id="btnPayMobile" class="flex-1 px-4 py-2 rounded-xl bg-blue-600 text-white">Открыть номера</button>
     </div>
   </div>
 
@@ -626,7 +596,7 @@
     function updateAuthUI(){
       const logged  = !!localStorage.getItem('userLogged');
       const btn     = qs('#btnAuth');
-      const btnM    = qs('#btnAuthMobile');
+      const btnM    = qs('#btnAuthMobile'); // может отсутствовать — ок
       const badge   = qs('#userBadge');
       const avatar  = qs('#userAvatar');
       const menu    = qs('#accountMenu');
@@ -712,10 +682,7 @@
       try{
         localStorage.removeItem('userLogged');
         localStorage.removeItem('tg_user');
-        // при необходимости можно очистить доступ:
-        // localStorage.removeItem('accessUntil');
       }catch(_){}
-      // удалить auth cookie (если был)
       document.cookie = 'auth=; Max-Age=0; path=/';
       updateAuthUI();
       showToast('Вы вышли из аккаунта');
@@ -921,9 +888,7 @@
         const saved = localStorage.getItem('email_magic_' + email);
         if (saved && saved === magic) {
           localStorage.setItem('userLogged', '1');
-          // почистим URL
           history.replaceState(null, '', location.pathname);
-          // обновим UI, если функция есть
           try { updateAuthUI(); } catch(_){}
           try { document.getElementById('modalLogin')?.classList.add('hidden'); } catch(_){}
           try {
