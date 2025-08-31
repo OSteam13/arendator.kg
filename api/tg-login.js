@@ -1,11 +1,11 @@
 const crypto = require('crypto');
-const { pool } = require('./_db'); // <-- общий пул из api/_db.js
+const { pool } = require('./_db');
 
 function days(n){ return n*24*60*60; }
 
 module.exports = async (req, res) => {
   try {
-    // В проде нужно валидировать hash от Telegram
+    // В проде нужно валидировать hash от Telegram!
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
     const tg = body?.user;
     if (!tg?.id) { res.status(400).json({ ok:false, error:'no_user' }); return; }
@@ -23,11 +23,7 @@ module.exports = async (req, res) => {
 
     const token = crypto.randomBytes(32).toString('hex');
     const exp   = new Date(Date.now() + 14*24*3600*1000);
-
-    await pool.query(
-      'insert into sessions(token, user_id, expires_at) values ($1,$2,$3)',
-      [token, userId, exp]
-    );
+    await pool.query('insert into sessions(token, user_id, expires_at) values ($1,$2,$3)', [token, userId, exp]);
 
     res.setHeader('Set-Cookie',
       `auth=${token}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${days(14)}`
