@@ -5,7 +5,7 @@ const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejec
 function days(n){ return n*24*60*60; }
 
 module.exports = async (req, res) => {
-  // В продакшене надо валидировать hash от Telegram!
+  // В продакшене надо валидировать р hash от Telegram!
   const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
   const tg = body?.user;
   if (!tg?.id) { res.status(400).json({ ok:false, error:'no_user' }); return; }
