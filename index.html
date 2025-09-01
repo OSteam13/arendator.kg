@@ -6,7 +6,6 @@
   <title>Arendator.kg — свежие квартиры без посредников</title>
   <meta name="description" content="Свежие объявления аренды от владельцев. Анти-агент фильтр, номера открываются после оплаты. Объявления живут 24 часа." />
   <link rel="icon" href="./images/Arendatorkg.png">
-  <!-- Onest: 400 (Regular) + 800 (ExtraBold) -->
   <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -19,85 +18,49 @@
       font-weight: 400;
     }
     .hero-title{ font-weight: 800; }
-
-    /* элементы хедера поверх всего */
     header .container > * { position: relative; z-index: 10; }
-
     .side-ads{position:fixed;top:60px;bottom:0;width:var(--ads);display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:5}
     .side-ads>div{writing-mode:vertical-rl;transform:rotate(180deg);opacity:.75}
     @media (max-width:1400px){.side-ads{display:none}}
-
     .card-actions{display:flex;gap:.5rem;align-items:center}
     .card-actions>input{min-width:0}
     .mask-blur{filter:blur(3px)}
-
-    /* dropdown */
     .dropdown{position:relative}
     .dropdown-menu{position:absolute; right:0; top:calc(100% + .5rem); min-width:220px}
-
-    /* avatar */
     .user-avatar{
-      width: 32px; height: 32px;
-      border-radius: 9999px;
-      background: #e5e7eb;
-      color:#374151;
-      display:grid; place-items:center;
-      font-weight: 700;
-      overflow:hidden;
-      background-size: cover;
-      background-position: center;
-      flex-shrink:0;
-      font-size: 14px;
-      cursor: pointer;
+      width: 32px; height: 32px; border-radius: 9999px; background: #e5e7eb; color:#374151;
+      display:grid; place-items:center; font-weight: 700; overflow:hidden; background-size: cover;
+      background-position: center; flex-shrink:0; font-size: 14px; cursor: pointer;
     }
     .avatar-lg{
-      width: 96px; height: 96px;
-      border-radius: 9999px;
-      background:#e5e7eb;
-      display:grid; place-items:center;
-      overflow:hidden;
-      background-size: cover;
-      background-position: center;
-      font-weight: 800;
-      font-size: 36px;
-      color:#374151;
-      margin: 0 auto;
+      width: 96px; height: 96px; border-radius: 9999px; background:#e5e7eb; display:grid; place-items:center;
+      overflow:hidden; background-size: cover; background-position: center; font-weight: 800; font-size: 36px;
+      color:#374151; margin: 0 auto;
     }
-
-    /* Мобильная вторая строка навигации — компактнее */
     .nav-mobile a { font-size: 13px; }
-
-    /* Кнопка переключения языка */
-    .lang-toggle{padding:.25rem .5rem;border-radius:.75rem;border:1px solid rgb(229 231 235);}
+    .lang-toggle{padding:.25rem .5rem;border:1px solid rgb(229 231 235);border-radius:.75rem}
     .lang-toggle span{opacity:.55}
     .lang-toggle .active{opacity:1;font-weight:700}
   </style>
 </head>
 <body class="bg-neutral-50 text-neutral-900">
 
-  <!-- Верхняя зелёная плашка -->
   <div class="bg-emerald-600 text-white text-center text-xs sm:text-sm py-2">
     Объявления живут 24 часа · Анти-агент фильтр включён
   </div>
 
-  <!-- Боковые «Реклама» -->
   <aside class="side-ads left-0"><div class="rounded-2xl bg-white border border-neutral-200 shadow-soft px-2 py-4 text-sm">Реклама</div></aside>
   <aside class="side-ads right-0"><div class="rounded-2xl bg-white border border-neutral-200 shadow-soft px-2 py-4 text-sm">Реклама</div></aside>
 
-  <!-- Хедер -->
   <header class="bg-white sticky top-0 z-30 border-b border-neutral-100/80">
     <div class="container mx-auto px-4 py-2 md:py-3 flex flex-col gap-2">
-
-      <!-- Строка 1 (мобилка): Лого — Рус/кыр — Вход/регистрация — Аватар -->
       <div class="flex items-center justify-between md:hidden">
         <a href="/" class="flex items-center gap-2 shrink-0">
           <img src="./images/Arendatorkg.png" alt="Arendator.kg" class="w-8 h-8 rounded-full object-contain">
         </a>
-
         <button id="langToggleMobile" class="lang-toggle text-sm">
           <span class="ru active">Рус</span> / <span class="ky">Кыр</span>
         </button>
-
         <div class="flex items-center gap-2 dropdown" id="accountAreaMobile">
           <button id="btnAuthMobile" class="text-blue-600 text-sm hover:underline">Вход / регистрация</button>
           <div id="userBadgeMobile" class="hidden items-center">
@@ -113,7 +76,6 @@
         </div>
       </div>
 
-      <!-- Строка 2 (мобилка): компактная навигация в одну строку -->
       <nav class="md:hidden nav-mobile flex flex-wrap items-center gap-3">
         <a href="post.html" class="px-3 py-1.5 rounded-xl bg-neutral-900 text-white hover:bg-neutral-800 whitespace-nowrap">Добавить объявление</a>
         <a href="sell.html" class="hover:text-blue-600 whitespace-nowrap">Продажа</a>
@@ -121,14 +83,11 @@
         <a href="favorites.html" class="hover:text-blue-600 whitespace-nowrap">Избранное</a>
       </nav>
 
-      <!-- ДЕСКТОП: одна строка по схеме: Лого — Нав — spacer — Рус/кыр — Вход/аккаунт — Аватар -->
       <div class="hidden md:flex items-center gap-4">
-        <!-- Лого -->
         <a href="/" class="flex items-center gap-2 shrink-0">
           <img src="./images/Arendatorkg.png" alt="Arendator.kg" class="w-8 h-8 rounded-full object-contain">
         </a>
 
-        <!-- Навигация -->
         <nav class="flex items-center gap-4 text-sm">
           <a href="post.html" class="px-3 py-1.5 rounded-xl bg-neutral-900 text-white hover:bg-neutral-800 whitespace-nowrap">Добавить объявление</a>
           <a href="sell.html" class="hover:text-blue-600 whitespace-nowrap">Продажа</a>
@@ -136,21 +95,17 @@
           <a href="favorites.html" class="hover:text-blue-600 whitespace-nowrap">Избранное</a>
         </nav>
 
-        <!-- Длинный отступ -->
         <div class="flex-1"></div>
 
-        <!-- Переключатель языка -->
         <button id="langToggle" class="lang-toggle text-sm">
           <span class="ru active">Рус</span> / <span class="ky">Кыр</span>
         </button>
 
-        <!-- Аккаунт + аватар -->
         <div class="flex items-center gap-3 text-sm dropdown" id="accountArea">
           <button id="btnAuth" class="text-blue-600 hover:underline">Вход / регистрация</button>
           <div id="userBadge" class="hidden items-center">
             <div id="userAvatar" class="user-avatar" title="Мой аккаунт"></div>
           </div>
-          <!-- Выпадающее меню аккаунта -->
           <div id="accountMenu" class="dropdown-menu hidden bg-white border border-neutral-200 rounded-xl shadow-soft p-1">
             <button id="menuMyAds" class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50">Мои объявления</button>
             <button id="menuEditProfile" class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50">Редактировать профиль</button>
@@ -164,10 +119,8 @@
     </div>
   </header>
 
-  <!-- Герой -->
   <section class="container mx-auto px-4 pt-8">
     <div class="grid md:grid-cols-2 gap-8 items-stretch">
-      <!-- Левая: Поиск -->
       <div class="bg-white border border-neutral-200 rounded-2xl shadow-soft p-4 sm:p-5 h-full flex flex-col">
         <h1 class="hero-title text-3xl md:text-5xl leading-tight text-blue-600">Ищете квартиру в аренду?</h1>
         <p class="mt-3 text-base md:text-lg text-neutral-600">
@@ -208,7 +161,6 @@
         </div>
       </div>
 
-      <!-- Правая: Лучший вариант -->
       <div class="bg-white border border-neutral-200 rounded-2xl shadow-soft p-4 sm:p-5 h-full flex flex-col">
         <h3 class="text-xl md:text-2xl font-semibold text-blue-600 text-center mb-3">
           Лучший вариант на данную минуту — успей купить!!!
@@ -245,22 +197,19 @@
     </div>
   </section>
 
-  <!-- Межстраничный рекламный блок -->
   <div class="container mx-auto px-4">
     <div id="ad-mid"
          class="my-6 rounded-2xl border border-neutral-200 bg-white shadow-soft grid place-items-center
-                minх-[84px] sm:min-h-[100px] md:min-h-[100px]">
+                min-h-[84px] sm:min-h-[100px] md:min-h-[100px]">
       <span class="text-sm text-neutral-500">Место для рекламы (банк · мебель · интернет)</span>
     </div>
   </div>
 
-  <!-- Список объявлений -->
   <main id="listings" class="container mx-auto px-4 py-1">
     <div id="listGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"></div>
     <div id="emptyState" class="hidden text-center py-16 text-neutral-600">По этим фильтрам нет свежих объявлений.</div>
   </main>
 
-  <!-- Тарифы -->
   <section class="container mx-auto px-4 pb-10">
     <h2 class="text-2xl font-bold mb-2">Тарифы доступа</h2>
     <p class="text-neutral-700 mb-6">
@@ -304,7 +253,6 @@
     </details>
   </section>
 
-  <!-- START: Contact form -->
   <section id="contact" class="container mx-auto px-4 pb-10">
     <h2 class="text-2xl font-bold mb-3">Связаться с нами</h2>
     <p class="text-neutral-700 mb-4 text-sm">Задайте вопрос — ответим на почту в течение дня.</p>
@@ -314,20 +262,14 @@
         <input type="text" name="name" placeholder="Ваше имя" required class="px-3 py-2 rounded-xl border border-neutral-200">
         <input type="email" name="email" placeholder="Ваш email" required class="px-3 py-2 rounded-xl border border-neutral-200">
       </div>
-
-      <!-- honeypot -->
       <input type="text" name="website" style="display:none">
-      <!-- timestamp -->
       <input type="hidden" name="ts" id="tsField">
-
       <textarea name="message" rows="5" placeholder="Сообщение" required class="px-3 py-2 rounded-xl border border-neutral-200"></textarea>
       <button type="submit" class="px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700">Отправить</button>
       <div id="contactNote" class="text-xs text-neutral-500"></div>
     </form>
   </section>
-  <!-- END: Contact form -->
 
-  <!-- Футер -->
   <footer class="border-t border-neutral-100 bg-white">
     <div class="container mx-auto px-4 py-8 grid md:grid-cols-4 gap-6 text-sm">
       <div class="md:col-span-2">
@@ -373,56 +315,43 @@
         <button id="btnConfirmOtp" class="mt-3 w-full px-4 py-2 rounded-xl bg-blue-600 text-white">Войти</button>
       </div>
       <div class="my-4 flex items-center gap-3">
-        <div class="h-пx flex-1 bg-neutral-200"></div>
+        <div class="h-px flex-1 bg-neutral-200"></div>
         <div class="text-xs text-neutral-500">или Telegram</div>
-        <div class="h-пx flex-1 bg-neutral-200"></div>
+        <div class="h-px flex-1 bg-neutral-200"></div>
       </div>
       <div id="tgLoginContainer" class="flex justify-center"></div>
       <div class="text-xs text-neutral-500 text-center mt-2">
         После нажатия появится окно Telegram — откройте Telegram и нажмите «Принять / Allow», чтобы завершить вход.
       </div>
 
-      <!-- START: extra auth buttons -->
       <div class="mt-3 text-xs text-neutral-500 text-center">или:</div>
       <div class="mt-2 grid grid-cols-2 gap-2">
-        <button id="btnLoginWhatsApp" class="px-3 py-2 rounded-xl border border-neutral-200 hover:bg-neutral-50">
-          Войти через WhatsApp
-        </button>
-        <button id="btnLoginEmail" class="px-3 py-2 rounded-xl border border-neutral-200 hover:bg-neutral-50">
-          Войти по e-mail
-        </button>
+        <button id="btnLoginWhatsApp" class="px-3 py-2 rounded-xl border border-neutral-200 hover:bg-neutral-50">Войти через WhatsApp</button>
+        <button id="btnLoginEmail" class="px-3 py-2 rounded-xl border border-neutral-200 hover:bg-neutral-50">Войти по e-mail</button>
       </div>
 
-      <!-- Появляется при выборе e-mail -->
       <div id="loginEmailBlock" class="hidden mt-3 space-y-2">
-        <input id="loginEmail" type="email" placeholder="you@email.com"
-               class="w-full px-3 py-2 rounded-xl border border-neutral-200">
-        <button id="btnSendEmailLink" class="w-full px-4 py-2 rounded-xl bg-neutral-900 text-white">
-          Отправить ссылку для входа
-        </button>
+        <input id="loginEmail" type="email" placeholder="you@email.com" class="w-full px-3 py-2 rounded-xl border border-neutral-200">
+        <button id="btnSendEmailLink" class="w-full px-4 py-2 rounded-xl bg-neutral-900 text-white">Отправить ссылку для входа</button>
         <div class="text-xs text-neutral-500">Мы пришлём «магическую» ссылку на почту.</div>
       </div>
-      <!-- END: extra auth buttons -->
     </div>
   </div>
 
-  <!-- Модалка: Профиль (смена аватара) -->
+  <!-- Модалки профиля/оплаты (без изменений) -->
   <div id="modalProfile" class="fixed inset-0 hidden items-center justify-center bg-black/40 p-4">
     <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-soft">
       <div class="text-lg font-semibold">Мой профиль</div>
       <p class="text-sm text-neutral-600 mt-1">Измени аватарку. (Пока локально, без сервера)</p>
-
       <div class="mt-4">
         <div id="profileAvatar" class="avatar-lg">U</div>
         <div class="mt-4 grid grid-cols-2 gap-2">
           <label class="px-4 py-2 rounded-xl bg-neutral-900 text-white text-center cursor-pointer">
-            <input id="avatarFile" type="file" accept="image/*" class="hidden">
-            Загрузить
+            <input id="avatarFile" type="file" accept="image/*" class="hidden">Загрузить
           </label>
           <button id="btnAvatarRemove" class="px-4 py-2 rounded-xl border border-neutral-200">Удалить</button>
         </div>
       </div>
-
       <div class="mt-6 grid grid-cols-2 gap-2">
         <button id="btnCloseProfile" class="px-4 py-2 rounded-xl border border-neutral-200">Закрыть</button>
         <button id="btnSaveProfile" class="px-4 py-2 rounded-xl bg-blue-600 text-white">Сохранить</button>
@@ -430,7 +359,6 @@
     </div>
   </div>
 
-  <!-- Модалка: Редактировать профиль -->
   <div id="modalEditProfile" class="fixed inset-0 hidden items-center justify-center bg-black/40 p-4">
     <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-soft">
       <div class="text-lg font-semibold">Редактировать профиль</div>
@@ -447,7 +375,6 @@
     </div>
   </div>
 
-  <!-- Модалка: Оплата -->
   <div id="modalPay" class="fixed inset-0 hidden items-center justify-center bg-black/40 p-4">
     <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-soft">
       <div class="text-lg font-semibold">Открой номера владельцев</div>
@@ -465,11 +392,10 @@
     </div>
   </div>
 
-  <!-- Toast -->
   <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 hidden px-4 py-2 rounded-xl bg-neutral-900 text-white text-sm"></div>
 
   <script>
-    /* ======= Данные (демо) ======= */
+    /* ===== демо-данные и утилиты (как у тебя) ===== */
     const listings = [
       { id:'l1', title:'2к, Центр, свежий ремонт', price:35000, district:'Центр', rooms:'2', daily:false, owner:true, img:'', phone:'+996555123456', expiresAt: Date.now()+23*3600e3+30*60e3 },
       { id:'l2', title:'1к, Майевка, уютная',      price:18000, district:'Майевка', rooms:'1', daily:false, owner:true, img:'https://images.unsplash.com/photo-1502005229762-cf1b2da7cda7?q=80&w=1200&auto=format&fit=crop', phone:'+996700222333', expiresAt: Date.now()+10*3600e3 },
@@ -479,7 +405,6 @@
       { id:'l6', title:'3к, Свердловский, новая мебель', price:45000, district:'Свердловский', rooms:'3+', daily:false, owner:true, img:'https://images.unsplash.com/photo-1494526585095-c41746248156?q=80&w=1200&auto=format&fit=crop', phone:'+996500321654', expiresAt: Date.now()+5*3600e3 },
     ];
 
-    /* ======= Утилиты ======= */
     const qs  = (s,el=document)=>el.querySelector(s);
     const qsa = (s,el=document)=>Array.from(el.querySelectorAll(s));
     const showToast=(m)=>{const t=qs('#toast'); t.textContent=m; t.classList.remove('hidden'); clearTimeout(showToast.t); showToast.t=setTimeout(()=>t.classList.add('hidden'),2200);};
@@ -496,34 +421,18 @@
       tick(); return setInterval(tick,60000);
     }
 
-    /* ======= Лучший блок ======= */
-    let bestItem = null;
+    /* ===== Лучший блок, карточки и избранное (как у тебя) ===== */
+    let bestItem=null;
     function renderBest(){
       bestItem = listings.find(it=>!it.daily && it.price<=25000) || listings[0];
-
-      const imgEl = qs('#bestImg');
-      const noPhoto = qs('#bestNoPhoto');
-      const btn = qs('#bestCallBtn');
-      const masked = qs('#bestMasked');
-
-      if (bestItem.img) {
-        imgEl.src = bestItem.img;
-        imgEl.alt = bestItem.title || 'Лучшее объявление';
-        imgEl.classList.remove('hidden');
-        noPhoto.classList.add('hidden');
-      } else {
-        imgEl.removeAttribute('src');
-        imgEl.classList.add('hidden');
-        noPhoto.classList.remove('hidden');
-      }
-
-      masked.textContent = maskPhone(bestItem.phone || '');
-
-      qs('#bestTitle').textContent = bestItem.title || '';
-      qs('#bestPrice').textContent = (bestItem.price || 0).toLocaleString('ru-RU') + ' сом';
-      qs('#bestDistrict').textContent = bestItem.district || '';
-      qs('#bestRooms').textContent = 'Комнат: ' + (bestItem.rooms || '');
-
+      const imgEl=qs('#bestImg'), noPhoto=qs('#bestNoPhoto'), btn=qs('#bestCallBtn'), masked=qs('#bestMasked');
+      if (bestItem.img){ imgEl.src=bestItem.img; imgEl.alt=bestItem.title||'Лучшее объявление'; imgEl.classList.remove('hidden'); noPhoto.classList.add('hidden'); }
+      else { imgEl.removeAttribute('src'); imgEl.classList.add('hidden'); noPhoto.classList.remove('hidden'); }
+      masked.textContent = maskPhone(bestItem.phone||'');
+      qs('#bestTitle').textContent = bestItem.title||'';
+      qs('#bestPrice').textContent = (bestItem.price||0).toLocaleString('ru-RU')+' сом';
+      qs('#bestDistrict').textContent = bestItem.district||'';
+      qs('#bestRooms').textContent   = 'Комнат: '+(bestItem.rooms||'');
       btn.onclick = () => {
         if(!localStorage.getItem('userLogged')){ openLogin(); return; }
         if(!hasAccess()){ openPay(); return; }
@@ -531,7 +440,6 @@
       };
     }
 
-    /* ======= Карточки (с учётом избранного) ======= */
     function cardHTML(it){
       const priceUnit = it.daily ? 'сом/сут' : 'сом/мес';
       const favs = new Set(JSON.parse(localStorage.getItem('favs')||'[]'));
@@ -539,9 +447,7 @@
       return `
       <article class="rounded-2xl border border-neutral-200 bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
         <div class="aspect-[4/3] overflow-hidden grid place-items-center bg-neutral-100">
-          ${it.img
-            ? `<img src="${it.img}" alt="${it.title}" class="w-full h-full object-cover">`
-            : `<div class="text-neutral-500 text-sm">Нет фото</div>`}
+          ${it.img ? `<img src="${it.img}" alt="${it.title}" class="w-full h-full object-cover">` : `<div class="text-neutral-500 text-sm">Нет фото</div>`}
         </div>
         <div class="p-4 flex-1 flex flex-col gap-3">
           <div class="flex items-start gap-2">
@@ -554,9 +460,7 @@
             <div class="text-2xl font-bold">${it.price.toLocaleString('ru-RU')} <span class="text-sm font-medium text-neutral-500">${priceUnit}</span></div>
             <div class="ml-auto text-xs text-neutral-600">осталось <span class="countdown" data-ts="${it.expiresAt}"></span></div>
           </div>
-          <div class="flex items-center gap-2 text-sm text-neutral-600">
-            <div>${it.district}</div><div>·</div><div>Комнат: ${it.rooms}</div>
-          </div>
+          <div class="flex items-center gap-2 text-sm text-neutral-600"><div>${it.district}</div><div>·</div><div>Комнат: ${it.rooms}</div></div>
           <div class="mt-auto card-actions">
             <input readonly class="flex-1 px-3 py-2 rounded-xl border border-neutral-200 bg-neutral-50 ${hasAccess()?'':'mask-blur'}" value="${it.phone}">
             <button class="px-3 py-2 rounded-xl bg-blue-600 text-white text-sm reveal-btn" data-id="${it.id}">${hasAccess()?'Скопировать':'Показать номер'}</button>
@@ -594,33 +498,23 @@
       const id=e.currentTarget.dataset.id;
       const favs=new Set(JSON.parse(localStorage.getItem('favs')||'[]'));
       const heart=e.currentTarget.querySelector('.heart');
-
-      if(favs.has(id)){
-        favs.delete(id);
-        heart.textContent='♡';
-        heart.classList.remove('text-red-600');
-        showToast('Убрано из избранного');
-      } else {
-        favs.add(id);
-        heart.textContent='❤';
-        heart.classList.add('text-red-600');
-        showToast('Добавлено в избранное');
-      }
+      if(favs.has(id)){ favs.delete(id); heart.textContent='♡'; heart.classList.remove('text-red-600'); showToast('Убрано из избранного'); }
+      else{ favs.add(id); heart.textContent='❤'; heart.classList.add('text-red-600'); showToast('Добавлено в избранное'); }
       localStorage.setItem('favs', JSON.stringify([...favs]));
     }
 
-    /* ======= Модалки ======= */
+    /* ===== модалки ===== */
     const modalLogin=qs('#modalLogin'), modalPay=qs('#modalPay'), modalProfile=qs('#modalProfile'), modalEdit=qs('#modalEditProfile');
-    function openLogin(){ modalLogin.classList.remove('hidden'); modalLogin.classList.add('flex'); }
-    function closeLogin(){ modalLogin.classList.add('hidden'); modalLogin.classList.remove('flex'); }
-    function openPay(){ modalPay.classList.remove('hidden'); modalPay.classList.add('flex'); }
-    function closePay(){ modalPay.classList.add('hidden'); modalPay.classList.remove('flex'); }
-    function openProfile(){ modalProfile.classList.remove('hidden'); modalProfile.classList.add('flex'); syncProfileModal(); }
-    function closeProfile(){ modalProfile.classList.add('hidden'); modalProfile.classList.remove('flex'); }
-    function openEdit(){ fillEditProfileModal(); modalEdit.classList.remove('hidden'); modalEdit.classList.add('flex'); }
-    function closeEdit(){ modalEdit.classList.add('hidden'); modalEdit.classList.remove('flex'); }
+    const openLogin =()=>{ modalLogin.classList.remove('hidden'); modalLogin.classList.add('flex'); }
+    const closeLogin=()=>{ modalLogin.classList.add('hidden'); modalLogin.classList.remove('flex'); }
+    const openPay   =()=>{ modalPay.classList.remove('hidden'); modalPay.classList.add('flex'); }
+    const closePay  =()=>{ modalPay.classList.add('hidden'); modalPay.classList.remove('flex'); }
+    const openProfile=()=>{ modalProfile.classList.remove('hidden'); modalProfile.classList.add('flex'); syncProfileModal(); }
+    const closeProfile=()=>{ modalProfile.classList.add('hidden'); modalProfile.classList.remove('flex'); }
+    const openEdit=()=>{ fillEditProfileModal(); modalEdit.classList.remove('hidden'); modalEdit.classList.add('flex'); }
+    const closeEdit=()=>{ modalEdit.classList.add('hidden'); modalEdit.classList.remove('flex'); }
 
-    /* ======= Telegram Login — лениво ======= */
+    /* ===== Telegram Login (лениво) ===== */
     function mountTelegramWidget(){
       if (qs('#tgLoginContainer script')) return;
       const s=document.createElement('script');
@@ -630,11 +524,12 @@
       s.setAttribute('data-size','large');
       s.setAttribute('data-userpic','false');
       s.setAttribute('data-request-access','write');
-      s.setAttribute('data-auth-url','/api/tg-login');
+      const back = encodeURIComponent(location.pathname + location.search || '/');
+      s.setAttribute('data-auth-url', `/api/tg-login?return_to=${back}`);
       qs('#tgLoginContainer').appendChild(s);
     }
 
-    /* ======= Ответ из попапа /api/tg-login ======= */
+    /* ===== ответ от /api/tg-login (postMessage) ===== */
     window.addEventListener('message', (ev) => {
       const msg = ev.data || {};
       if (msg && msg.type === 'tg-auth') {
@@ -642,31 +537,26 @@
           try{ localStorage.setItem('userLogged','1'); }catch(_){}
           try{ localStorage.setItem('tg_user', JSON.stringify(msg.user||{})); }catch(_){}
           try{ closeLogin(); }catch(_){}
-          try{ showToast('Вход через Telegram выполнен'); }catch(_){}
+          showToast('Вход через Telegram выполнен');
           try{ updateAuthUI(); render(); }catch(_){}
         } else {
-          try{ showToast('Не удалось войти через Telegram'); }catch(_){}
+          showToast('Не удалось войти через Telegram');
         }
       }
     }, false);
 
-    /* === авторизация: кука/квери === */
-    function hasAuthCookie(){
-      return document.cookie.split("; ").some(c => c.trim().startsWith("auth="));
-    }
+    /* ===== cookie ↔ localStorage ===== */
+    const hasAuthCookie=()=> document.cookie.split("; ").some(c => c.trim().startsWith("auth="));
     function syncAuthFromCookieAndQuery(){
       const p = new URLSearchParams(location.search);
       if (p.get("tg") === "ok" || hasAuthCookie()) {
         try { localStorage.setItem("userLogged", "1"); } catch(e){}
-        if (p.get("tg") === "ok") {
-          history.replaceState(null, "", location.pathname);
-        }
+        if (p.get("tg") === "ok") history.replaceState(null, "", location.pathname);
       }
     }
 
-    /* === Язык: простое сохранение RU/KY === */
+    /* ===== язык ===== */
     function setLangUI(lang){
-      // только визуальный переключатель
       qsa('#langToggle .ru, #langToggleMobile .ru').forEach(el=>el.classList.toggle('active', lang==='ru'));
       qsa('#langToggle .ky, #langToggleMobile .ky').forEach(el=>el.classList.toggle('active', lang==='ky'));
     }
@@ -674,62 +564,40 @@
       const lang = localStorage.getItem('lang') || 'ru';
       setLangUI(lang);
       const bind = id => {
-        const el = qs(id);
-        if(!el) return;
+        const el = qs(id); if(!el) return;
         el.addEventListener('click', ()=>{
           const cur = localStorage.getItem('lang') || 'ru';
           const next = cur==='ru' ? 'ky' : 'ru';
-          localStorage.setItem('lang', next);
-          setLangUI(next);
+          localStorage.setItem('lang', next); setLangUI(next);
         });
       };
-      bind('#langToggle');
-      bind('#langToggleMobile');
+      bind('#langToggle'); bind('#langToggleMobile');
     }
 
-    /* === UI: хедер, кнопки, аватар, меню === */
+    /* ===== UI аккаунта ===== */
     function updateAuthUI(){
       const logged  = !!localStorage.getItem('userLogged');
-
-      // Desktop
-      const btn     = qs('#btnAuth');
-      const badge   = qs('#userBadge');
-      const avatar  = qs('#userAvatar');
-      const menu    = qs('#accountMenu');
-
-      // Mobile
-      const btnM    = qs('#btnAuthMobile');
-      const badgeM  = qs('#userBadgeMobile');
-      const avatarM = qs('#userAvatarMobile');
-      const menuM   = qs('#accountMenuMobile');
-
+      const btn=qs('#btnAuth'), badge=qs('#userBadge'), avatar=qs('#userAvatar'), menu=qs('#accountMenu');
+      const btnM=qs('#btnAuthMobile'), badgeM=qs('#userBadgeMobile'), avatarM=qs('#userAvatarMobile'), menuM=qs('#accountMenuMobile');
       if (btn) btn.textContent  = logged ? 'Мой аккаунт' : 'Вход / регистрация';
       if (btnM) btnM.textContent = logged ? 'Аккаунт' : 'Вход / регистрация';
 
       const applyUser = (avatarEl, badgeEl, menuEl) => {
         if (!avatarEl || !badgeEl) return;
-        if (!logged){
-          badgeEl.classList.add('hidden');
-          avatarEl.style.backgroundImage='';
-          avatarEl.textContent='';
-          menuEl?.classList.add('hidden');
-          return;
-        }
+        if (!logged){ badgeEl.classList.add('hidden'); avatarEl.style.backgroundImage=''; avatarEl.textContent=''; menuEl?.classList.add('hidden'); return; }
         let u={}; try{u=JSON.parse(localStorage.getItem('tg_user')||'{}')}catch(_){}
         const localAvatar = localStorage.getItem('avatar_url') || '';
         const initial = (u.first_name?.trim()?.[0] || u.username?.trim()?.[0] || 'U').toUpperCase();
-        avatarEl.style.backgroundImage='';
-        avatarEl.textContent=initial;
+        avatarEl.style.backgroundImage=''; avatarEl.textContent=initial;
         const imgUrl = localAvatar || u.photo_url || '';
         if (imgUrl){ avatarEl.style.backgroundImage=`url("${imgUrl}")`; avatarEl.textContent=''; }
         badgeEl.classList.remove('hidden');
       };
-
       applyUser(avatar, badge, menu);
       applyUser(avatarM, badgeM, menuM);
     }
 
-    /* ======= События ======= */
+    /* ===== события ===== */
     qs('#btnCloseLogin').addEventListener('click', closeLogin);
     qs('#btnSendCode').addEventListener('click', ()=>{ qs('#loginStep2').classList.remove('hidden'); showToast('Код отправлен (демо)'); });
     qs('#btnConfirmOtp').addEventListener('click', ()=>{ localStorage.setItem('userLogged', '1'); closeLogin(); updateAuthUI(); showToast('Вход выполнен'); });
@@ -739,48 +607,31 @@
     qs('#btnClosePay').addEventListener('click', closePay);
     qs('#btnSimulatePaid').addEventListener('click', ()=>{ setAccess(24); closePay(); });
 
-    // Клики по кнопкам входа / аватару — показ меню или логина (десктоп и мобилка)
     document.addEventListener('click', (ev) => {
       const trg = ev.target.closest('#btnAuth, #btnAuthMobile, #userAvatar, #userAvatarMobile');
       if (trg){
         const logged = !!localStorage.getItem('userLogged');
         const isMobile = !!ev.target.closest('#accountAreaMobile');
         const menu = isMobile ? qs('#accountMenuMobile') : qs('#accountMenu');
-        if (logged){
-          menu?.classList.toggle('hidden');
-        } else {
-          openLogin();
-          mountTelegramWidget();
-        }
+        if (logged){ menu?.classList.toggle('hidden'); }
+        else { openLogin(); mountTelegramWidget(); }
         return;
       }
-      // клик вне меню — закрыть оба
-      if (!ev.target.closest('#accountMenu') && !ev.target.closest('#accountArea')) {
-        qs('#accountMenu')?.classList.add('hidden');
-      }
-      if (!ev.target.closest('#accountMenuMobile') && !ev.target.closest('#accountAreaMobile')) {
-        qs('#accountMenuMobile')?.classList.add('hidden');
-      }
+      if (!ev.target.closest('#accountMenu') && !ev.target.closest('#accountArea')) qs('#accountMenu')?.classList.add('hidden');
+      if (!ev.target.closest('#accountMenuMobile') && !ev.target.closest('#accountAreaMobile')) qs('#accountMenuMobile')?.classList.add('hidden');
     });
 
-    // Пункты меню (десктоп)
     qs('#menuMyAds').addEventListener('click', ()=>{ qs('#accountMenu').classList.add('hidden'); showToast('Мои объявления (демо)'); });
     qs('#menuEditProfile').addEventListener('click', ()=>{ qs('#accountMenu').classList.add('hidden'); openEdit(); });
     qs('#menuChangeAvatar').addEventListener('click', ()=>{ qs('#accountMenu').classList.add('hidden'); openProfile(); });
 
-    // === ВЫХОД ===
     qs('#menuLogout').addEventListener('click', ()=>{
       qs('#accountMenu').classList.add('hidden');
-      try{
-        localStorage.removeItem('userLogged');
-        localStorage.removeItem('tg_user');
-      }catch(_){}
+      try{ localStorage.removeItem('userLogged'); localStorage.removeItem('tg_user'); }catch(_){}
       document.cookie = 'auth=; Max-Age=0; path=/';
-      updateAuthUI();
-      showToast('Вы вышли из аккаунта');
+      updateAuthUI(); showToast('Вы вышли из аккаунта');
     });
 
-    // Редактировать профиль — запись/чтение
     function fillEditProfileModal(){
       const p = JSON.parse(localStorage.getItem('profile')||'{}');
       qs('#profName').value  = p.name  || '';
@@ -790,59 +641,30 @@
     }
     qs('#btnCloseEditProfile').addEventListener('click', closeEdit);
     qs('#btnSaveEditProfile').addEventListener('click', ()=>{
-      const data = {
-        name : qs('#profName').value.trim(),
-        email: qs('#profEmail').value.trim(),
-        phone: qs('#profPhone').value.trim(),
-        about: qs('#profAbout').value.trim()
-      };
-      localStorage.setItem('profile', JSON.stringify(data));
-      closeEdit();
-      updateAuthUI();
-      showToast('Профиль сохранён');
+      const data = { name:qs('#profName').value.trim(), email:qs('#profEmail').value.trim(), phone:qs('#profPhone').value.trim(), about:qs('#profAbout').value.trim() };
+      localStorage.setItem('profile', JSON.stringify(data)); closeEdit(); updateAuthUI(); showToast('Профиль сохранён');
     });
 
-    // Профиль (аватар)
     qs('#btnCloseProfile').addEventListener('click', closeProfile);
     qs('#btnSaveProfile').addEventListener('click', ()=>{ closeProfile(); showToast('Профиль сохранён'); updateAuthUI(); });
 
     qs('#avatarFile').addEventListener('change', async (e)=>{
-      const file = e.target.files?.[0];
-      if (!file) return;
+      const file = e.target.files?.[0]; if (!file) return;
       try{
         const dataUrl = await fileToAvatarDataURL(file, 256);
-        localStorage.setItem('avatar_url', dataUrl);
-        syncProfileModal();
-        updateAuthUI();
-        showToast('Аватар обновлён');
-      }catch(err){
-        showToast('Не удалось обработать изображение');
-      }
+        localStorage.setItem('avatar_url', dataUrl); syncProfileModal(); updateAuthUI(); showToast('Аватар обновлён');
+      }catch(err){ showToast('Не удалось обработать изображение'); }
     });
-    qs('#btnAvatarRemove').addEventListener('click', ()=>{
-      localStorage.removeItem('avatar_url');
-      syncProfileModal();
-      updateAuthUI();
-      showToast('Аватар удалён');
-    });
+    qs('#btnAvatarRemove').addEventListener('click', ()=>{ localStorage.removeItem('avatar_url'); syncProfileModal(); updateAuthUI(); showToast('Аватар удалён'); });
 
     function syncProfileModal(){
       const box = qs('#profileAvatar');
-      let u = {};
-      try { u = JSON.parse(localStorage.getItem('tg_user')||'{}'); } catch(_){}
+      let u = {}; try { u = JSON.parse(localStorage.getItem('tg_user')||'{}'); } catch(_){}
       const initial = (u.first_name?.trim()?.[0] || u.username?.trim()?.[0] || 'U').toUpperCase();
       const localAvatar = localStorage.getItem('avatar_url');
-
-      box.style.backgroundImage = '';
-      box.textContent = initial;
-
-      if (localAvatar) {
-        box.style.backgroundImage = `url(${localAvatar})`;
-        box.textContent = '';
-      } else if (u.photo_url) {
-        box.style.backgroundImage = `url(${u.photo_url})`;
-        box.textContent = '';
-      }
+      box.style.backgroundImage = ''; box.textContent = initial;
+      if (localAvatar){ box.style.backgroundImage = `url(${localAvatar})`; box.textContent = ''; }
+      else if (u.photo_url){ box.style.backgroundImage = `url(${u.photo_url})`; box.textContent = ''; }
     }
 
     function fileToAvatarDataURL(file, size=256){
@@ -850,16 +672,10 @@
         const img = new Image();
         img.onload = ()=>{
           const s = Math.min(img.width, img.height);
-          const sx = (img.width - s)/2;
-          const sy = (img.height - s)/2;
-
-          const canvas = document.createElement('canvas');
-          canvas.width = size;
-          canvas.height = size;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, sx, sy, s, s, 0, 0, size, size);
-          const out = canvas.toDataURL('image/jpeg', 0.85);
-          resolve(out);
+          const sx = (img.width - s)/2, sy = (img.height - s)/2;
+          const canvas = document.createElement('canvas'); canvas.width = size; canvas.height = size;
+          const ctx = canvas.getContext('2d'); ctx.drawImage(img, sx, sy, s, s, 0, 0, size, size);
+          resolve(canvas.toDataURL('image/jpeg', 0.85));
         };
         img.onerror = reject;
         const reader = new FileReader();
@@ -869,26 +685,20 @@
       });
     }
 
-    /* ======= Фильтры / Рендер ======= */
     function applyFilters(){
       const priceMin = Number(qs('#pMin').value || 0);
       const priceMax = Number(qs('#pMax').value || Infinity);
       const onlyOwn = qs('#own').checked;
       const onlyDaily = qs('#daily').checked;
       const onlyLong = qs('#long').checked;
-
       let out=listings.filter(it=>(
-        it.price>=priceMin &&
-        it.price<=priceMax &&
-        (!onlyOwn || it.owner) &&
-        (!onlyDaily || it.daily) &&
-        (!onlyLong || !it.daily)
+        it.price>=priceMin && it.price<=priceMax &&
+        (!onlyOwn || it.owner) && (!onlyDaily || it.daily) && (!onlyLong || !it.daily)
       ));
       out.sort((a,b)=>b.expiresAt-a.expiresAt);
       renderListings(out);
     }
 
-    /* ======= Запуск ======= */
     function render(){ renderBest(); applyFilters(); updateAuthUI(); }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -905,137 +715,64 @@
     });
   </script>
 
-  <!-- SECOND SCRIPT: логика WhatsApp / Email + форма контакта -->
+  <!-- WhatsApp/e-mail + форма “Связаться” (как у тебя) -->
   <script>
   (() => {
-    // ===== WhatsApp / Email login =====
     const waBtn   = document.getElementById('btnLoginWhatsApp');
     const emBtn   = document.getElementById('btnLoginEmail');
     const emBox   = document.getElementById('loginEmailBlock');
     const emInput = document.getElementById('loginEmail');
     const emSend  = document.getElementById('btnSendEmailLink');
-
-    // Укажи свой WA Business номер без + (пример: 996555123456)
     const WA_NUMBER = '996555123456';
-
-    if (waBtn) {
-      waBtn.addEventListener('click', () => {
-        const text = encodeURIComponent('Здравствуйте! Хочу войти в Arendator.kg');
-        window.open(`https://wa.me/${WA_NUMBER}?text=${text}`, '_blank');
-      });
-    }
-
-    if (emBtn) {
-      emBtn.addEventListener('click', () => {
-        emBox?.classList.toggle('hidden');
-      });
-    }
-
+    if (waBtn) waBtn.addEventListener('click', () => {
+      const text = encodeURIComponent('Здравствуйте! Хочу войти в Arendator.kg');
+      window.open(`https://wa.me/${WA_NUMBER}?text=${text}`, '_blank');
+    });
+    if (emBtn) emBtn.addEventListener('click', () => { emBox?.classList.toggle('hidden'); });
     if (emSend) {
       emSend.addEventListener('click', async () => {
-        const email = (emInput?.value || '').trim();
-        if (!email) { alert('Укажи e-mail'); return; }
-
-        // простая «магическая» ссылка (демо без сервера пользователей)
+        const email = (emInput?.value || '').trim(); if (!email) { alert('Укажи e-mail'); return; }
         const magic = Math.random().toString(36).slice(2);
         try { localStorage.setItem('email_magic_' + email, magic); } catch(_){}
-
         const link = `${location.origin}/?login=${encodeURIComponent(email)}&magic=${magic}`;
-        const html = `
-          <p>Привет! Для входа в Arendator.kg нажми ссылку:</p>
-          <p><a href="${link}">Войти</a></p>
-          <p>Если это были не вы — просто игнорируйте письмо.</p>
-        `;
-
+        const html = `<p>Привет! Для входа в Arendator.kg нажми ссылку:</p><p><a href="${link}">Войти</a></p><p>Если это были не вы — просто игнорируйте письмо.</p>`;
         try {
-          const res = await fetch('/api/send-mail', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-              to: email,
-              subject: 'Вход в Arendator.kg',
-              html
-            })
-          });
-          const data = await res.json();
-          if (data.ok) {
-            alert('Ссылка отправлена на почту.');
-          } else {
-            alert('Не удалось отправить: ' + (data.error || 'ошибка'));
-          }
-        } catch (e) {
-          alert('Сеть недоступна, попробуй ещё раз.');
-        }
+          const res = await fetch('/api/send-mail', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({to:email, subject:'Вход в Arendator.kg', html}) });
+          const data = await res.json(); if (data.ok) alert('Ссылка отправлена на почту.'); else alert('Не удалось отправить: ' + (data.error || 'ошибка'));
+        } catch { alert('Сеть недоступна, попробуй ещё раз.'); }
       });
     }
-
-    // Автовход по ссылке из письма (демо)
     (function emailMagicAutoLogin(){
-      const p = new URLSearchParams(location.search);
-      const email = p.get('login');
-      const magic = p.get('magic');
-      if (!email || !magic) return;
-
+      const p = new URLSearchParams(location.search); const email = p.get('login'); const magic = p.get('magic'); if (!email || !magic) return;
       try {
         const saved = localStorage.getItem('email_magic_' + email);
         if (saved && saved === magic) {
-          localStorage.setItem('userLogged', '1');
-          history.replaceState(null, '', location.pathname);
+          localStorage.setItem('userLogged', '1'); history.replaceState(null, '', location.pathname);
           try { updateAuthUI(); } catch(_){}
           try { document.getElementById('modalLogin')?.classList.add('hidden'); } catch(_){}
-          try {
-            const t = document.getElementById('toast');
-            if (t){ t.textContent='Вход по email выполнен'; t.classList.remove('hidden'); setTimeout(()=>t.classList.add('hidden'), 2000); }
-          } catch(_){}
+          const t = document.getElementById('toast'); if (t){ t.textContent='Вход по email выполнен'; t.classList.remove('hidden'); setTimeout(()=>t.classList.add('hidden'), 2000); }
         }
       } catch(_){}
     })();
 
-    // ===== Форма «Связаться с нами» =====
-    const ts = document.getElementById('tsField');
-    if (ts) ts.value = Date.now();
-
-    const form = document.getElementById('contactForm');
-    const note = document.getElementById('contactNote');
-
-    if (form) {
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const fd = new FormData(form);
-        const payload = Object.fromEntries(fd.entries());
-
-        // honeypot: если заполнен — молча «успех»
-        if (payload.website && payload.website.trim() !== '') {
-          form.reset();
-          if (note) note.textContent = 'Спасибо!';
-          return;
-        }
-
-        // получатель фиксируем на клиенте (на сервере всё равно проверяй)
-        payload.to = 'reply@arendator.kg';
-
-        try {
-          const res = await fetch('/api/send-mail', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(payload)
-          });
-          const data = await res.json();
-          if (data.ok) {
-            form.reset();
-            if (note) note.textContent = 'Сообщение отправлено.';
-            if (ts) ts.value = Date.now();
-          } else {
-            if (note) note.textContent = 'Ошибка: ' + (data.error || 'не удалось отправить');
-          }
-        } catch (err) {
-          if (note) note.textContent = 'Ошибка сети. Попробуйте ещё раз.';
-        }
-      });
-    }
+    const ts = document.getElementById('tsField'); if (ts) ts.value = Date.now();
+    const form = document.getElementById('contactForm'); const note = document.getElementById('contactNote');
+    if (form) form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(form); const payload = Object.fromEntries(fd.entries());
+      if (payload.website && payload.website.trim() !== '') { form.reset(); if (note) note.textContent = 'Спасибо!'; return; }
+      payload.to = 'reply@arendator.kg';
+      try {
+        const res = await fetch('/api/send-mail', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+        const data = await res.json();
+        if (data.ok) { form.reset(); if (note) note.textContent = 'Сообщение отправлено.'; if (ts) ts.value = Date.now(); }
+        else { if (note) note.textContent = 'Ошибка: ' + (data.error || 'не удалось отправить'); }
+      } catch { if (note) note.textContent = 'Ошибка сети. Попробуйте ещё раз.'; }
+    });
   })();
   </script>
+
+  <!-- Если app.js у тебя уже есть (fetch /api/me и т.д.) — оставляй -->
   <script src="/app.js"></script>
 </body>
 </html>
-
