@@ -12,13 +12,9 @@
     :root{--container:1180px; --ads:110px}
     .container{max-width:var(--container)}
     .shadow-soft{box-shadow:0 8px 30px rgba(0,0,0,.08)}
-    html,body{
-      overflow-x:hidden;
-      font-family: 'Onest', system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-      font-weight: 400;
-    }
-    .hero-title{ font-weight: 800; }
-    header .container > * { position: relative; z-index: 10; }
+    html,body{overflow-x:hidden;font-family:'Onest',system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-weight:400}
+    .hero-title{font-weight:800}
+    header .container>*{position:relative;z-index:10}
     .side-ads{position:fixed;top:60px;bottom:0;width:var(--ads);display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:5}
     .side-ads>div{writing-mode:vertical-rl;transform:rotate(180deg);opacity:.75}
     @media (max-width:1400px){.side-ads{display:none}}
@@ -26,18 +22,10 @@
     .card-actions>input{min-width:0}
     .mask-blur{filter:blur(3px)}
     .dropdown{position:relative}
-    .dropdown-menu{position:absolute; right:0; top:calc(100% + .5rem); min-width:220px}
-    .user-avatar{
-      width: 32px; height: 32px; border-radius: 9999px; background: #e5e7eb; color:#374151;
-      display:grid; place-items:center; font-weight: 700; overflow:hidden; background-size: cover;
-      background-position: center; flex-shrink:0; font-size: 14px; cursor: pointer;
-    }
-    .avatar-lg{
-      width: 96px; height: 96px; border-radius: 9999px; background:#e5e7eb; display:grid; place-items:center;
-      overflow:hidden; background-size: cover; background-position: center; font-weight: 800; font-size: 36px;
-      color:#374151; margin: 0 auto;
-    }
-    .nav-mobile a { font-size: 13px; }
+    .dropdown-menu{position:absolute;right:0;top:calc(100% + .5rem);min-width:220px}
+    .user-avatar{width:32px;height:32px;border-radius:9999px;background:#e5e7eb;color:#374151;display:grid;place-items:center;font-weight:700;overflow:hidden;background-size:cover;background-position:center;flex-shrink:0;font-size:14px;cursor:pointer}
+    .avatar-lg{width:96px;height:96px;border-radius:9999px;background:#e5e7eb;display:grid;place-items:center;overflow:hidden;background-size:cover;background-position:center;font-weight:800;font-size:36px;color:#374151;margin:0 auto}
+    .nav-mobile a{font-size:13px}
     .lang-toggle{padding:.25rem .5rem;border:1px solid rgb(229 231 235);border-radius:.75rem}
     .lang-toggle span{opacity:.55}
     .lang-toggle .active{opacity:1;font-weight:700}
@@ -54,6 +42,8 @@
 
   <header class="bg-white sticky top-0 z-30 border-b border-neutral-100/80">
     <div class="container mx-auto px-4 py-2 md:py-3 flex flex-col gap-2">
+
+      <!-- Моб. строка -->
       <div class="flex items-center justify-between md:hidden">
         <a href="/" class="flex items-center gap-2 shrink-0">
           <img src="./images/Arendatorkg.png" alt="Arendator.kg" class="w-8 h-8 rounded-full object-contain">
@@ -83,6 +73,7 @@
         <a href="favorites.html" class="hover:text-blue-600 whitespace-nowrap">Избранное</a>
       </nav>
 
+      <!-- Десктоп строка -->
       <div class="hidden md:flex items-center gap-4">
         <a href="/" class="flex items-center gap-2 shrink-0">
           <img src="./images/Arendatorkg.png" alt="Arendator.kg" class="w-8 h-8 rounded-full object-contain">
@@ -119,27 +110,18 @@
     </div>
   </header>
 
+  <!-- Герой и остальная верстка (без изменений) -->
   <section class="container mx-auto px-4 pt-8">
     <div class="grid md:grid-cols-2 gap-8 items-stretch">
       <div class="bg-white border border-neutral-200 rounded-2xl shadow-soft p-4 sm:p-5 h-full flex flex-col">
         <h1 class="hero-title text-3xl md:text-5xl leading-tight text-blue-600">Ищете квартиру в аренду?</h1>
-        <p class="mt-3 text-base md:text-lg text-neutral-600">
-          Объявления обновляются каждую секунду из 30 источников. Только свежие — жильё за день!
-        </p>
+        <p class="mt-3 text-base md:text-lg text-neutral-600">Объявления обновляются каждую секунду из 30 источников. Только свежие — жильё за день!</p>
 
         <div class="mt-5 grid grid-cols-2 gap-3">
-          <select id="s1" class="px-3 py-2 rounded-xl border border-neutral-200">
-            <option>Снять</option><option>Сдать</option>
-          </select>
-          <select id="s2" class="px-3 py-2 rounded-xl border border-neutral-200">
-            <option>Квартира</option><option>Комната</option><option>Дом</option>
-          </select>
-          <select id="s3" class="px-3 py-2 rounded-xl border border-neutral-200">
-            <option>Чуй / Бш</option><option>Ыссык-Куль</option><option>Ош</option>
-          </select>
-          <select id="s4" class="px-3 py-2 rounded-xl border border-neutral-200">
-            <option>Бишкек</option><option>Округ</option>
-          </select>
+          <select id="s1" class="px-3 py-2 rounded-xl border border-neutral-200"><option>Снять</option><option>Сдать</option></select>
+          <select id="s2" class="px-3 py-2 rounded-xl border border-neutral-200"><option>Квартира</option><option>Комната</option><option>Дом</option></select>
+          <select id="s3" class="px-3 py-2 rounded-xl border border-neutral-200"><option>Чуй / Бш</option><option>Ыссык-Куль</option><option>Ош</option></select>
+          <select id="s4" class="px-3 py-2 rounded-xl border border-neutral-200"><option>Бишкек</option><option>Округ</option></select>
           <input id="pMin" type="number" placeholder="Цена от" class="px-3 py-2 rounded-xl border border-neutral-200">
           <input id="pMax" type="number" placeholder="Цена до" class="px-3 py-2 rounded-xl border border-neutral-200">
         </div>
@@ -162,9 +144,7 @@
       </div>
 
       <div class="bg-white border border-neutral-200 rounded-2xl shadow-soft p-4 sm:p-5 h-full flex flex-col">
-        <h3 class="text-xl md:text-2xl font-semibold text-blue-600 text-center mb-3">
-          Лучший вариант на данную минуту — успей купить!!!
-        </h3>
+        <h3 class="text-xl md:text-2xl font-semibold text-blue-600 text-center mb-3">Лучший вариант на данную минуту — успей купить!!!</h3>
 
         <div class="rounded-xl overflow-hidden border border-neutral-200">
           <div class="aspect-[16/9] bg-neutral-100 grid place-items-center relative">
@@ -179,18 +159,9 @@
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 px-3 pb-3">
-            <div class="p-3 rounded-xl bg-neutral-50 border border-neutral-200">
-              <div class="font-semibold" id="bestTitle"></div>
-              <div class="text-neutral-600" id="bestPrice"></div>
-            </div>
-            <div class="p-3 rounded-xl bg-neutral-50 border border-neutral-200">
-              <div class="font-semibold" id="bestDistrict"></div>
-              <div class="text-neutral-600" id="bestRooms"></div>
-            </div>
-            <div class="p-3 rounded-xl bg-neutral-50 border border-neutral-200">
-              <div class="font-semibold">Без посредников</div>
-              <div class="text-neutral-600">от владельца</div>
-            </div>
+            <div class="p-3 rounded-xl bg-neutral-50 border border-neutral-200"><div class="font-semibold" id="bestTitle"></div><div class="text-neutral-600" id="bestPrice"></div></div>
+            <div class="p-3 rounded-xl bg-neutral-50 border border-neutral-200"><div class="font-semibold" id="bestDistrict"></div><div class="text-neutral-600" id="bestRooms"></div></div>
+            <div class="p-3 rounded-xl bg-neutral-50 border border-neutral-200"><div class="font-semibold">Без посредников</div><div class="text-neutral-600">от владельца</div></div>
           </div>
         </div>
       </div>
@@ -198,9 +169,7 @@
   </section>
 
   <div class="container mx-auto px-4">
-    <div id="ad-mid"
-         class="my-6 rounded-2xl border border-neutral-200 bg-white shadow-soft grid place-items-center
-                min-h-[84px] sm:min-h-[100px] md:min-h-[100px]">
+    <div id="ad-mid" class="my-6 rounded-2xl border border-neutral-200 bg-white shadow-soft grid place-items-center min-h-[84px] sm:min-h-[100px] md:min-h-[100px]">
       <span class="text-sm text-neutral-500">Место для рекламы (банк · мебель · интернет)</span>
     </div>
   </div>
@@ -212,9 +181,7 @@
 
   <section class="container mx-auto px-4 pb-10">
     <h2 class="text-2xl font-bold mb-2">Тарифы доступа</h2>
-    <p class="text-neutral-700 mb-6">
-      Наши объявления живут всего 24 часа. Лучшие варианты улетают за часы. Открой номера владельцев и забронируй первым — без агентов и переплат.
-    </p>
+    <p class="text-neutral-700 mb-6">Наши объявления живут всего 24 часа. Лучшие варианты улетают за часы. Открой номера владельцев и забронируй первым — без агентов и переплат.</p>
 
     <div class="grid sm:grid-cols-2 gap-4">
       <div class="rounded-2xl border border-neutral-200 bg-white p-5 shadow-soft">
@@ -277,9 +244,7 @@
           <img src="./images/Arendatorkg.png" alt="Arendator.kg" class="w-7 h-7 rounded-full object-contain">
           <span class="font-semibold">Arendator.kg</span>
         </div>
-        <p class="text-neutral-600 mt-2 max-w-[60ch]">
-          Автоматически мониторим только свежие объявления от владельцев и проверенных источников, чтобы вы нашли жильё быстрее и без посредников.
-        </p>
+        <p class="text-neutral-600 mt-2 max-w-[60ch]">Автоматически мониторим только свежие объявления от владельцев и проверенных источников, чтобы вы нашли жильё быстрее и без посредников.</p>
       </div>
       <div>
         <div class="font-semibold">Навигация</div>
@@ -300,7 +265,7 @@
     <div class="text-center text-xs text-neutral-500 pb-6">© 2025 — Arendator.kg</div>
   </footer>
 
-  <!-- Модалка: Вход -->
+  <!-- Модалки -->
   <div id="modalLogin" class="fixed inset-0 hidden items-center justify-center bg-black/40 p-4">
     <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-soft">
       <div class="text-lg font-semibold">Вход без пароля</div>
@@ -320,16 +285,14 @@
         <div class="h-px flex-1 bg-neutral-200"></div>
       </div>
       <div id="tgLoginContainer" class="flex justify-center"></div>
-      <div class="text-xs text-neutral-500 text-center mt-2">
-        После нажатия появится окно Telegram — откройте Telegram и нажмите «Принять / Allow», чтобы завершить вход.
-      </div>
+      <div class="text-xs text-neutral-500 text-center mt-2">После нажатия появится окно Telegram — откройте Telegram и нажмите «Принять / Allow», чтобы завершить вход.</div>
 
+      <!-- Доп. способы -->
       <div class="mt-3 text-xs text-neutral-500 text-center">или:</div>
       <div class="mt-2 grid grid-cols-2 gap-2">
         <button id="btnLoginWhatsApp" class="px-3 py-2 rounded-xl border border-neutral-200 hover:bg-neutral-50">Войти через WhatsApp</button>
         <button id="btnLoginEmail" class="px-3 py-2 rounded-xl border border-neutral-200 hover:bg-neutral-50">Войти по e-mail</button>
       </div>
-
       <div id="loginEmailBlock" class="hidden mt-3 space-y-2">
         <input id="loginEmail" type="email" placeholder="you@email.com" class="w-full px-3 py-2 rounded-xl border border-neutral-200">
         <button id="btnSendEmailLink" class="w-full px-4 py-2 rounded-xl bg-neutral-900 text-white">Отправить ссылку для входа</button>
@@ -338,7 +301,6 @@
     </div>
   </div>
 
-  <!-- Модалки профиля/оплаты (без изменений) -->
   <div id="modalProfile" class="fixed inset-0 hidden items-center justify-center bg-black/40 p-4">
     <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-soft">
       <div class="text-lg font-semibold">Мой профиль</div>
@@ -395,7 +357,7 @@
   <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 hidden px-4 py-2 rounded-xl bg-neutral-900 text-white text-sm"></div>
 
   <script>
-    /* ===== демо-данные и утилиты (как у тебя) ===== */
+    /* ======= ДЕМО-данные и утилиты (как у тебя) ======= */
     const listings = [
       { id:'l1', title:'2к, Центр, свежий ремонт', price:35000, district:'Центр', rooms:'2', daily:false, owner:true, img:'', phone:'+996555123456', expiresAt: Date.now()+23*3600e3+30*60e3 },
       { id:'l2', title:'1к, Майевка, уютная',      price:18000, district:'Майевка', rooms:'1', daily:false, owner:true, img:'https://images.unsplash.com/photo-1502005229762-cf1b2da7cda7?q=80&w=1200&auto=format&fit=crop', phone:'+996700222333', expiresAt: Date.now()+10*3600e3 },
@@ -407,21 +369,30 @@
 
     const qs  = (s,el=document)=>el.querySelector(s);
     const qsa = (s,el=document)=>Array.from(el.querySelectorAll(s));
-    const showToast=(m)=>{const t=qs('#toast'); t.textContent=m; t.classList.remove('hidden'); clearTimeout(showToast.t); showToast.t=setTimeout(()=>t.classList.add('hidden'),2200);};
+    const showToast=(m)=>{const t=qs('#toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(showToast.t);showToast.t=setTimeout(()=>t.classList.add('hidden'),2200);};
     const hasAccess=()=>Date.now() < Number(localStorage.getItem('accessUntil')||0);
     const setAccess=(h=24)=>{ localStorage.setItem('accessUntil', String(Date.now()+h*3600e3)); showToast('Доступ открыт на 24 часа'); render(); };
     const maskPhone=(p)=> p ? p.replace(/(\+\d{3})\d+/, '$1 ••• •• •••') : '•••';
 
-    function countdown(el, ts){
-      function tick(){
-        const d=ts-Date.now(); if(d<=0){ el.textContent='0ч 00м'; return; }
-        const h=Math.floor(d/3600000), m=Math.floor((d%3600000)/60000);
-        el.textContent = `${h}ч ${String(m).padStart(2,'0')}м`;
-      }
-      tick(); return setInterval(tick,60000);
+    /* ---------- СЕССИЯ: универсальная проверка ---------- */
+    let loginPoll = null;
+    async function checkSession(silent=true){
+      try{
+        const r = await fetch('/api/me', { credentials:'include' });
+        const data = await r.json();
+        if (data && data.ok){
+          try{ localStorage.setItem('userLogged','1'); }catch(_){}
+          try{ localStorage.setItem('tg_user', JSON.stringify(data.user||{})); }catch(_){}
+          try{ closeLogin(); }catch(_){}
+          updateAuthUI();
+          if (!silent) showToast('Вход выполнен');
+          return true;
+        }
+      }catch(_){}
+      return false;
     }
 
-    /* ===== Лучший блок, карточки и избранное (как у тебя) ===== */
+    /* ======= Лучший блок / карточки / избранное ======= */
     let bestItem=null;
     function renderBest(){
       bestItem = listings.find(it=>!it.daily && it.price<=25000) || listings[0];
@@ -452,9 +423,7 @@
         <div class="p-4 flex-1 flex flex-col gap-3">
           <div class="flex items-start gap-2">
             <h3 class="font-semibold leading-snug">${it.title}</h3>
-            <span class="ml-auto inline-flex items-center text-xs px-2 py-1 rounded-full whitespace-nowrap ${it.owner?'bg-emerald-100 text-emerald-700':'bg-neutral-100 text-neutral-700'}">
-              ${it.owner?'Без посредников':'Источник'}
-            </span>
+            <span class="ml-auto inline-flex items-center text-xs px-2 py-1 rounded-full whitespace-nowrap ${it.owner?'bg-emerald-100 text-emerald-700':'bg-neutral-100 text-neutral-700'}">${it.owner?'Без посредников':'Источник'}</span>
           </div>
           <div class="flex items-center gap-2">
             <div class="text-2xl font-bold">${it.price.toLocaleString('ru-RU')} <span class="text-sm font-medium text-neutral-500">${priceUnit}</span></div>
@@ -503,10 +472,15 @@
       localStorage.setItem('favs', JSON.stringify([...favs]));
     }
 
-    /* ===== модалки ===== */
+    /* ======= Модалки ======= */
     const modalLogin=qs('#modalLogin'), modalPay=qs('#modalPay'), modalProfile=qs('#modalProfile'), modalEdit=qs('#modalEditProfile');
-    const openLogin =()=>{ modalLogin.classList.remove('hidden'); modalLogin.classList.add('flex'); }
-    const closeLogin=()=>{ modalLogin.classList.add('hidden'); modalLogin.classList.remove('flex'); }
+    const openLogin =()=>{ modalLogin.classList.remove('hidden'); modalLogin.classList.add('flex');
+      // Лениво вставляем виджет + запускаем короткий поллинг на 10 сек
+      mountTelegramWidget();
+      if (loginPoll) clearInterval(loginPoll);
+      let ticks=0; loginPoll=setInterval(async ()=>{ ticks++; const ok=await checkSession(true); if(ok||ticks>10){ clearInterval(loginPoll); loginPoll=null; } },1000);
+    };
+    const closeLogin=()=>{ modalLogin.classList.add('hidden'); modalLogin.classList.remove('flex'); if (loginPoll) { clearInterval(loginPoll); loginPoll=null; } };
     const openPay   =()=>{ modalPay.classList.remove('hidden'); modalPay.classList.add('flex'); }
     const closePay  =()=>{ modalPay.classList.add('hidden'); modalPay.classList.remove('flex'); }
     const openProfile=()=>{ modalProfile.classList.remove('hidden'); modalProfile.classList.add('flex'); syncProfileModal(); }
@@ -514,7 +488,7 @@
     const openEdit=()=>{ fillEditProfileModal(); modalEdit.classList.remove('hidden'); modalEdit.classList.add('flex'); }
     const closeEdit=()=>{ modalEdit.classList.add('hidden'); modalEdit.classList.remove('flex'); }
 
-    /* ===== Telegram Login (лениво) ===== */
+    /* ======= Telegram Login — лениво монтируем виджет ======= */
     function mountTelegramWidget(){
       if (qs('#tgLoginContainer script')) return;
       const s=document.createElement('script');
@@ -524,38 +498,38 @@
       s.setAttribute('data-size','large');
       s.setAttribute('data-userpic','false');
       s.setAttribute('data-request-access','write');
-      const back = encodeURIComponent(location.pathname + location.search || '/');
+      // пусть сервер знает, куда возвращать/что сообщать
+      const back = encodeURIComponent((location.pathname+location.search) || '/');
       s.setAttribute('data-auth-url', `/api/tg-login?return_to=${back}`);
       qs('#tgLoginContainer').appendChild(s);
     }
 
-    /* ===== ответ от /api/tg-login (postMessage) ===== */
-    window.addEventListener('message', (ev) => {
+    /* ======= Ответ из окна авторизации (postMessage) ======= */
+    window.addEventListener('message', async (ev) => {
       const msg = ev.data || {};
       if (msg && msg.type === 'tg-auth') {
         if (msg.ok) {
           try{ localStorage.setItem('userLogged','1'); }catch(_){}
           try{ localStorage.setItem('tg_user', JSON.stringify(msg.user||{})); }catch(_){}
-          try{ closeLogin(); }catch(_){}
-          showToast('Вход через Telegram выполнен');
-          try{ updateAuthUI(); render(); }catch(_){}
+          await checkSession(true);
+          updateAuthUI(); closeLogin(); showToast('Вход через Telegram выполнен');
         } else {
           showToast('Не удалось войти через Telegram');
         }
       }
     }, false);
 
-    /* ===== cookie ↔ localStorage ===== */
+    /* ======= Cookie → localStorage и обратно ======= */
     const hasAuthCookie=()=> document.cookie.split("; ").some(c => c.trim().startsWith("auth="));
     function syncAuthFromCookieAndQuery(){
       const p = new URLSearchParams(location.search);
       if (p.get("tg") === "ok" || hasAuthCookie()) {
-        try { localStorage.setItem("userLogged", "1"); } catch(e){}
-        if (p.get("tg") === "ok") history.replaceState(null, "", location.pathname);
+        try { localStorage.setItem("userLogged","1"); } catch(_){}
+        if (p.get("tg") === "ok") history.replaceState(null,"",location.pathname);
       }
     }
 
-    /* ===== язык ===== */
+    /* ======= Язык ======= */
     function setLangUI(lang){
       qsa('#langToggle .ru, #langToggleMobile .ru').forEach(el=>el.classList.toggle('active', lang==='ru'));
       qsa('#langToggle .ky, #langToggleMobile .ky').forEach(el=>el.classList.toggle('active', lang==='ky'));
@@ -574,7 +548,7 @@
       bind('#langToggle'); bind('#langToggleMobile');
     }
 
-    /* ===== UI аккаунта ===== */
+    /* ======= UI аккаунта ======= */
     function updateAuthUI(){
       const logged  = !!localStorage.getItem('userLogged');
       const btn=qs('#btnAuth'), badge=qs('#userBadge'), avatar=qs('#userAvatar'), menu=qs('#accountMenu');
@@ -597,10 +571,10 @@
       applyUser(avatarM, badgeM, menuM);
     }
 
-    /* ===== события ===== */
+    /* ======= События ======= */
     qs('#btnCloseLogin').addEventListener('click', closeLogin);
     qs('#btnSendCode').addEventListener('click', ()=>{ qs('#loginStep2').classList.remove('hidden'); showToast('Код отправлен (демо)'); });
-    qs('#btnConfirmOtp').addEventListener('click', ()=>{ localStorage.setItem('userLogged', '1'); closeLogin(); updateAuthUI(); showToast('Вход выполнен'); });
+    qs('#btnConfirmOtp').addEventListener('click', async ()=>{ localStorage.setItem('userLogged','1'); await checkSession(true); closeLogin(); updateAuthUI(); showToast('Вход выполнен'); });
 
     qsa('.pay').forEach(b=>b.addEventListener('click', openPay));
     qsa('.pay-method').forEach(b=> b.addEventListener('click', ()=>{ qs('#paySelected').classList.remove('hidden'); qs('#payMethodName').textContent=b.textContent; }));
@@ -614,7 +588,7 @@
         const isMobile = !!ev.target.closest('#accountAreaMobile');
         const menu = isMobile ? qs('#accountMenuMobile') : qs('#accountMenu');
         if (logged){ menu?.classList.toggle('hidden'); }
-        else { openLogin(); mountTelegramWidget(); }
+        else { openLogin(); }
         return;
       }
       if (!ev.target.closest('#accountMenu') && !ev.target.closest('#accountArea')) qs('#accountMenu')?.classList.add('hidden');
@@ -653,7 +627,7 @@
       try{
         const dataUrl = await fileToAvatarDataURL(file, 256);
         localStorage.setItem('avatar_url', dataUrl); syncProfileModal(); updateAuthUI(); showToast('Аватар обновлён');
-      }catch(err){ showToast('Не удалось обработать изображение'); }
+      }catch{ showToast('Не удалось обработать изображение'); }
     });
     qs('#btnAvatarRemove').addEventListener('click', ()=>{ localStorage.removeItem('avatar_url'); syncProfileModal(); updateAuthUI(); showToast('Аватар удалён'); });
 
@@ -691,31 +665,32 @@
       const onlyOwn = qs('#own').checked;
       const onlyDaily = qs('#daily').checked;
       const onlyLong = qs('#long').checked;
-      let out=listings.filter(it=>(
-        it.price>=priceMin && it.price<=priceMax &&
-        (!onlyOwn || it.owner) && (!onlyDaily || it.daily) && (!onlyLong || !it.daily)
-      ));
+      let out=listings.filter(it=>(it.price>=priceMin && it.price<=priceMax && (!onlyOwn || it.owner) && (!onlyDaily || it.daily) && (!onlyLong || !it.daily)));
       out.sort((a,b)=>b.expiresAt-a.expiresAt);
       renderListings(out);
     }
 
     function render(){ renderBest(); applyFilters(); updateAuthUI(); }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      try { syncAuthFromCookieAndQuery(); } catch(e){}
-      try { initLang(); } catch(e){}
-      try { render(); } catch(e){}
+    document.addEventListener('DOMContentLoaded', async () => {
+      try { syncAuthFromCookieAndQuery(); } catch(_){}
+      try { initLang(); } catch(_){}
+      await checkSession(true); // если кука уже есть — сразу подтянем профиль
+      try { render(); } catch(_){}
     });
 
+    // Возврат фокуса из Telegram → проверяем сессию
+    window.addEventListener('focus', () => { checkSession(true); });
+
     window.addEventListener('storage', (e) => {
-      if (['userLogged', 'avatar_url', 'tg_user', 'lang'].includes(e.key)) {
-        try { updateAuthUI(); } catch(e){}
-        if (e.key === 'lang') try { setLangUI(localStorage.getItem('lang')||'ru'); } catch(e){}
+      if (['userLogged','avatar_url','tg_user','lang'].includes(e.key)) {
+        try { updateAuthUI(); } catch(_){}
+        if (e.key === 'lang') try { setLangUI(localStorage.getItem('lang')||'ru'); } catch(_){}
       }
     });
   </script>
 
-  <!-- WhatsApp/e-mail + форма “Связаться” (как у тебя) -->
+  <!-- Второй скрипт: WA/e-mail + форма контакта (без изменений функционала) -->
   <script>
   (() => {
     const waBtn   = document.getElementById('btnLoginWhatsApp');
@@ -723,56 +698,83 @@
     const emBox   = document.getElementById('loginEmailBlock');
     const emInput = document.getElementById('loginEmail');
     const emSend  = document.getElementById('btnSendEmailLink');
+
     const WA_NUMBER = '996555123456';
-    if (waBtn) waBtn.addEventListener('click', () => {
-      const text = encodeURIComponent('Здравствуйте! Хочу войти в Arendator.kg');
-      window.open(`https://wa.me/${WA_NUMBER}?text=${text}`, '_blank');
-    });
-    if (emBtn) emBtn.addEventListener('click', () => { emBox?.classList.toggle('hidden'); });
+
+    if (waBtn) {
+      waBtn.addEventListener('click', () => {
+        const text = encodeURIComponent('Здравствуйте! Хочу войти в Arendator.kg');
+        window.open(`https://wa.me/${WA_NUMBER}?text=${text}`, '_blank');
+      });
+    }
+
+    if (emBtn) {
+      emBtn.addEventListener('click', () => { emBox?.classList.toggle('hidden'); });
+    }
+
     if (emSend) {
       emSend.addEventListener('click', async () => {
-        const email = (emInput?.value || '').trim(); if (!email) { alert('Укажи e-mail'); return; }
+        const email = (emInput?.value || '').trim();
+        if (!email) { alert('Укажи e-mail'); return; }
         const magic = Math.random().toString(36).slice(2);
         try { localStorage.setItem('email_magic_' + email, magic); } catch(_){}
         const link = `${location.origin}/?login=${encodeURIComponent(email)}&magic=${magic}`;
         const html = `<p>Привет! Для входа в Arendator.kg нажми ссылку:</p><p><a href="${link}">Войти</a></p><p>Если это были не вы — просто игнорируйте письмо.</p>`;
         try {
-          const res = await fetch('/api/send-mail', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({to:email, subject:'Вход в Arendator.kg', html}) });
-          const data = await res.json(); if (data.ok) alert('Ссылка отправлена на почту.'); else alert('Не удалось отправить: ' + (data.error || 'ошибка'));
+          const res = await fetch('/api/send-mail', {
+            method:'POST', headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({ to:email, subject:'Вход в Arendator.kg', html })
+          });
+          const data = await res.json();
+          if (data.ok) alert('Ссылка отправлена на почту.');
+          else alert('Не удалось отправить: ' + (data.error || 'ошибка'));
         } catch { alert('Сеть недоступна, попробуй ещё раз.'); }
       });
     }
+
+    // Автовход по "магической" ссылке (демо)
     (function emailMagicAutoLogin(){
-      const p = new URLSearchParams(location.search); const email = p.get('login'); const magic = p.get('magic'); if (!email || !magic) return;
+      const p = new URLSearchParams(location.search);
+      const email = p.get('login');
+      const magic = p.get('magic');
+      if (!email || !magic) return;
+
       try {
         const saved = localStorage.getItem('email_magic_' + email);
         if (saved && saved === magic) {
-          localStorage.setItem('userLogged', '1'); history.replaceState(null, '', location.pathname);
+          localStorage.setItem('userLogged','1');
+          history.replaceState(null,'',location.pathname);
           try { updateAuthUI(); } catch(_){}
           try { document.getElementById('modalLogin')?.classList.add('hidden'); } catch(_){}
-          const t = document.getElementById('toast'); if (t){ t.textContent='Вход по email выполнен'; t.classList.remove('hidden'); setTimeout(()=>t.classList.add('hidden'), 2000); }
+          const t = document.getElementById('toast');
+          if (t){ t.textContent='Вход по email выполнен'; t.classList.remove('hidden'); setTimeout(()=>t.classList.add('hidden'),2000); }
         }
       } catch(_){}
     })();
 
+    // Форма контакта
     const ts = document.getElementById('tsField'); if (ts) ts.value = Date.now();
-    const form = document.getElementById('contactForm'); const note = document.getElementById('contactNote');
-    if (form) form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const fd = new FormData(form); const payload = Object.fromEntries(fd.entries());
-      if (payload.website && payload.website.trim() !== '') { form.reset(); if (note) note.textContent = 'Спасибо!'; return; }
-      payload.to = 'reply@arendator.kg';
-      try {
-        const res = await fetch('/api/send-mail', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
-        const data = await res.json();
-        if (data.ok) { form.reset(); if (note) note.textContent = 'Сообщение отправлено.'; if (ts) ts.value = Date.now(); }
-        else { if (note) note.textContent = 'Ошибка: ' + (data.error || 'не удалось отправить'); }
-      } catch { if (note) note.textContent = 'Ошибка сети. Попробуйте ещё раз.'; }
-    });
+    const form = document.getElementById('contactForm');
+    const note = document.getElementById('contactNote');
+    if (form) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const fd = new FormData(form);
+        const payload = Object.fromEntries(fd.entries());
+        if (payload.website && payload.website.trim() !== '') { form.reset(); if (note) note.textContent = 'Спасибо!'; return; }
+        payload.to = 'reply@arendator.kg';
+        try {
+          const res = await fetch('/api/send-mail', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+          const data = await res.json();
+          if (data.ok) { form.reset(); if (note) note.textContent = 'Сообщение отправлено.'; if (ts) ts.value = Date.now(); }
+          else { if (note) note.textContent = 'Ошибка: ' + (data.error || 'не удалось отправить'); }
+        } catch { if (note) note.textContent = 'Ошибка сети. Попробуйте ещё раз.'; }
+      });
+    }
   })();
   </script>
 
-  <!-- Если app.js у тебя уже есть (fetch /api/me и т.д.) — оставляй -->
+  <!-- Если у тебя есть собственный app.js — оставляй -->
   <script src="/app.js"></script>
 </body>
 </html>
