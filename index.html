@@ -29,6 +29,11 @@
     .lang-toggle{padding:.25rem .5rem;border:1px solid rgb(229 231 235);border-radius:.75rem}
     .lang-toggle span{opacity:.55}
     .lang-toggle .active{opacity:1;font-weight:700}
+
+    /* Плашка Снять/Купить */
+    .seg{display:grid;grid-template-columns:1fr 1fr;border:1px solid rgb(229 231 235);border-radius:0.75rem;overflow:hidden}
+    .seg button{padding:.5rem .75rem;font-weight:600}
+    .seg button.active{background:#111827;color:#fff}
   </style>
 </head>
 <body class="bg-neutral-50 text-neutral-900">
@@ -110,7 +115,7 @@
     </div>
   </header>
 
-  <!-- Герой и остальная верстка (без изменений) -->
+  <!-- Герой и остальная верстка -->
   <section class="container mx-auto px-4 pt-8">
     <div class="grid md:grid-cols-2 gap-8 items-stretch">
       <div class="bg-white border border-neutral-200 rounded-2xl shadow-soft p-4 sm:p-5 h-full flex flex-col">
@@ -118,10 +123,97 @@
         <p class="mt-3 text-base md:text-lg text-neutral-600">Объявления обновляются каждую секунду из 30 источников. Только свежие — жильё за день!</p>
 
         <div class="mt-5 grid grid-cols-2 gap-3">
-          <select id="s1" class="px-3 py-2 rounded-xl border border-neutral-200"><option>Снять</option><option>Сдать</option></select>
-          <select id="s2" class="px-3 py-2 rounded-xl border border-neutral-200"><option>Квартира</option><option>Комната</option><option>Дом</option></select>
-          <select id="s3" class="px-3 py-2 rounded-xl border border-neutral-200"><option>Чуй / Бш</option><option>Ыссык-Куль</option><option>Ош</option></select>
-          <select id="s4" class="px-3 py-2 rounded-xl border border-neutral-200"><option>Бишкек</option><option>Округ</option></select>
+          <!-- Плашка Снять / Купить -->
+          <div class="seg col-span-2" id="dealTabs">
+            <button type="button" data-deal="rent" class="active">Снять</button>
+            <button type="button" data-deal="buy">Купить</button>
+          </div>
+
+          <select id="s2" class="px-3 py-2 rounded-xl border border-neutral-200">
+            <option>Квартира</option><option>Комната</option><option>Дом</option>
+          </select>
+
+          <select id="s3" class="px-3 py-2 rounded-xl border border-neutral-200">
+            <option>Чуй / Бш</option><option>Ыссык-Куль</option><option>Ош</option>
+          </select>
+
+          <!-- Полный список районов Бишкек -->
+          <select id="s4" class="px-3 py-2 rounded-xl border border-neutral-200">
+            <option selected>Бишкек (все районы)</option>
+
+            <optgroup label="Ленинский район">
+              <option>Азия Молл</option><option>Ак Кеме</option><option>Ак-Орго ж/м</option><option>Ак-Ордо ж/м</option>
+              <option>Академия Наук</option><option>Ала-Тоо 3 ж-м</option><option>Ала-Тоо м-н</option><option>Арча-Бешик ж/м</option>
+              <option>Баха</option><option>БГУ</option><option>Верхний Джал м-н</option><option>Гагарина</option>
+              <option>Госрегистр</option><option>Джал 15 м-н</option><option>Джал-23 м-н (Нижний Джал)</option>
+              <option>Джал-29 м-н</option><option>Джал-30 м-н</option><option>Джальская больница</option>
+              <option>ж/м Ала-Арча 2</option><option>Завод Кока-Кола</option><option>Ипподром</option>
+              <option>Калыка Акиева – Льва Толстого</option><option>Киргизия 1 ж/м</option><option>Киргизия-2 м-н</option>
+              <option>Кызыл-Аскер ж/м</option><option>Лущихина – Льва Толстого</option><option>Молодая Гвардия</option>
+              <option>Московская – Белинка</option><option>Московская – Уметалиева</option><option>Орок ж/м</option>
+              <option>Ошский рынок</option><option>Пишпек ж/м</option><option>Рабочий Городок</option>
+              <option>с. Верхний Орок</option><option>с. Джал</option><option>с. Калтар</option><option>с. Кашка-Баш</option>
+              <option>с. Нижний Орок</option><option>с. Новопавловка</option><option>с. Орто-Сай</option><option>с. Сарбан</option>
+              <option>с. Селекционное</option><option>с. Чон-Арык</option><option>Сейил, жилой комплекс</option>
+              <option>СК. Тоо-Жели</option><option>Средний Джал м-н</option><option>Старый аэропорт</option>
+              <option>Тенир-Тоо м-н</option><option>Филармония</option><option>Шлагбаум</option><option>Ынтымак ж/м</option>
+            </optgroup>
+
+            <optgroup label="Октябрьский район">
+              <option>10 м-н</option><option>11 м-н</option><option>12 м-н</option><option>3 м-н</option><option>4 м-н</option>
+              <option>5 м-н</option><option>6 м-н</option><option>7 м-н</option><option>8 м-н</option><option>9 м-н</option>
+              <option>Айкол (с. Кок-Джар)</option><option>Ала-Арча 3</option><option>Ала-Арча ж/м</option>
+              <option>Алматинка – Магистраль</option><option>Алтын-Ордо ж/м</option><option>Анар-Бак ж/м</option>
+              <option>Асанбай м-н</option><option>АУЦА</option><option>Ахунбаева – Достоевского</option>
+              <option>АЮ Grand</option><option>Восточная Промзона</option><option>Ген прокуратура</option>
+              <option>Горького – Алма-Атинская</option><option>Жилгородок Ницца</option><option>Жилгородок Совмина ж/м</option>
+              <option>Карла Маркса</option><option>КГУСТА</option><option>Кок-Жар ж/м</option><option>Кок-Жар м-н</option>
+              <option>Кулатова – Матросова</option><option>Магистраль</option><option>Матросова</option><option>Мед. академия</option>
+              <option>Ортосайский рынок</option><option>Парк Ататюрк</option><option>Полицейский городок м-н</option>
+              <option>Проспект Айтматова</option><option>Рухий Мурас ж/м</option><option>с. Кок-Джар</option>
+              <option>Советская – Скрябина</option><option>Таш Рабат</option><option>Токольдош ж/м</option><option>Тунгуч 44</option>
+              <option>Тунгуч м-н</option><option>Улан м-н</option><option>Улан-2 м-н</option><option>Учкун-2 ж/м</option>
+              <option>Физкультурный</option><option>Чокана Валиханова – Исакеева</option>
+            </optgroup>
+
+            <optgroup label="Первомайский район">
+              <option>1000 мелочей</option><option>110 квартал ж/м</option><option>VEFA</option><option>Ак Эмир рынок</option>
+              <option>Ак-Босого ж/м</option><option>Алтын-Бешик ж/м</option><option>Алтын-Казык ж/м</option><option>Аска-Таш ж/м</option>
+              <option>Ата Журт</option><option>Бишкек-Парк</option><option>Боталиева – Тулебердиева</option><option>Вечерка</option>
+              <option>Военторг</option><option>Восточный автовокзал</option><option>Горького – Панфилова</option><option>Дворец спорта</option>
+              <option>Ден Сяопина – Фучика</option><option>Достук</option><option>Достук м-н</option><option>Душанбинка</option>
+              <option>ж/м Учкун-2 (Аэропорт)</option><option>ЖД вокзал</option><option>Западный автовокзал</option>
+              <option>Золотой квадрат</option><option>Калыс-Ордо 2</option><option>Калыс-Ордо ж/м</option><option>Касым ж/м</option>
+              <option>Керемет ж/м</option><option>КНУ</option><option>Колмо ж/м</option><option>Космос</option><option>Кудайберген</option>
+              <option>Маданият ж/м</option><option>Манаса-Кудрука</option><option>Махатма Ганди – БЧК</option><option>Моссовет</option>
+              <option>Мурас-Ордо ж/м</option><option>Парк Панфилова/Спартак</option><option>Площадь Победы</option><option>Политех</option>
+              <option>с. Дача СУ</option><option>с. Достук</option><option>с. Кернивоз</option><option>с. Лесное</option>
+              <option>с. Маевка</option><option>с. Озёрное</option><option>с. Пригородное</option><option>с. Степное</option>
+              <option>с. Учкун</option><option>Салам-Алик ж/м</option><option>Сквер Тоголок Молдо</option><option>Тендик ж/м</option>
+              <option>Тоголок Молдо – Щербакова</option><option>Тоголок-Молдо – БЧК</option><option>Тынчтык м-н</option>
+              <option>Умут ж/м</option><option>Щербакова ж/м</option><option>Юг-2 м-н</option>
+            </optgroup>
+
+            <optgroup label="Свердловский район">
+              <option>Айкол (с. Лебединовка)</option><option>Ак-Бата ж/м</option><option>Ак-Жар ж/м</option>
+              <option>Ак-Тилек 2 ж/м</option><option>Ак-Тилек ж/м</option><option>Академия МВД</option><option>Аламедин-1 м-н</option>
+              <option>Аламединский рынок</option><option>Бакай-Ата ж/м</option><option>Восток-5 м-н</option>
+              <option>Восточный автовокзал</option><option>Гоин</option><option>Городок строителей</option><option>Городок энергетиков</option>
+              <option>Дзержинского – Куренкеева</option><option>Дордой 2 ж/м</option><option>Дордой ж/м</option><option>Дордой Плаза</option>
+              <option>ж/м Биримдик Кут</option><option>Жибек-Жолу – Лермонтова</option><option>Кайынды ж/м</option>
+              <option>Карагачевая роща</option><option>Карпинка</option><option>Келечек ж/м</option><option>Керамическая ж/м</option>
+              <option>Керченский ж/м</option><option>Кожзавод</option><option>Комфорт</option><option>Красный Строитель 2 ж/м</option>
+              <option>Красный Строитель ж/м</option><option>Лебединовка</option><option>Мадина</option><option>Нижний Токольдош</option>
+              <option>Орозбекова – Жибек-Жолу</option><option>с. Аламудун</option><option>с. Восток</option><option>с. Мыкан</option>
+              <option>с. Нижняя Ала-Арча</option><option>с. Садовое</option><option>Советская – БЧК</option><option>Советская – Куренкеева</option>
+              <option>Советская – Щербакова</option><option>Станционный</option><option>Старый толчок</option><option>Таатан</option>
+              <option>Табачка</option><option>Тоголок молдо – Куренкеева</option><option>Туберкулезная больница</option><option>ТЭЦ</option>
+              <option>Учкун ж/м</option><option>Учкун м-н</option><option>Центральная мечеть</option><option>Церковь</option>
+              <option>Цирк/Дворец бракосочетания</option><option>ЦУМ</option><option>Чалбай ж/м</option><option>Чуй – Алматинка</option>
+              <option>Элебесова – Фере (Турбаза)</option><option>Эне-Сай ж/м</option><option>Юбилейка</option>
+            </optgroup>
+          </select>
+
           <input id="pMin" type="number" placeholder="Цена от" class="px-3 py-2 rounded-xl border border-neutral-200">
           <input id="pMax" type="number" placeholder="Цена до" class="px-3 py-2 rounded-xl border border-neutral-200">
         </div>
@@ -357,7 +449,7 @@
   <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 hidden px-4 py-2 rounded-xl bg-neutral-900 text-white text-sm"></div>
 
   <script>
-    /* ======= ДЕМО-данные и утилиты (как у тебя) ======= */
+    /* ======= ДЕМО-данные и утилиты ======= */
     const listings = [
       { id:'l1', title:'2к, Центр, свежий ремонт', price:35000, district:'Центр', rooms:'2', daily:false, owner:true, img:'', phone:'+996555123456', expiresAt: Date.now()+23*3600e3+30*60e3 },
       { id:'l2', title:'1к, Майевка, уютная',      price:18000, district:'Майевка', rooms:'1', daily:false, owner:true, img:'https://images.unsplash.com/photo-1502005229762-cf1b2da7cda7?q=80&w=1200&auto=format&fit=crop', phone:'+996700222333', expiresAt: Date.now()+10*3600e3 },
@@ -498,7 +590,6 @@
       s.setAttribute('data-size','large');
       s.setAttribute('data-userpic','false');
       s.setAttribute('data-request-access','write');
-      // пусть сервер знает, куда возвращать/что сообщать
       const back = encodeURIComponent((location.pathname+location.search) || '/');
       s.setAttribute('data-auth-url', `/api/tg-login?return_to=${back}`);
       qs('#tgLoginContainer').appendChild(s);
@@ -519,7 +610,7 @@
       }
     }, false);
 
-    /* ======= Cookie → localStorage и обратно ======= */
+    /* ======= Cookie → localStorage и быстрое обновление UI ======= */
     const hasAuthCookie=()=> document.cookie.split("; ").some(c => c.trim().startsWith("auth="));
     function syncAuthFromCookieAndQuery(){
       const p = new URLSearchParams(location.search);
@@ -570,6 +661,20 @@
       applyUser(avatar, badge, menu);
       applyUser(avatarM, badgeM, menuM);
     }
+
+    /* ======= Плашка "Снять/Купить" ======= */
+    (function initDealTabs(){
+      const tabs = qs('#dealTabs');
+      if (!tabs) return;
+      tabs.addEventListener('click', (e)=>{
+        const b = e.target.closest('button[data-deal]'); if(!b) return;
+        qsa('button', tabs).forEach(x=>x.classList.remove('active'));
+        b.classList.add('active');
+        try{ localStorage.setItem('dealType', b.dataset.deal); }catch(_){}
+      });
+      const saved = localStorage.getItem('dealType') || 'rent';
+      qsa('button', tabs).forEach(x=> x.classList.toggle('active', x.dataset.deal===saved));
+    })();
 
     /* ======= События ======= */
     qs('#btnCloseLogin').addEventListener('click', closeLogin);
@@ -674,13 +779,16 @@
 
     document.addEventListener('DOMContentLoaded', async () => {
       try { syncAuthFromCookieAndQuery(); } catch(_){}
+      updateAuthUI();              // Мгновенное обновление UI по localStorage/cookie (фикс для мобильных)
       try { initLang(); } catch(_){}
-      await checkSession(true); // если кука уже есть — сразу подтянем профиль
+      await checkSession(true);    // Подтянуть профиль, если уже вошли
       try { render(); } catch(_){}
     });
 
-    // Возврат фокуса из Telegram → проверяем сессию
-    window.addEventListener('focus', () => { checkSession(true); });
+    // Доп. хуки для мобильных: гарантируем быстрый рефреш UI после возврата
+    window.addEventListener('focus', () => { checkSession(true); updateAuthUI(); });
+    window.addEventListener('pageshow', () => { checkSession(true); updateAuthUI(); });
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) checkSession(true); });
 
     window.addEventListener('storage', (e) => {
       if (['userLogged','avatar_url','tg_user','lang'].includes(e.key)) {
@@ -688,9 +796,22 @@
         if (e.key === 'lang') try { setLangUI(localStorage.getItem('lang')||'ru'); } catch(_){}
       }
     });
+
+    // Простейший таймер обратного отсчёта (если его нет в app.js)
+    function countdown(el, ts){
+      function tick(){
+        const ms = ts - Date.now();
+        if (ms <= 0){ el.textContent = '0ч 00м'; return; }
+        const h = Math.floor(ms/3600000);
+        const m = Math.floor((ms%3600000)/60000);
+        el.textContent = `${h}ч ${String(m).padStart(2,'0')}м`;
+        requestAnimationFrame(tick);
+      }
+      tick();
+    }
   </script>
 
-  <!-- Второй скрипт: WA/e-mail + форма контакта (без изменений функционала) -->
+  <!-- Второй скрипт: WA/e-mail + форма контакта -->
   <script>
   (() => {
     const waBtn   = document.getElementById('btnLoginWhatsApp');
