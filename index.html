@@ -35,7 +35,7 @@
     .card-actions>input{min-width:0}
     .mask-blur{filter:blur(3px)}
     .dropdown{position:relative}
-    /* Важная правка: плашки аккаунта поверх ПРОДАЖА/БЛОГ/ИЗБРАННОЕ на мобилке */
+    /* Плашки аккаунта поверх ПРОДАЖА/БЛОГ/ИЗБРАННОЕ на мобилке */
     .dropdown-menu{position:absolute;right:0;top:calc(100% + .5rem);min-width:220px;z-index:60}
     .user-avatar{width:32px;height:32px;border-radius:9999px;background:#e5e7eb;color:#374151;display:grid;place-items:center;font-weight:700;overflow:hidden;background-size:cover;background-position:center;flex-shrink:0;font-size:14px;cursor:pointer}
     .avatar-lg{width:96px;height:96px;border-radius:9999px;background:#e5e7eb;display:grid;place-items:center;overflow:hidden;background-size:cover;background-position:center;font-weight:800;font-size:36px;color:#374151;margin:0 auto}
@@ -44,7 +44,7 @@
     .lang-toggle span{opacity:.55}
     .lang-toggle .active{opacity:1;font-weight:700}
 
-    /* Стиль старой плашки Снять/Купить (оставлено для совместимости) */
+    /* Стиль старой плашки Снять/Купить (совместимость) */
     .seg{display:grid;grid-template-columns:1fr 1fr;border:1px solid rgb(229 231 235);border-radius:0.75rem;overflow:hidden}
     .seg button{padding:.5rem .75rem;font-weight:600}
     .seg button.active{background:#111827;color:#fff}
@@ -71,7 +71,7 @@
           <span class="ru active">Рус</span> / <span class="ky">Кыр</span>
         </button>
         <div class="flex items-center gap-2 dropdown" id="accountAreaMobile">
-          <button id="btnAuthMobile" class="text-blue-600 text-sm hover:underline">Вход / регистрация</button>
+          <a id="btnAuthMobile" href="#" class="text-blue-600 text-sm hover:underline">Вход / регистрация</a>
           <div id="userBadgeMobile" class="hidden items-center">
             <div id="userAvatarMobile" class="user-avatar" title="Мой аккаунт"></div>
           </div>
@@ -112,7 +112,7 @@
         </button>
 
         <div class="flex items-center gap-3 text-sm dropdown" id="accountArea">
-          <button id="btnAuth" class="text-blue-600 hover:underline">Вход / регистрация</button>
+          <a id="btnAuth" href="#" class="text-blue-600 hover:underline">Вход / регистрация</a>
           <div id="userBadge" class="hidden items-center">
             <div id="userAvatar" class="user-avatar" title="Мой аккаунт"></div>
           </div>
@@ -120,7 +120,7 @@
             <button id="menuMyAds" class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50">Мои объявления</button>
             <button id="menuEditProfile" class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50">Редактировать профиль</button>
             <button id="menuChangeAvatar" class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50">Изменить аватарку</button>
-            <div class="h-px bg-neutral-200 my-1"></div>
+            <div class="h-пx bg-neutral-200 my-1"></div>
             <button id="menuLogout" class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50 text-red-600">Выйти</button>
           </div>
         </div>
@@ -491,12 +491,7 @@
     const hasAccess=()=>Date.now() < Number(localStorage.getItem('accessUntil')||0);
     const maskPhone=(p)=> p ? p.replace(/(\+\d{3})\d+/, '$1 ••• •• •••') : '•••';
 
-    /* ========= СИНХРОНИЗАЦИЯ АККАУНТА МЕЖДУ ТЕЛЕФОНОМ И ПК =========
-       Работает через серверные эндпоинты (cookie auth):
-       GET  /api/user-state -> {ok:true, state:{ profile, avatar_url, favs, accessUntil }}
-       POST /api/user-state -> {ok:true}
-       Если сервер их ещё не реализовал — всё продолжит работать локально.
-    ================================================================= */
+    /* ========= СИНХРОНИЗАЦИЯ АККАУНТА (мягкая; опционально, если сервер готов) ========= */
     const SYNC_ENDPOINT = '/api/user-state';
     let loadingServerState = false;
     let saveTimer = null;
@@ -527,7 +522,7 @@
         if ('accessUntil' in incoming)  (incoming.accessUntil ? localStorage.setItem('accessUntil', incoming.accessUntil) : localStorage.removeItem('accessUntil'));
         updateAuthUI(); render();
         setTimeout(()=>{ loadingServerState=false; }, 200);
-      }catch(_){ /* молча уходим в оффлайн-режим */ }
+      }catch(_){ /* оффлайн-режим */ }
     }
 
     async function saveServerState(){
@@ -538,7 +533,7 @@
           headers:{'Content-Type':'application/json'},
           body: JSON.stringify({ state })
         });
-      }catch(_){ /* если сервера нет — просто пропускаем */ }
+      }catch(_){}
     }
     function saveServerStateDebounced(){
       if (loadingServerState) return;
@@ -546,7 +541,7 @@
       saveTimer = setTimeout(saveServerState, 600);
     }
 
-    /* ---------- СЕССИЯ: универсальная проверка ---------- */
+    /* ---------- СЕССИЯ: проверка ---------- */
     let loginPoll = null;
     async function checkSession(silent=true){
       try{
@@ -556,7 +551,7 @@
           try{ localStorage.setItem('userLogged','1'); }catch(_){}
           try{ localStorage.setItem('tg_user', JSON.stringify(data.user||{})); }catch(_){}
           try{ closeLogin(); }catch(_){}
-          ensureUserScoped();     // важная вставка: предотвращает «другой аккаунт» на этом же устройстве
+          ensureUserScoped();
           updateAuthUI();
           if (!silent) showToast('Вход выполнен');
           return true;
@@ -569,7 +564,7 @@
     let bestItem=null;
     function renderBest(){
       bestItem = listings.find(it=>!it.daily && it.price<=25000) || listings[0];
-      const imgEl=qs('#bestImg'), noPhoto=qs('#bestNoPhoto'), btn=qs('#bestCallBtn'), masked=qs('#bestMasked');
+      const imgEl=qs('#bestImg'), noPhoto=qs('#bestNoPhoto'), btn=qs('#bestCallBtn'), masked=qs('#bestMasked']);
       if (bestItem.img){ imgEl.src=bestItem.img; imgEl.alt=bestItem.title||'Лучшее объявление'; imgEl.classList.remove('hidden'); noPhoto.classList.add('hidden'); }
       else { imgEl.removeAttribute('src'); imgEl.classList.add('hidden'); noPhoto.classList.remove('hidden'); }
       masked.textContent = maskPhone(bestItem.phone||'');
@@ -643,13 +638,13 @@
       if(favs.has(id)){ favs.delete(id); heart.textContent='♡'; heart.classList.remove('text-red-600'); showToast('Убрано из избранного'); }
       else{ favs.add(id); heart.textContent='❤'; heart.classList.add('text-red-600'); showToast('Добавлено в избранное'); }
       localStorage.setItem('favs', JSON.stringify([...favs]));
-      saveServerStateDebounced(); // СИНХ
+      saveServerStateDebounced();
     }
 
     /* ======= Модалки ======= */
     const modalLogin=qs('#modalLogin'), modalPay=qs('#modalPay'), modalProfile=qs('#modalProfile'), modalEdit=qs('#modalEditProfile');
     const openLogin =()=>{ modalLogin.classList.remove('hidden'); modalLogin.classList.add('flex');
-      // Лениво вставляем виджет + запускаем короткий поллинг на 10 сек
+      // Лениво вставляем виджет + короткий поллинг на /api/me
       mountTelegramWidget();
       if (loginPoll) clearInterval(loginPoll);
       let ticks=0; loginPoll=setInterval(async ()=>{ ticks++; const ok=await checkSession(true); if(ok||ticks>10){ clearInterval(loginPoll); loginPoll=null; } },1000);
@@ -662,7 +657,7 @@
     const openEdit=()=>{ fillEditProfileModal(); modalEdit.classList.remove('hidden'); modalEdit.classList.add('flex'); }
     const closeEdit=()=>{ modalEdit.classList.add('hidden'); modalEdit.classList.remove('flex'); }
 
-    /* ======= Telegram Login — лениво монтируем виджет ======= */
+    /* ======= Telegram Login — виджет на текущем домене (без хардкода origin) ======= */
     function mountTelegramWidget(){
       if (qs('#tgLoginContainer script')) return;
       const s=document.createElement('script');
@@ -672,9 +667,9 @@
       s.setAttribute('data-size','large');
       s.setAttribute('data-userpic','false');
       s.setAttribute('data-request-access','write');
-      const CANON = 'https://arendator.kg';
       const back  = encodeURIComponent((location.pathname+location.search) || '/');
-      s.setAttribute('data-auth-url', `${CANON}/api/tg-login?return_to=${back}`);
+      // ВАЖНО: относительный URL, чтобы кука ставилась на тот же хост/домен
+      s.setAttribute('data-auth-url', `/api/tg-login?return_to=${back}`);
       qs('#tgLoginContainer').appendChild(s);
     }
 
@@ -687,7 +682,7 @@
           try{ localStorage.setItem('tg_user', JSON.stringify(msg.user||{})); }catch(_){}
           await checkSession(true);
           ensureUserScoped();
-          await loadServerState();   // подхватить серверное состояние сразу после логина
+          await loadServerState();
           updateAuthUI(); closeLogin(); showToast('Вход через Telegram выполнен');
         } else {
           showToast('Не удалось войти через Telegram');
@@ -724,13 +719,12 @@
       bind('#langToggle'); bind('#langToggleMobile');
     }
 
-    /* ======= Привязка локального состояния к конкретному юзеру (важно при смене аккаунта) ======= */
+    /* ======= Привязка локального состояния к конкретному юзеру ======= */
     function ensureUserScoped(){
       let u={}; try{ u = JSON.parse(localStorage.getItem('tg_user')||'{}'); }catch(_){}
       const uid = u.id || u.user_id || u.telegram_id || u._id || null;
       const prev = localStorage.getItem('current_uid');
       if (uid && prev && prev !== String(uid)){
-        // Очистить локальное состояние другого пользователя
         localStorage.removeItem('profile');
         localStorage.removeItem('avatar_url');
         localStorage.removeItem('favs');
@@ -771,7 +765,7 @@
       sel.addEventListener('change', ()=>{ localStorage.setItem('dealType', sel.value); });
     })();
 
-    /* ======= (устар.) плашка табов оставлена для совместимости ======= */
+    /* ======= (устар.) плашка табов (совместимость) ======= */
     (function initDealTabs(){
       const tabs = qs('#dealTabs');
       if (!tabs) return;
@@ -785,7 +779,7 @@
       qsa('button', tabs).forEach(x=> x.classList.toggle('active', x.dataset.deal===saved));
     })();
 
-    /* ======= Показ/скрытие районов Бишкек по выбору области ======= */
+    /* ======= Показ/скрытие районов Бишкек ======= */
     (function initRegionVisibility(){
       const region = qs('#s3');
       const districts = qs('#s4');
@@ -814,20 +808,26 @@
       localStorage.setItem('accessUntil', String(Date.now()+24*3600e3)); 
       showToast('Доступ открыт на 24 часа'); 
       render(); 
-      saveServerStateDebounced(); // СИНХ
+      saveServerStateDebounced();
       closePay(); 
     });
 
     document.addEventListener('click', (ev) => {
+      // Триггеры аккаунта: кнопки/аватар (работает и на страницах, где это <a>)
       const trg = ev.target.closest('#btnAuth, #btnAuthMobile, #userAvatar, #userAvatarMobile');
       if (trg){
+        ev.preventDefault();      // критично: не уезжаем на главную
+        ev.stopPropagation();     // чтобы другие обработчики не сработали
+
         const logged = !!localStorage.getItem('userLogged');
-        const isMobile = !!ev.target.closest('#accountAreaMobile');
+        const isMobile = !!trg.closest('#accountAreaMobile');
         const menu = isMobile ? qs('#accountMenuMobile') : qs('#accountMenu');
+
         if (logged){ menu?.classList.toggle('hidden'); }
         else { openLogin(); }
         return;
       }
+      // Клик вне меню — закрываем оба
       if (!ev.target.closest('#accountMenu') && !ev.target.closest('#accountArea')) qs('#accountMenu')?.classList.add('hidden');
       if (!ev.target.closest('#accountMenuMobile') && !ev.target.closest('#accountAreaMobile')) qs('#accountMenuMobile')?.classList.add('hidden');
     });
@@ -844,7 +844,7 @@
       updateAuthUI(); showToast('Вы вышли из аккаунта');
     });
 
-    /* МОБИЛЬНОЕ МЕНЮ — все кнопки полноценно работают */
+    /* МОБИЛЬНОЕ МЕНЮ */
     const accMenuM = qs('#accountMenuMobile');
     qs('#menuMyAdsM')?.addEventListener('click', ()=>{ accMenuM?.classList.add('hidden'); showToast('Мои объявления (демо)'); });
     qs('#menuEditProfileM')?.addEventListener('click', ()=>{ accMenuM?.classList.add('hidden'); openEdit(); });
@@ -868,7 +868,7 @@
       const data = { name:qs('#profName').value.trim(), email:qs('#profEmail').value.trim(), phone:qs('#profPhone').value.trim(), about:qs('#profAbout').value.trim() };
       localStorage.setItem('profile', JSON.stringify(data));
       closeEdit(); updateAuthUI(); showToast('Профиль сохранён');
-      saveServerStateDebounced(); // СИНХ
+      saveServerStateDebounced();
     });
 
     qs('#btnCloseProfile').addEventListener('click', closeProfile);
@@ -879,7 +879,7 @@
       try{
         const dataUrl = await fileToAvatarDataURL(file, 256);
         localStorage.setItem('avatar_url', dataUrl); syncProfileModal(); updateAuthUI(); showToast('Аватар обновлён');
-        saveServerStateDebounced(); // СИНХ
+        saveServerStateDebounced();
       }catch{ showToast('Не удалось обработать изображение'); }
     });
     qs('#btnAvatarRemove').addEventListener('click', ()=>{ localStorage.removeItem('avatar_url'); syncProfileModal(); updateAuthUI(); showToast('Аватар удалён'); saveServerStateDebounced(); });
@@ -927,20 +927,20 @@
 
     document.addEventListener('DOMContentLoaded', async () => {
       try { syncAuthFromCookieAndQuery(); } catch(_){}
-      updateAuthUI();              // мгновенное обновление UI (фикс для мобильных)
+      updateAuthUI();
       try { initLang(); } catch(_){}
-      await checkSession(true);    // подтянуть профиль, если уже вошли
+      await checkSession(true);
       ensureUserScoped();
-      await loadServerState();     // ПОДХВАТИТЬ ОБЩЕЕ СОСТОЯНИЕ С СЕРВЕРА
+      await loadServerState();
       try { render(); } catch(_){}
     });
 
-    // Доп. хуки: при возврате в вкладку подтягиваем серверное состояние (для кросс-девайса)
+    // Подтягиваем серверное состояние при возврате
     window.addEventListener('focus', () => { checkSession(true).then(()=>{ updateAuthUI(); loadServerState(); }); });
     window.addEventListener('pageshow', () => { checkSession(true).then(()=>{ updateAuthUI(); loadServerState(); }); });
     document.addEventListener('visibilitychange', () => { if (!document.hidden) { checkSession(true); loadServerState(); } });
 
-    // Периодическая мягкая синхронизация (если сервер доступен)
+    // Периодическая мягкая синхронизация
     setInterval(() => { checkSession(true).then(()=>{ updateAuthUI(); loadServerState(); }); }, 30000);
 
     window.addEventListener('storage', (e) => {
@@ -1041,7 +1041,7 @@
           const res = await fetch('/api/send-mail', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
           const data = await res.json();
           if (data.ok) { form.reset(); if (note) note.textContent = 'Сообщение отправлено.'; if (ts) ts.value = Date.now(); }
-          else { if (note) note.textContent = 'Ошибка: ' + (data.error или 'не удалось отправить'); }
+          else { if (note) note.textContent = 'Ошибка: ' + (data.error || 'не удалось отправить'); }
         } catch { if (note) note.textContent = 'Ошибка сети. Попробуйте ещё раз.'; }
       });
     }
