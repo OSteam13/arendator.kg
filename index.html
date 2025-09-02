@@ -659,8 +659,9 @@
       s.setAttribute('data-size','large');
       s.setAttribute('data-userpic','false');
       s.setAttribute('data-request-access','write');
-      const back = encodeURIComponent((location.pathname+location.search) || '/');
-      s.setAttribute('data-auth-url', `/api/tg-login?return_to=${back}`);
+      const CANON = 'https://arendator.kg';
+      const back  = encodeURIComponent((location.pathname+location.search) || '/');
+      s.setAttribute('data-auth-url', `${CANON}/api/tg-login?return_to=${back}`);
       qs('#tgLoginContainer').appendChild(s);
     }
 
