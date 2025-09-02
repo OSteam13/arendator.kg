@@ -1,52 +1,70 @@
-const { pool } = require('./_db');
+// /api/favorites.js
+import { createClient } from '@supabase/supabase-js'
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+)
 
-async function getUserId(req) {
-  const cookies = req.headers.cookie || '';
-  const token = cookies.split('; ')
-    .find(c => c.startsWith('auth='))?.split('=')[1] || '';
-  if (!token) return null;
-  const { rows } = await pool.query(
-    'select user_id from sessions where token=$1 and expires_at>now()',
-    [token]
-  );
-  return rows[0]?.user_id || null;
+const COOKIE_NAME = 'auth'
+function readToken(req) {
+  const raw = req.headers.cookie || ''
+  const m = raw.match(new RegExp(`${COOKIE_NAME}=([^;]+)`))
+  return m ? m[1] : null
 }
 
-module.exports = async (req, res) => {
-  try {
-    const userId = await getUserId(req);
-    if (!userId) return res.status(401).json({ ok:false });
-
-    if (req.method === 'GET') {
-      const { rows } = await pool.query(
-        'select listing_id from favorites where user_id=$1 order by updated_at desc',
-        [userId]
-      );
-      res.json({ ok:true, favorites: rows.map(r => r.listing_id) });
-      return;
-    }
-
-    if (req.method === 'POST') {
-      const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
-      const { action, listing_id } = body || {};
-      if (!listing_id) return res.status(400).json({ ok:false, error:'no_listing_id' });
-
-      if (action === 'remove') {
-        await pool.query('delete from favorites where user_id=$1 and listing_id=$2', [userId, listing_id]);
-      } else {
-        await pool.query(
-          `insert into favorites (user_id, listing_id, updated_at)
-           values ($1,$2, now())
-           on conflict (user_id, listing_id) do update set updated_at = excluded.updated_at`,
-          [userId, listing_id]
-        );
-      }
-      res.json({ ok:true });
-      return;
-    }
-
-    res.status(405).json({ ok:false, error:'method_not_allowed' });
-  } catch (e) {
-    res.status(500).json({ ok:false, error: e.message });
+async function requireUser(req, res) {
+  const token = readToken(req)
+  if (!token) { res.status(401).json({ ok:false }); return null }
+  const { data, error } = await supabase
+    .from('sessions')
+    .select('user_id, expires_at')
+    .eq('token', token)
+    .limit(1)
+  if (error || !data || !data.length) { res.status(401).json({ ok:false }); return null }
+  const s = data[0]
+  if (new Date(s.expires_at).getTime() <= Date.now()) {
+    await supabase.from('sessions').delete().eq('token', token)
+    res.status(401).json({ ok:false }); return null
   }
-};
+  return s.user_id
+}
+
+export default async function handler(req, res) {
+  res.setHeader('Cache-Control', 'no-store')
+  const userId = await requireUser(req, res)
+  if (!userId) return
+
+  if (req.method === 'GET') {
+    const { data, error } = await supabase
+      .from('favorites')
+      .select('listing_id, updated_at')
+      .eq('user_id', userId)
+      .order('updated_at', { ascending: false })
+
+    if (error) return res.status(500).json({ ok:false, error:error.message })
+    return res.json({ ok:true, favorites: data })
+  }
+
+  if (req.method === 'POST') {
+    const { listing_id } = req.body || {}
+    if (!listing_id) return res.status(400).json({ ok:false, error:'listing_id is required' })
+    const { error } = await supabase
+      .from('favorites')
+      .upsert({ user_id: userId, listing_id }, { onConflict: 'user_id,listing_id' })
+    if (error) return res.status(500).json({ ok:false, error:error.message })
+    return res.json({ ok:true })
+  }
+
+  if (req.method === 'DELETE') {
+    const { listing_id } = req.body || {}
+    if (!listing_id) return res.status(400).json({ ok:false, error:'listing_id is required' })
+    const { error } = await supabase
+      .from('favorites')
+      .delete()
+      .match({ user_id: userId, listing_id })
+    if (error) return res.status(500).json({ ok:false, error:error.message })
+    return res.json({ ok:true })
+  }
+
+  res.status(405).end()
+}
