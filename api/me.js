@@ -1,33 +1,37 @@
-const { pool } = require('./_db');
+// /api/me.js
+import { createClient } from '@supabase/supabase-js'
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+)
 
-async function getUserByCookie(req) {
-  const cookies = req.headers.cookie || '';
-  const token = cookies.split('; ')
-    .find(c => c.startsWith('auth='))?.split('=')[1] || '';
-  if (!token) return null;
+const COOKIE_NAME = 'auth'
 
-  const { rows } = await pool.query(
-    `select u.id, u.display_name, u.avatar_url, u.locale
-       from sessions s
-       join users u on u.id = s.user_id
-      where s.token = $1 and s.expires_at > now()`,
-    [token]
-  );
-  return rows[0] || null;
+function readCookieToken(req) {
+  const raw = req.headers.cookie || ''
+  const m = raw.match(new RegExp(`${COOKIE_NAME}=([^;]+)`))
+  return m ? m[1] : null
 }
 
-module.exports = async (req, res) => {
-  try {
-    const user = await getUserByCookie(req);
-    if (!user) return res.status(401).json({ ok:false });
+export default async function handler(req, res) {
+  res.setHeader('Cache-Control', 'no-store')
+  const token = readCookieToken(req)
+  if (!token) return res.status(401).json({ ok:false })
 
-    const { rows } = await pool.query(
-      'select listing_id from favorites where user_id = $1',
-      [user.id]
-    );
+  const { data: sessions, error } = await supabase
+    .from('sessions')
+    .select('user_id, expires_at, users:users!inner(id,email,tg_id)')
+    .eq('token', token)
+    .limit(1)
 
-    res.json({ ok:true, user, favorites: rows.map(r => r.listing_id) });
-  } catch (e) {
-    res.status(500).json({ ok:false, error: e.message });
+  if (error || !sessions || sessions.length === 0) return res.status(401).json({ ok:false })
+
+  const s = sessions[0]
+  if (new Date(s.expires_at).getTime() <= Date.now()) {
+    // просрочена
+    await supabase.from('sessions').delete().eq('token', token)
+    return res.status(401).json({ ok:false })
   }
-};
+
+  return res.json({ ok:true, user: s.users })
+}
