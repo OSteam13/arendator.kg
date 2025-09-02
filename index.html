@@ -1,3 +1,6 @@
+Вот исправленный полный HTML (кнопка «Вход через Telegram» теперь появляется, добавлен резервный вариант на случай, если виджет не подгрузится; «Закрыть» работает, модалка поверх шапки благодаря z-50; мелкие опечатки тоже поправил — `text-3xl`, `h-px`).
+
+```html
 <!doctype html>
 <html lang="ru">
 <head>
@@ -6,9 +9,7 @@
   try {
     var p = new URLSearchParams(location.search);
     if (p.get('tg') === 'ok') {
-      // локально помечаем как вошедшего до загрузки остального кода
       localStorage.setItem('userLogged','1');
-      // чистим URL
       history.replaceState(null,'',location.pathname);
     }
   } catch(_) {}
@@ -35,7 +36,6 @@
     .card-actions>input{min-width:0}
     .mask-blur{filter:blur(3px)}
     .dropdown{position:relative}
-    /* Плашки аккаунта поверх ПРОДАЖА/БЛОГ/ИЗБРАННОЕ на мобилке */
     .dropdown-menu{position:absolute;right:0;top:calc(100% + .5rem);min-width:220px;z-index:60}
     .user-avatar{width:32px;height:32px;border-radius:9999px;background:#e5e7eb;color:#374151;display:grid;place-items:center;font-weight:700;overflow:hidden;background-size:cover;background-position:center;flex-shrink:0;font-size:14px;cursor:pointer}
     .avatar-lg{width:96px;height:96px;border-radius:9999px;background:#e5e7eb;display:grid;place-items:center;overflow:hidden;background-size:cover;background-position:center;font-weight:800;font-size:36px;color:#374151;margin:0 auto}
@@ -43,8 +43,6 @@
     .lang-toggle{padding:.25rem .5rem;border:1px solid rgb(229 231 235);border-radius:.75rem}
     .lang-toggle span{opacity:.55}
     .lang-toggle .active{opacity:1;font-weight:700}
-
-    /* Стиль старой плашки Снять/Купить (совместимость) */
     .seg{display:grid;grid-template-columns:1fr 1fr;border:1px solid rgb(229 231 235);border-radius:0.75rem;overflow:hidden}
     .seg button{padding:.5rem .75rem;font-weight:600}
     .seg button.active{background:#111827;color:#fff}
@@ -71,7 +69,7 @@
           <span class="ru active">Рус</span> / <span class="ky">Кыр</span>
         </button>
         <div class="flex items-center gap-2 dropdown" id="accountAreaMobile">
-          <a id="btnAuthMobile" href="#" class="text-blue-600 text-sm hover:underline">Вход / регистрация</a>
+          <button id="btnAuthMobile" type="button" class="text-blue-600 text-sm hover:underline">Вход / регистрация</button>
           <div id="userBadgeMobile" class="hidden items-center">
             <div id="userAvatarMobile" class="user-avatar" title="Мой аккаунт"></div>
           </div>
@@ -112,7 +110,7 @@
         </button>
 
         <div class="flex items-center gap-3 text-sm dropdown" id="accountArea">
-          <a id="btnAuth" href="#" class="text-blue-600 hover:underline">Вход / регистрация</a>
+          <button id="btnAuth" type="button" class="text-blue-600 hover:underline">Вход / регистрация</button>
           <div id="userBadge" class="hidden items-center">
             <div id="userAvatar" class="user-avatar" title="Мой аккаунт"></div>
           </div>
@@ -120,7 +118,7 @@
             <button id="menuMyAds" class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50">Мои объявления</button>
             <button id="menuEditProfile" class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50">Редактировать профиль</button>
             <button id="menuChangeAvatar" class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50">Изменить аватарку</button>
-            <div class="h-пx bg-neutral-200 my-1"></div>
+            <div class="h-px bg-neutral-200 my-1"></div>
             <button id="menuLogout" class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50 text-red-600">Выйти</button>
           </div>
         </div>
@@ -133,7 +131,7 @@
   <section class="container mx-auto px-4 pt-8">
     <div class="grid md:grid-cols-2 gap-8 items-stretch">
       <div class="bg-white border border-neutral-200 rounded-2xl shadow-soft p-4 sm:p-5 h-full flex flex-col">
-        <h1 class="hero-title text-3л md:text-5xl leading-tight text-blue-600">Ищете квартиру в аренду?</h1>
+        <h1 class="hero-title text-3xl md:text-5xl leading-tight text-blue-600">Ищете квартиру в аренду?</h1>
         <p class="mt-3 text-base md:text-lg text-neutral-600">Объявления обновляются каждую секунду из 30 источников. Только свежие — жильё за день!</p>
 
         <div class="mt-5 grid grid-cols-2 gap-3">
@@ -181,8 +179,8 @@
               <option>с. Верхний Орок</option><option>с. Джал</option><option>с. Калтар</option><option>с. Кашка-Баш</option>
               <option>с. Нижний Орок</option><option>с. Новопавловка</option><option>с. Орто-Сай</option><option>с. Сарбан</option>
               <option>с. Селекционное</option><option>с. Чон-Арык</option><option>Сейил, жилой комплекс</option>
-              <option>СК. Тоо-Жели</option><option>Средний Джал м-н</option><option>Старый аэропорт</option>
-              <option>Тенир-Тоо м-н</option><option>Филармония</option><option>Шлагбаум</option><option>Ынтымак ж/м</option>
+              <option>СК. Тоо-Жели</option><option>Средний Джал м-н</option>
+              <option>Старый аэропорт</option><option>Тенир-Тоо м-н</option><option>Филармония</option><option>Шлагбаум</option><option>Ынтымак ж/м</option>
             </optgroup>
 
             <optgroup label="Октябрьский район">
@@ -384,42 +382,67 @@
   </footer>
 
   <!-- Модалки -->
-  <div id="modalLogin" class="fixed inset-0 hidden items-center justify-center bg-black/40 p-4">
+  <div id="modalLogin" role="dialog" aria-modal="true" class="fixed inset-0 hidden items-center justify-center bg-black/40 p-4 z-50">
     <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-soft">
       <div class="text-lg font-semibold">Вход без пароля</div>
       <p class="text-sm text-neutral-600 mt-1">Войдите по номеру — отправим код в SMS.<br>Или через Telegram одним нажатием.</p>
       <input id="loginPhone" placeholder="0(555) 123-456" class="mt-4 w-full px-3 py-2 rounded-xl border border-neutral-200" />
       <div class="mt-3 grid grid-cols-2 gap-2">
-        <button id="btnSendCode" class="px-4 py-2 rounded-xl bg-neutral-900 text-white">Отправить код</button>
-        <button id="btnCloseLogin" class="px-4 py-2 rounded-xl border border-neutral-200">Закрыть</button>
+        <button id="btnSendCode" class="px-4 py-2 rounded-xl bg-neutral-900 text-white" type="button">Отправить код</button>
+        <button id="btnCloseLogin" class="px-4 py-2 rounded-xl border border-neutral-200" type="button">Закрыть</button>
       </div>
       <div id="loginStep2" class="hidden mt-4">
         <input id="loginOtp" placeholder="Код из SMS" class="w-full px-3 py-2 rounded-xl border border-neutral-200" />
-        <button id="btnConfirmOtp" class="mt-3 w-full px-4 py-2 rounded-xl bg-blue-600 text-white">Войти</button>
+        <button id="btnConfirmOtp" class="mt-3 w-full px-4 py-2 rounded-xl bg-blue-600 text-white" type="button">Войти</button>
       </div>
       <div class="my-4 flex items-center gap-3">
         <div class="h-px flex-1 bg-neutral-200"></div>
         <div class="text-xs text-neutral-500">или Telegram</div>
         <div class="h-px flex-1 bg-neutral-200"></div>
       </div>
+
+      <!-- Контейнер виджета -->
       <div id="tgLoginContainer" class="flex justify-center"></div>
+
+      <!-- Резервная кнопка (покажем, если виджет не успел загрузиться) -->
+      <div id="tgFallbackWrap" class="hidden mt-2 flex justify-center">
+        <a id="tgFallback" class="px-4 py-2 rounded-xl bg-[#27A7E7] text-white inline-block">Войти через Telegram</a>
+      </div>
+      <script>
+        // сформируем ссылку возврата для запасной кнопки
+        (function(){
+          try{
+            var back = encodeURIComponent((location.pathname+location.search)||'/');
+            var a = document.getElementById('tgFallback');
+            if (a) a.href = '/api/tg-login?return_to='+back;
+          }catch(_){}
+        })();
+        // если за ~1.2с виджет не появился, покажем fallback
+        setTimeout(function(){
+          var c = document.getElementById('tgLoginContainer');
+          if (c && c.childElementCount === 0){
+            document.getElementById('tgFallbackWrap')?.classList.remove('hidden');
+          }
+        }, 1200);
+      </script>
+
       <div class="text-xs text-neutral-500 text-center mt-2">После нажатия появится окно Telegram — откройте Telegram и нажмите «Принять / Allow», чтобы завершить вход.</div>
 
       <!-- Доп. способы -->
       <div class="mt-3 text-xs text-neutral-500 text-center">или:</div>
       <div class="mt-2 grid grid-cols-2 gap-2">
-        <button id="btnLoginWhatsApp" class="px-3 py-2 rounded-xl border border-neutral-200 hover:bg-neutral-50">Войти через WhatsApp</button>
-        <button id="btnLoginEmail" class="px-3 py-2 rounded-xl border border-neutral-200 hover:bg-neutral-50">Войти по e-mail</button>
+        <button id="btnLoginWhatsApp" class="px-3 py-2 rounded-xl border border-neutral-200 hover:bg-neutral-50" type="button">Войти через WhatsApp</button>
+        <button id="btnLoginEmail" class="px-3 py-2 rounded-xl border border-neutral-200 hover:bg-neutral-50" type="button">Войти по e-mail</button>
       </div>
       <div id="loginEmailBlock" class="hidden mt-3 space-y-2">
         <input id="loginEmail" type="email" placeholder="you@email.com" class="w-full px-3 py-2 rounded-xl border border-neutral-200">
-        <button id="btnSendEmailLink" class="w-full px-4 py-2 rounded-xl bg-neutral-900 text-white">Отправить ссылку для входа</button>
+        <button id="btnSendEmailLink" class="w-full px-4 py-2 rounded-xl bg-neutral-900 text-white" type="button">Отправить ссылку для входа</button>
         <div class="text-xs text-neutral-500">Мы пришлём «магическую» ссылку на почту.</div>
       </div>
     </div>
   </div>
 
-  <div id="modalProfile" class="fixed inset-0 hidden items-center justify-center bg-black/40 p-4">
+  <div id="modalProfile" role="dialog" aria-modal="true" class="fixed inset-0 hidden items-center justify-center bg-black/40 p-4 z-50">
     <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-soft">
       <div class="text-lg font-semibold">Мой профиль</div>
       <p class="text-sm text-neutral-600 mt-1">Измени аватарку. (Пока локально, без сервера)</p>
@@ -429,17 +452,17 @@
           <label class="px-4 py-2 rounded-xl bg-neutral-900 text-white text-center cursor-pointer">
             <input id="avatarFile" type="file" accept="image/*" class="hidden">Загрузить
           </label>
-          <button id="btnAvatarRemove" class="px-4 py-2 rounded-xl border border-neutral-200">Удалить</button>
+          <button id="btnAvatarRemove" class="px-4 py-2 rounded-xl border border-neutral-200" type="button">Удалить</button>
         </div>
       </div>
       <div class="mt-6 grid grid-cols-2 gap-2">
-        <button id="btnCloseProfile" class="px-4 py-2 rounded-xl border border-neutral-200">Закрыть</button>
-        <button id="btnSaveProfile" class="px-4 py-2 rounded-xl bg-blue-600 text-white">Сохранить</button>
+        <button id="btnCloseProfile" class="px-4 py-2 rounded-xl border border-neutral-200" type="button">Закрыть</button>
+        <button id="btnSaveProfile" class="px-4 py-2 rounded-xl bg-blue-600 text-white" type="button">Сохранить</button>
       </div>
     </div>
   </div>
 
-  <div id="modalEditProfile" class="fixed inset-0 hidden items-center justify-center bg-black/40 p-4">
+  <div id="modalEditProfile" role="dialog" aria-modal="true" class="fixed inset-0 hidden items-center justify-center bg-black/40 p-4 z-50">
     <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-soft">
       <div class="text-lg font-semibold">Редактировать профиль</div>
       <div class="mt-4 space-y-3">
@@ -449,25 +472,25 @@
         <textarea id="profAbout" rows="4" placeholder="Обо мне" class="w-full px-3 py-2 rounded-xl border border-neutral-200"></textarea>
       </div>
       <div class="mt-6 grid grid-cols-2 gap-2">
-        <button id="btnCloseEditProfile" class="px-4 py-2 rounded-xl border border-neutral-200">Отмена</button>
-        <button id="btnSaveEditProfile" class="px-4 py-2 rounded-xl bg-blue-600 text-white">Сохранить</button>
+        <button id="btnCloseEditProfile" class="px-4 py-2 rounded-xl border border-neutral-200" type="button">Отмена</button>
+        <button id="btnSaveEditProfile" class="px-4 py-2 rounded-xl bg-blue-600 text-white" type="button">Сохранить</button>
       </div>
     </div>
   </div>
 
-  <div id="modalPay" class="fixed inset-0 hidden items-center justify-center bg-black/40 p-4">
+  <div id="modalPay" role="dialog" aria-modal="true" class="fixed inset-0 hidden items-center justify-center bg-black/40 p-4 z-50">
     <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-soft">
       <div class="text-lg font-semibold">Открой номера владельцев</div>
       <p class="text-sm text-neutral-600 mt-1">После оплаты доступ активируется автоматически. Никаких автопродлений.</p>
       <div class="mt-4 grid grid-cols-3 gap-2 text-sm">
-        <button class="pay-method px-3 py-2 rounded-xl border border-neutral-200 hover:bg-neutral-50" data-method="mbank">MBank QR</button>
-        <button class="pay-method px-3 py-2 rounded-xl border border-neutral-200 hover:bg-neutral-50" data-method="elqr">ELQR</button>
-        <button class="pay-method px-3 py-2 rounded-xl border border-neutral-200 hover:bg-neutral-50" data-method="card">Карта</button>
+        <button class="pay-method px-3 py-2 rounded-xl border border-neutral-200 hover:bg-neutral-50" data-method="mbank" type="button">MBank QR</button>
+        <button class="pay-method px-3 py-2 rounded-xl border border-neutral-200 hover:bg-neutral-50" data-method="elqr" type="button">ELQR</button>
+        <button class="pay-method px-3 py-2 rounded-xl border border-neutral-200 hover:bg-neutral-50" data-method="card" type="button">Карта</button>
       </div>
       <div id="paySelected" class="mt-4 text-sm text-neutral-700 hidden">Вы выбрали: <span class="font-medium" id="payMethodName"></span></div>
       <div class="mt-4 grid grid-cols-2 gap-2">
-        <button id="btnSimulatePaid" class="px-4 py-2 rounded-xl bg-blue-600 text-white">Оплата прошла (демо)</button>
-        <button id="btnClosePay" class="px-4 py-2 rounded-xl border border-neutral-200">Отмена</button>
+        <button id="btnSimulatePaid" class="px-4 py-2 rounded-xl bg-blue-600 text-white" type="button">Оплата прошла (демо)</button>
+        <button id="btnClosePay" class="px-4 py-2 rounded-xl border border-neutral-200" type="button">Отмена</button>
       </div>
     </div>
   </div>
@@ -491,7 +514,7 @@
     const hasAccess=()=>Date.now() < Number(localStorage.getItem('accessUntil')||0);
     const maskPhone=(p)=> p ? p.replace(/(\+\d{3})\d+/, '$1 ••• •• •••') : '•••';
 
-    /* ========= СИНХРОНИЗАЦИЯ АККАУНТА (мягкая; опционально, если сервер готов) ========= */
+    /* ========= СИНХРОНИЗАЦИЯ АККАУНТА ========= */
     const SYNC_ENDPOINT = '/api/user-state';
     let loadingServerState = false;
     let saveTimer = null;
@@ -657,7 +680,7 @@
     const openEdit=()=>{ fillEditProfileModal(); modalEdit.classList.remove('hidden'); modalEdit.classList.add('flex'); }
     const closeEdit=()=>{ modalEdit.classList.add('hidden'); modalEdit.classList.remove('flex'); }
 
-    /* ======= Telegram Login — виджет на текущем домене (без хардкода origin) ======= */
+    /* ======= Telegram Login — виджет ======= */
     function mountTelegramWidget(){
       if (qs('#tgLoginContainer script')) return;
       const s=document.createElement('script');
@@ -668,7 +691,6 @@
       s.setAttribute('data-userpic','false');
       s.setAttribute('data-request-access','write');
       const back  = encodeURIComponent((location.pathname+location.search) || '/');
-      // ВАЖНО: относительный URL, чтобы кука ставилась на тот же хост/домен
       s.setAttribute('data-auth-url', `/api/tg-login?return_to=${back}`);
       qs('#tgLoginContainer').appendChild(s);
     }
@@ -690,7 +712,7 @@
       }
     }, false);
 
-    /* ======= Cookie → localStorage и быстрое обновление UI ======= */
+    /* ======= Cookie → localStorage ======= */
     const hasAuthCookie=()=> document.cookie.split("; ").some(c => c.trim().startsWith("auth="));
     function syncAuthFromCookieAndQuery(){
       const p = new URLSearchParams(location.search);
@@ -719,7 +741,7 @@
       bind('#langToggle'); bind('#langToggleMobile');
     }
 
-    /* ======= Привязка локального состояния к конкретному юзеру ======= */
+    /* ======= Привязка локального состояния ======= */
     function ensureUserScoped(){
       let u={}; try{ u = JSON.parse(localStorage.getItem('tg_user')||'{}'); }catch(_){}
       const uid = u.id || u.user_id || u.telegram_id || u._id || null;
@@ -756,7 +778,7 @@
       applyUser(avatarM, badgeM, menuM);
     }
 
-    /* ======= "Снять/Купить" как селект ======= */
+    /* ======= "Снять/Купить" ======= */
     (function initDealSelect(){
       const sel = qs('#dealSelect');
       if (!sel) return;
@@ -765,7 +787,7 @@
       sel.addEventListener('change', ()=>{ localStorage.setItem('dealType', sel.value); });
     })();
 
-    /* ======= (устар.) плашка табов (совместимость) ======= */
+    /* ======= (устар.) плашка табов ======= */
     (function initDealTabs(){
       const tabs = qs('#dealTabs');
       if (!tabs) return;
@@ -797,27 +819,25 @@
     qs('#btnSendCode').addEventListener('click', ()=>{ qs('#loginStep2').classList.remove('hidden'); showToast('Код отправлен (демо)'); });
     qs('#btnConfirmOtp').addEventListener('click', async ()=>{ localStorage.setItem('userLogged','1'); await checkSession(true); ensureUserScoped(); await loadServerState(); closeLogin(); updateAuthUI(); showToast('Вход выполнен'); });
 
-    // ЯВНЫЕ обработчики для кнопок входа (фикс на главной)
     qs('#btnAuth')?.addEventListener('click', (e)=>{ e.preventDefault(); openLogin(); });
     qs('#btnAuthMobile')?.addEventListener('click', (e)=>{ e.preventDefault(); openLogin(); });
 
     qsa('.pay').forEach(b=>b.addEventListener('click', openPay));
     qsa('.pay-method').forEach(b=> b.addEventListener('click', ()=>{ qs('#paySelected').classList.remove('hidden'); qs('#payMethodName').textContent=b.textContent; }));
     qs('#btnClosePay').addEventListener('click', closePay);
-    qs('#btnSimulatePaid').addEventListener('click', ()=>{ 
-      localStorage.setItem('accessUntil', String(Date.now()+24*3600e3)); 
-      showToast('Доступ открыт на 24 часа'); 
-      render(); 
+    qs('#btnSimulatePaid').addEventListener('click', ()=>{
+      localStorage.setItem('accessUntil', String(Date.now()+24*3600e3));
+      showToast('Доступ открыт на 24 часа');
+      render();
       saveServerStateDebounced();
-      closePay(); 
+      closePay();
     });
 
     document.addEventListener('click', (ev) => {
-      // Триггеры аккаунта: кнопки/аватар (работает и на страницах, где это <a>)
       const trg = ev.target.closest('#btnAuth, #btnAuthMobile, #userAvatar, #userAvatarMobile');
       if (trg){
-        ev.preventDefault();      // критично: не уезжаем на главную
-        ev.stopPropagation();     // чтобы другие обработчики не сработали
+        ev.preventDefault();
+        ev.stopPropagation();
 
         const logged = !!localStorage.getItem('userLogged');
         const isMobile = !!trg.closest('#accountAreaMobile');
@@ -827,7 +847,6 @@
         else { openLogin(); }
         return;
       }
-      // Клик вне меню — закрываем оба
       if (!ev.target.closest('#accountMenu') && !ev.target.closest('#accountArea')) qs('#accountMenu')?.classList.add('hidden');
       if (!ev.target.closest('#accountMenuMobile') && !ev.target.closest('#accountAreaMobile')) qs('#accountMenuMobile')?.classList.add('hidden');
     });
@@ -935,12 +954,10 @@
       try { render(); } catch(_){}
     });
 
-    // Подтягиваем серверное состояние при возврате
     window.addEventListener('focus', () => { checkSession(true).then(()=>{ updateAuthUI(); loadServerState(); }); });
     window.addEventListener('pageshow', () => { checkSession(true).then(()=>{ updateAuthUI(); loadServerState(); }); });
     document.addEventListener('visibilitychange', () => { if (!document.hidden) { checkSession(true); loadServerState(); } });
 
-    // Периодическая мягкая синхронизация
     setInterval(() => { checkSession(true).then(()=>{ updateAuthUI(); loadServerState(); }); }, 30000);
 
     window.addEventListener('storage', (e) => {
@@ -950,7 +967,6 @@
       }
     });
 
-    // Простейший таймер обратного отсчёта
     function countdown(el, ts){
       function tick(){
         const ms = ts - Date.now();
@@ -1006,7 +1022,6 @@
       });
     }
 
-    // Автовход по "магической" ссылке (демо)
     (function emailMagicAutoLogin(){
       const p = new URLSearchParams(location.search);
       const email = p.get('login');
@@ -1026,7 +1041,6 @@
       } catch(_){}
     })();
 
-    // Форма контакта
     const ts = document.getElementById('tsField'); if (ts) ts.value = Date.now();
     const form = document.getElementById('contactForm');
     const note = document.getElementById('contactNote');
@@ -1048,7 +1062,7 @@
   })();
   </script>
 
-  <!-- Если у тебя есть собственный app.js — оставляй -->
   <script src="/app.js"></script>
 </body>
 </html>
+```
