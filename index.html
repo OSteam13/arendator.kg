@@ -22,6 +22,7 @@
     .card-actions>input{min-width:0}
     .mask-blur{filter:blur(3px)}
     .dropdown{position:relative}
+    /* Важная правка: плашки аккаунта поверх ПРОДАЖА/БЛОГ/ИЗБРАННОЕ на мобилке */
     .dropdown-menu{position:absolute;right:0;top:calc(100% + .5rem);min-width:220px;z-index:60}
     .user-avatar{width:32px;height:32px;border-radius:9999px;background:#e5e7eb;color:#374151;display:grid;place-items:center;font-weight:700;overflow:hidden;background-size:cover;background-position:center;flex-shrink:0;font-size:14px;cursor:pointer}
     .avatar-lg{width:96px;height:96px;border-radius:9999px;background:#e5e7eb;display:grid;place-items:center;overflow:hidden;background-size:cover;background-position:center;font-weight:800;font-size:36px;color:#374151;margin:0 auto}
@@ -30,7 +31,7 @@
     .lang-toggle span{opacity:.55}
     .lang-toggle .active{opacity:1;font-weight:700}
 
-    /* (не используется после правок, но оставлено без изменения остального кода) */
+    /* Стиль старой плашки Снять/Купить (оставлено для совместимости) */
     .seg{display:grid;grid-template-columns:1fr 1fr;border:1px solid rgb(229 231 235);border-radius:0.75rem;overflow:hidden}
     .seg button{padding:.5rem .75rem;font-weight:600}
     .seg button.active{background:#111827;color:#fff}
@@ -119,11 +120,11 @@
   <section class="container mx-auto px-4 pt-8">
     <div class="grid md:grid-cols-2 gap-8 items-stretch">
       <div class="bg-white border border-neutral-200 rounded-2xl shadow-soft p-4 sm:p-5 h-full flex flex-col">
-        <h1 class="hero-title text-3xl md:text-5xl leading-tight text-blue-600">Ищете квартиру в аренду?</h1>
+        <h1 class="hero-title text-3л md:text-5xl leading-tight text-blue-600">Ищете квартиру в аренду?</h1>
         <p class="mt-3 text-base md:text-lg text-neutral-600">Объявления обновляются каждую секунду из 30 источников. Только свежие — жильё за день!</p>
 
         <div class="mt-5 grid grid-cols-2 gap-3">
-          <!-- СДЕЛАНО: Снять / Купить как выпадающий пункт -->
+          <!-- Снять / Купить как выпадающий пункт -->
           <select id="dealSelect" class="col-span-2 px-3 py-2 rounded-xl border border-neutral-200">
             <option value="rent">Снять</option>
             <option value="buy">Купить</option>
@@ -133,7 +134,7 @@
             <option>Квартира</option><option>Комната</option><option>Дом</option>
           </select>
 
-          <!-- СДЕЛАНО: Развернутые области -->
+          <!-- Области внутри плашки, отдельно Бишкек -->
           <select id="s3" class="px-3 py-2 rounded-xl border border-neutral-200">
             <optgroup label="Город">
               <option>Бишкек</option>
@@ -386,7 +387,7 @@
       <div class="my-4 flex items-center gap-3">
         <div class="h-px flex-1 bg-neutral-200"></div>
         <div class="text-xs text-neutral-500">или Telegram</div>
-        <div class="h-px flex-1 bg-neutral-200"></div>
+        <div class="h-пx flex-1 bg-neutral-200"></div>
       </div>
       <div id="tgLoginContainer" class="flex justify-center"></div>
       <div class="text-xs text-neutral-500 text-center mt-2">После нажатия появится окно Telegram — откройте Telegram и нажмите «Принять / Allow», чтобы завершить вход.</div>
@@ -475,8 +476,62 @@
     const qsa = (s,el=document)=>Array.from(el.querySelectorAll(s));
     const showToast=(m)=>{const t=qs('#toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(showToast.t);showToast.t=setTimeout(()=>t.classList.add('hidden'),2200);};
     const hasAccess=()=>Date.now() < Number(localStorage.getItem('accessUntil')||0);
-    const setAccess=(h=24)=>{ localStorage.setItem('accessUntil', String(Date.now()+h*3600e3)); showToast('Доступ открыт на 24 часа'); render(); };
     const maskPhone=(p)=> p ? p.replace(/(\+\d{3})\d+/, '$1 ••• •• •••') : '•••';
+
+    /* ========= СИНХРОНИЗАЦИЯ АККАУНТА МЕЖДУ ТЕЛЕФОНОМ И ПК =========
+       Работает через серверные эндпоинты (cookie auth):
+       GET  /api/user-state -> {ok:true, state:{ profile, avatar_url, favs, accessUntil }}
+       POST /api/user-state -> {ok:true}
+       Если сервер их ещё не реализовал — всё продолжит работать локально.
+    ================================================================= */
+    const SYNC_ENDPOINT = '/api/user-state';
+    let loadingServerState = false;
+    let saveTimer = null;
+
+    function collectState(){
+      let profile = {}; try { profile = JSON.parse(localStorage.getItem('profile')||'{}'); } catch(_){}
+      const avatar_url = localStorage.getItem('avatar_url') || '';
+      let favs = [];   try { favs = JSON.parse(localStorage.getItem('favs')||'[]'); } catch(_){}
+      const accessUntil = localStorage.getItem('accessUntil') || '';
+      return { profile, avatar_url, favs, accessUntil };
+    }
+    function statesEqual(a,b){ try{ return JSON.stringify(a||{})===JSON.stringify(b||{});}catch(_){return false;} }
+
+    async function loadServerState(){
+      try{
+        const r = await fetch(SYNC_ENDPOINT, { credentials:'include' });
+        if (!r.ok) return;
+        const d = await r.json();
+        if (!d || !d.ok || !d.state) return;
+        const incoming = d.state;
+        const local = collectState();
+        if (statesEqual(local, incoming)) return;
+
+        loadingServerState = true;
+        if ('profile' in incoming)      (incoming.profile ? localStorage.setItem('profile', JSON.stringify(incoming.profile)) : localStorage.removeItem('profile'));
+        if ('avatar_url' in incoming)   (incoming.avatar_url ? localStorage.setItem('avatar_url', incoming.avatar_url) : localStorage.removeItem('avatar_url'));
+        if ('favs' in incoming)         (incoming.favs ? localStorage.setItem('favs', JSON.stringify(incoming.favs)) : localStorage.removeItem('favs'));
+        if ('accessUntil' in incoming)  (incoming.accessUntil ? localStorage.setItem('accessUntil', incoming.accessUntil) : localStorage.removeItem('accessUntil'));
+        updateAuthUI(); render();
+        setTimeout(()=>{ loadingServerState=false; }, 200);
+      }catch(_){ /* молча уходим в оффлайн-режим */ }
+    }
+
+    async function saveServerState(){
+      try{
+        const state = collectState();
+        await fetch(SYNC_ENDPOINT, {
+          method:'POST', credentials:'include',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ state })
+        });
+      }catch(_){ /* если сервера нет — просто пропускаем */ }
+    }
+    function saveServerStateDebounced(){
+      if (loadingServerState) return;
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(saveServerState, 600);
+    }
 
     /* ---------- СЕССИЯ: универсальная проверка ---------- */
     let loginPoll = null;
@@ -488,6 +543,7 @@
           try{ localStorage.setItem('userLogged','1'); }catch(_){}
           try{ localStorage.setItem('tg_user', JSON.stringify(data.user||{})); }catch(_){}
           try{ closeLogin(); }catch(_){}
+          ensureUserScoped();     // важная вставка: предотвращает «другой аккаунт» на этом же устройстве
           updateAuthUI();
           if (!silent) showToast('Вход выполнен');
           return true;
@@ -574,6 +630,7 @@
       if(favs.has(id)){ favs.delete(id); heart.textContent='♡'; heart.classList.remove('text-red-600'); showToast('Убрано из избранного'); }
       else{ favs.add(id); heart.textContent='❤'; heart.classList.add('text-red-600'); showToast('Добавлено в избранное'); }
       localStorage.setItem('favs', JSON.stringify([...favs]));
+      saveServerStateDebounced(); // СИНХ
     }
 
     /* ======= Модалки ======= */
@@ -615,6 +672,8 @@
           try{ localStorage.setItem('userLogged','1'); }catch(_){}
           try{ localStorage.setItem('tg_user', JSON.stringify(msg.user||{})); }catch(_){}
           await checkSession(true);
+          ensureUserScoped();
+          await loadServerState();   // подхватить серверное состояние сразу после логина
           updateAuthUI(); closeLogin(); showToast('Вход через Telegram выполнен');
         } else {
           showToast('Не удалось войти через Telegram');
@@ -651,6 +710,21 @@
       bind('#langToggle'); bind('#langToggleMobile');
     }
 
+    /* ======= Привязка локального состояния к конкретному юзеру (важно при смене аккаунта) ======= */
+    function ensureUserScoped(){
+      let u={}; try{ u = JSON.parse(localStorage.getItem('tg_user')||'{}'); }catch(_){}
+      const uid = u.id || u.user_id || u.telegram_id || u._id || null;
+      const prev = localStorage.getItem('current_uid');
+      if (uid && prev && prev !== String(uid)){
+        // Очистить локальное состояние другого пользователя
+        localStorage.removeItem('profile');
+        localStorage.removeItem('avatar_url');
+        localStorage.removeItem('favs');
+        localStorage.removeItem('accessUntil');
+      }
+      if (uid) localStorage.setItem('current_uid', String(uid));
+    }
+
     /* ======= UI аккаунта ======= */
     function updateAuthUI(){
       const logged  = !!localStorage.getItem('userLogged');
@@ -683,7 +757,7 @@
       sel.addEventListener('change', ()=>{ localStorage.setItem('dealType', sel.value); });
     })();
 
-    /* ======= (устар.) плашка табов оставлена для совместимости, если где-то еще используется ======= */
+    /* ======= (устар.) плашка табов оставлена для совместимости ======= */
     (function initDealTabs(){
       const tabs = qs('#dealTabs');
       if (!tabs) return;
@@ -713,12 +787,18 @@
     /* ======= События ======= */
     qs('#btnCloseLogin').addEventListener('click', closeLogin);
     qs('#btnSendCode').addEventListener('click', ()=>{ qs('#loginStep2').classList.remove('hidden'); showToast('Код отправлен (демо)'); });
-    qs('#btnConfirmOtp').addEventListener('click', async ()=>{ localStorage.setItem('userLogged','1'); await checkSession(true); closeLogin(); updateAuthUI(); showToast('Вход выполнен'); });
+    qs('#btnConfirmOtp').addEventListener('click', async ()=>{ localStorage.setItem('userLogged','1'); await checkSession(true); ensureUserScoped(); await loadServerState(); closeLogin(); updateAuthUI(); showToast('Вход выполнен'); });
 
     qsa('.pay').forEach(b=>b.addEventListener('click', openPay));
     qsa('.pay-method').forEach(b=> b.addEventListener('click', ()=>{ qs('#paySelected').classList.remove('hidden'); qs('#payMethodName').textContent=b.textContent; }));
     qs('#btnClosePay').addEventListener('click', closePay);
-    qs('#btnSimulatePaid').addEventListener('click', ()=>{ setAccess(24); closePay(); });
+    qs('#btnSimulatePaid').addEventListener('click', ()=>{ 
+      localStorage.setItem('accessUntil', String(Date.now()+24*3600e3)); 
+      showToast('Доступ открыт на 24 часа'); 
+      render(); 
+      saveServerStateDebounced(); // СИНХ
+      closePay(); 
+    });
 
     document.addEventListener('click', (ev) => {
       const trg = ev.target.closest('#btnAuth, #btnAuthMobile, #userAvatar, #userAvatarMobile');
@@ -741,19 +821,19 @@
 
     qs('#menuLogout').addEventListener('click', ()=>{
       qs('#accountMenu').classList.add('hidden');
-      try{ localStorage.removeItem('userLogged'); localStorage.removeItem('tg_user'); }catch(_){}
+      try{ localStorage.removeItem('userLogged'); localStorage.removeItem('tg_user'); localStorage.removeItem('current_uid'); }catch(_){}
       document.cookie = 'auth=; Max-Age=0; path=/';
       updateAuthUI(); showToast('Вы вышли из аккаунта');
     });
 
-    /* МОБИЛЬНОЕ МЕНЮ — СДЕЛАНО: все кнопки полноценно работают */
+    /* МОБИЛЬНОЕ МЕНЮ — все кнопки полноценно работают */
     const accMenuM = qs('#accountMenuMobile');
     qs('#menuMyAdsM')?.addEventListener('click', ()=>{ accMenuM?.classList.add('hidden'); showToast('Мои объявления (демо)'); });
     qs('#menuEditProfileM')?.addEventListener('click', ()=>{ accMenuM?.classList.add('hidden'); openEdit(); });
     qs('#menuChangeAvatarM')?.addEventListener('click', ()=>{ accMenuM?.classList.add('hidden'); openProfile(); });
     qs('#menuLogoutM')?.addEventListener('click', ()=> {
       accMenuM?.classList.add('hidden');
-      try{ localStorage.removeItem('userLogged'); localStorage.removeItem('tg_user'); }catch(_){}
+      try{ localStorage.removeItem('userLogged'); localStorage.removeItem('tg_user'); localStorage.removeItem('current_uid'); }catch(_){}
       document.cookie = 'auth=; Max-Age=0; path=/';
       updateAuthUI(); showToast('Вы вышли из аккаунта');
     });
@@ -768,20 +848,23 @@
     qs('#btnCloseEditProfile').addEventListener('click', closeEdit);
     qs('#btnSaveEditProfile').addEventListener('click', ()=>{
       const data = { name:qs('#profName').value.trim(), email:qs('#profEmail').value.trim(), phone:qs('#profPhone').value.trim(), about:qs('#profAbout').value.trim() };
-      localStorage.setItem('profile', JSON.stringify(data)); closeEdit(); updateAuthUI(); showToast('Профиль сохранён');
+      localStorage.setItem('profile', JSON.stringify(data));
+      closeEdit(); updateAuthUI(); showToast('Профиль сохранён');
+      saveServerStateDebounced(); // СИНХ
     });
 
     qs('#btnCloseProfile').addEventListener('click', closeProfile);
-    qs('#btnSaveProfile').addEventListener('click', ()=>{ closeProfile(); showToast('Профиль сохранён'); updateAuthUI(); });
+    qs('#btnSaveProfile').addEventListener('click', ()=>{ closeProfile(); showToast('Профиль сохранён'); updateAuthUI(); saveServerStateDebounced(); });
 
     qs('#avatarFile').addEventListener('change', async (e)=>{
       const file = e.target.files?.[0]; if (!file) return;
       try{
         const dataUrl = await fileToAvatarDataURL(file, 256);
         localStorage.setItem('avatar_url', dataUrl); syncProfileModal(); updateAuthUI(); showToast('Аватар обновлён');
+        saveServerStateDebounced(); // СИНХ
       }catch{ showToast('Не удалось обработать изображение'); }
     });
-    qs('#btnAvatarRemove').addEventListener('click', ()=>{ localStorage.removeItem('avatar_url'); syncProfileModal(); updateAuthUI(); showToast('Аватар удалён'); });
+    qs('#btnAvatarRemove').addEventListener('click', ()=>{ localStorage.removeItem('avatar_url'); syncProfileModal(); updateAuthUI(); showToast('Аватар удалён'); saveServerStateDebounced(); });
 
     function syncProfileModal(){
       const box = qs('#profileAvatar');
@@ -826,28 +909,30 @@
 
     document.addEventListener('DOMContentLoaded', async () => {
       try { syncAuthFromCookieAndQuery(); } catch(_){}
-      updateAuthUI();              // Мгновенное обновление UI по localStorage/cookie (фикс для мобильных)
+      updateAuthUI();              // мгновенное обновление UI (фикс для мобильных)
       try { initLang(); } catch(_){}
-      await checkSession(true);    // Подтянуть профиль, если уже вошли
+      await checkSession(true);    // подтянуть профиль, если уже вошли
+      ensureUserScoped();
+      await loadServerState();     // ПОДХВАТИТЬ ОБЩЕЕ СОСТОЯНИЕ С СЕРВЕРА
       try { render(); } catch(_){}
     });
 
-    // Доп. хуки для мобильных: гарантируем быстрый рефреш UI после возврата
-    window.addEventListener('focus', () => { checkSession(true); updateAuthUI(); });
-    window.addEventListener('pageshow', () => { checkSession(true); updateAuthUI(); });
-    document.addEventListener('visibilitychange', () => { if (!document.hidden) checkSession(true); });
+    // Доп. хуки: при возврате в вкладку подтягиваем серверное состояние (для кросс-девайса)
+    window.addEventListener('focus', () => { checkSession(true).then(()=>{ updateAuthUI(); loadServerState(); }); });
+    window.addEventListener('pageshow', () => { checkSession(true).then(()=>{ updateAuthUI(); loadServerState(); }); });
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) { checkSession(true); loadServerState(); } });
 
-    // Периодическая проверки сессии (мягкая синхронизация между устройствами при наличии серверной сессии)
-    setInterval(() => { checkSession(true).then(()=>updateAuthUI()); }, 30000);
+    // Периодическая мягкая синхронизация (если сервер доступен)
+    setInterval(() => { checkSession(true).then(()=>{ updateAuthUI(); loadServerState(); }); }, 30000);
 
     window.addEventListener('storage', (e) => {
-      if (['userLogged','avatar_url','tg_user','lang'].includes(e.key)) {
+      if (['userLogged','avatar_url','tg_user','lang','profile','favs','accessUntil'].includes(e.key)) {
         try { updateAuthUI(); } catch(_){}
         if (e.key === 'lang') try { setLangUI(localStorage.getItem('lang')||'ru'); } catch(_){}
       }
     });
 
-    // Простейший таймер обратного отсчёта (если его нет в app.js)
+    // Простейший таймер обратного отсчёта
     function countdown(el, ts){
       function tick(){
         const ms = ts - Date.now();
