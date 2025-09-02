@@ -1,6 +1,19 @@
 <!doctype html>
 <html lang="ru">
 <head>
+  <script>
+(function(){
+  try {
+    var p = new URLSearchParams(location.search);
+    if (p.get('tg') === 'ok') {
+      // локально помечаем как вошедшего до загрузки остального кода
+      localStorage.setItem('userLogged','1');
+      // чистим URL
+      history.replaceState(null,'',location.pathname);
+    }
+  } catch(_) {}
+})();
+</script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Arendator.kg — свежие квартиры без посредников</title>
@@ -1035,3 +1048,4 @@
   <script src="/app.js"></script>
 </body>
 </html>
+
