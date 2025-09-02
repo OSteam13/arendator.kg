@@ -12,21 +12,12 @@
     .container{max-width:var(--container)}
     .shadow-soft{box-shadow:0 8px 30px rgba(0,0,0,.08)}
     html,body{font-family:'Onest',system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
-    .user-avatar{width:32px;height:32px;border-radius:9999px;background:#e5e7eb;display:grid;place-items:center;font-weight:700;overflow:hidden;background-size:cover;background-position:center}
+    .user-avatar{width:32px;height:32px;border-radius:9999px;background:#e5e7eb;display:grid;place-items:center;font-weight:700;overflow:hidden;background-size:cover;background-position:center;flex-shrink:0;cursor:pointer}
     .card-actions{display:flex;gap:.5rem;align-items:center}
     .mask-blur{filter:blur(3px)}
     header .container>*{position:relative;z-index:10}
-
-    /* добавил для выпадающего меню аккаунта */
     .dropdown{position:relative}
-    .dropdown-menu{
-      position:absolute; right:0; top:calc(100% + .5rem);
-      min-width:220px; z-index:60;
-      background:#fff; border:1px solid rgb(229 231 235);
-      border-radius:0.75rem; box-shadow:0 8px 30px rgba(0,0,0,.08); padding:.25rem;
-    }
-    .dropdown-menu button{width:100%; text-align:left; padding:.5rem .75rem; border-radius:.5rem}
-    .dropdown-menu button:hover{background:#f9fafb}
+    .dropdown-menu{position:absolute;right:0;top:calc(100% + .5rem);min-width:220px;z-index:60}
   </style>
 </head>
 <body class="bg-neutral-50 text-neutral-900">
@@ -57,18 +48,18 @@
           <a class="hover:text-blue-600" href="#" aria-label="Кыр">Кыр</a>
         </div>
 
-        <!-- заменил ссылку на dropdown -->
-        <div class="dropdown" id="accountArea">
-          <button id="btnAccount" class="hover:underline text-blue-600">Мой аккаунт</button>
-          <div id="userAvatar" class="user-avatar inline-grid ml-2"></div>
-
-          <!-- выпадающее меню -->
-          <div id="accountMenu" class="dropdown-menu hidden">
-            <button id="menuMyAds">Мои объявления</button>
-            <button id="menuEditProfile">Редактировать профиль</button>
-            <button id="menuChangeAvatar">Изменить аватарку</button>
+        <!-- АККАУНТ: кнопка + аватар + меню -->
+        <div class="flex items-center gap-3 dropdown" id="accountArea">
+          <button id="btnAuth" class="text-blue-600 hover:underline">Мой аккаунт</button>
+          <div id="userBadge" class="items-center">
+            <div id="userAvatar" class="user-avatar" title="Мой аккаунт"></div>
+          </div>
+          <div id="accountMenu" class="dropdown-menu hidden bg-white border border-neutral-200 rounded-xl shadow-soft p-1">
+            <button id="menuMyAds" class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50">Мои объявления</button>
+            <button id="menuEditProfile" class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50">Редактировать профиль</button>
+            <button id="menuChangeAvatar" class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50">Изменить аватарку</button>
             <div class="h-px bg-neutral-200 my-1"></div>
-            <button id="menuLogout" class="text-red-600">Выйти</button>
+            <button id="menuLogout" class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50 text-red-600">Выйти</button>
           </div>
         </div>
       </div>
@@ -92,8 +83,46 @@
 
   <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 hidden px-4 py-2 rounded-xl bg-neutral-900 text-white text-sm"></div>
 
+  <!-- Модалка: профиль (аватар) -->
+  <div id="modalProfile" class="fixed inset-0 hidden items-center justify-center bg-black/40 p-4">
+    <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-soft">
+      <div class="text-lg font-semibold">Мой профиль</div>
+      <p class="text-sm text-neutral-600 mt-1">Измени аватарку (локально).</p>
+      <div class="mt-4">
+        <div id="profileAvatar" class="w-24 h-24 mx-auto rounded-full bg-neutral-200 grid place-items-center font-bold text-2xl text-neutral-700 overflow-hidden bg-center bg-cover">U</div>
+        <div class="mt-4 grid grid-cols-2 gap-2">
+          <label class="px-4 py-2 rounded-xl bg-neutral-900 text-white text-center cursor-pointer">
+            <input id="avatarFile" type="file" accept="image/*" class="hidden">Загрузить
+          </label>
+          <button id="btnAvatarRemove" class="px-4 py-2 rounded-xl border border-neutral-200">Удалить</button>
+        </div>
+      </div>
+      <div class="mt-6 grid grid-cols-2 gap-2">
+        <button id="btnCloseProfile" class="px-4 py-2 rounded-xl border border-neutral-200">Закрыть</button>
+        <button id="btnSaveProfile" class="px-4 py-2 rounded-xl bg-blue-600 text-white">Сохранить</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модалка: редактировать профиль -->
+  <div id="modalEditProfile" class="fixed inset-0 hidden items-center justify-center bg-black/40 p-4">
+    <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-soft">
+      <div class="text-lg font-semibold">Редактировать профиль</div>
+      <div class="mt-4 space-y-3">
+        <input id="profName"  type="text"  placeholder="Моё имя" class="w-full px-3 py-2 rounded-xl border border-neutral-200">
+        <input id="profEmail" type="email" placeholder="E-mail"  class="w-full px-3 py-2 rounded-xl border border-neutral-200">
+        <input id="profPhone" type="tel"   placeholder="Телефон" class="w-full px-3 py-2 rounded-xl border border-neutral-200">
+        <textarea id="profAbout" rows="4"  placeholder="Обо мне" class="w-full px-3 py-2 rounded-xl border border-neutral-200"></textarea>
+      </div>
+      <div class="mt-6 grid grid-cols-2 gap-2">
+        <button id="btnCloseEditProfile" class="px-4 py-2 rounded-xl border border-neutral-200">Отмена</button>
+        <button id="btnSaveEditProfile"  class="px-4 py-2 rounded-xl bg-blue-600 text-white">Сохранить</button>
+      </div>
+    </div>
+  </div>
+
   <script>
-    /* демо-объявления */
+    /* ===== ДЕМО-список, чтобы собирать карточки по id ===== */
     const listings = [
       { id:'l1', title:'2к, Центр, свежий ремонт', price:35000, district:'Центр', rooms:'2', daily:false, owner:true, img:'', phone:'+996555123456', expiresAt: Date.now()+23*3600e3+30*60e3 },
       { id:'l2', title:'1к, Майевка, уютная',      price:18000, district:'Майевка', rooms:'1', daily:false, owner:true, img:'https://images.unsplash.com/photo-1502005229762-cf1b2da7cda7?q=80&w=1200&auto=format&fit=crop', phone:'+996700222333', expiresAt: Date.now()+10*3600e3 },
@@ -104,6 +133,7 @@
     ];
 
     const qs  = (s,el=document)=>el.querySelector(s);
+    const qsa = (s,el=document)=>Array.from(el.querySelectorAll(s));
     const showToast=(m)=>{const t=qs('#toast'); t.textContent=m; t.classList.remove('hidden'); clearTimeout(showToast.t); showToast.t=setTimeout(()=>t.classList.add('hidden'),2000);};
     const hasAccess=()=>Date.now() < Number(localStorage.getItem('accessUntil')||0);
 
@@ -153,7 +183,6 @@
 
       grid.innerHTML = items.map(cardHTML).join('');
 
-      // actions
       grid.querySelectorAll('.unfav-btn').forEach(b=>{
         b.addEventListener('click', ()=>{
           const id = b.dataset.id;
@@ -175,60 +204,129 @@
       });
     }
 
-    // аватар в шапке + кнопки аккаунта
-    (function(){
-      const avatar = qs('#userAvatar');
-      const btnAccount = qs('#btnAccount');
-      const menu = qs('#accountMenu');
-      const area = qs('#accountArea');
+    /* ===== Аккаунт-меню и модалки (как на главной) ===== */
+    function updateAuthUI(){
+      const logged = !!localStorage.getItem('userLogged') || document.cookie.split("; ").some(c => c.trim().startsWith("auth="));
+      const btn=qs('#btnAuth'), badge=qs('#userBadge'), avatar=qs('#userAvatar'), menu=qs('#accountMenu');
 
-      // заполнение аватара
-      let u = {};
-      try { u = JSON.parse(localStorage.getItem('tg_user')||'{}'); } catch(_){}
-      const localAvatar = localStorage.getItem('avatar_url');
-      const initial = (u.first_name?.trim()?.[0] || u.username?.trim()?.[0] || 'U').toUpperCase();
-      if (localAvatar){ avatar.style.backgroundImage = `url(${localAvatar})`; }
-      else if (u.photo_url){ avatar.style.backgroundImage = `url(${u.photo_url})`; }
-      else { avatar.textContent = initial; }
+      if (btn) btn.textContent = logged ? 'Мой аккаунт' : 'Вход / регистрация';
 
-      // клик по "Мой аккаунт"/аватару
-      function toggleOrRedirect(){
-        const logged = !!localStorage.getItem('userLogged');
-        if (!logged){
-          // пока у нас нет локальной модалки входа здесь — отправим на главную, где есть окно входа
-          location.href = 'index.html';
-          return;
-        }
-        menu.classList.toggle('hidden');
+      if (!badge || !avatar) return;
+      if (!logged){
+        badge.classList.add('hidden');
+        avatar.style.backgroundImage=''; avatar.textContent='';
+        menu?.classList.add('hidden');
+        return;
       }
+      let u={}; try{ u = JSON.parse(localStorage.getItem('tg_user')||'{}'); }catch(_){}
+      const localAvatar = localStorage.getItem('avatar_url') || '';
+      const initial = (u.first_name?.trim()?.[0] || u.username?.trim()?.[0] || 'U').toUpperCase();
+      avatar.style.backgroundImage=''; avatar.textContent=initial;
+      const imgUrl = localAvatar || u.photo_url || '';
+      if (imgUrl){ avatar.style.backgroundImage=`url("${imgUrl}")`; avatar.textContent=''; }
+      badge.classList.remove('hidden');
+    }
 
-      btnAccount.addEventListener('click', (e)=>{ e.preventDefault(); toggleOrRedirect(); });
-      avatar.addEventListener('click', (e)=>{ e.preventDefault(); toggleOrRedirect(); });
+    // показать/скрыть меню
+    document.addEventListener('click', (ev) => {
+      const trg = ev.target.closest('#btnAuth, #userAvatar');
+      if (trg){
+        const logged = !!localStorage.getItem('userLogged') || document.cookie.split("; ").some(c => c.trim().startsWith("auth="));
+        const menu = qs('#accountMenu');
+        if (logged){ menu?.classList.toggle('hidden'); }
+        else { location.href = 'index.html'; } // на главной — вход/регистрация
+        return;
+      }
+      if (!ev.target.closest('#accountMenu') && !ev.target.closest('#accountArea')) qs('#accountMenu')?.classList.add('hidden');
+    });
 
-      // закрытие по клику вне
-      document.addEventListener('click', (ev)=>{
-        if (!area.contains(ev.target)) menu.classList.add('hidden');
+    // обработчики пунктов меню
+    qs('#menuMyAds')?.addEventListener('click', ()=>{
+      qs('#accountMenu')?.classList.add('hidden');
+      location.href = 'post.html'; // поменяй на свою страницу
+    });
+    function openEdit(){ fillEditProfileModal(); qs('#modalEditProfile')?.classList.remove('hidden'); qs('#modalEditProfile')?.classList.add('flex'); }
+    function closeEdit(){ qs('#modalEditProfile')?.classList.add('hidden'); qs('#modalEditProfile')?.classList.remove('flex'); }
+    function openProfile(){ qs('#modalProfile')?.classList.remove('hidden'); qs('#modalProfile')?.classList.add('flex'); syncProfileModal(); }
+    function closeProfile(){ qs('#modalProfile')?.classList.add('hidden'); qs('#modalProfile')?.classList.remove('flex'); }
+
+    qs('#menuEditProfile')?.addEventListener('click', ()=>{ qs('#accountMenu')?.classList.add('hidden'); openEdit(); });
+    qs('#menuChangeAvatar')?.addEventListener('click', ()=>{ qs('#accountMenu')?.classList.add('hidden'); openProfile(); });
+    qs('#menuLogout')?.addEventListener('click', ()=>{
+      qs('#accountMenu')?.classList.add('hidden');
+      try{ localStorage.removeItem('userLogged'); localStorage.removeItem('tg_user'); localStorage.removeItem('current_uid'); }catch(_){}
+      document.cookie = 'auth=; Max-Age=0; path=/';
+      updateAuthUI(); showToast('Вы вышли из аккаунта');
+    });
+
+    // модалки — кнопки
+    qs('#btnCloseProfile')?.addEventListener('click', closeProfile);
+    qs('#btnSaveProfile')?.addEventListener('click', ()=>{ closeProfile(); showToast('Профиль сохранён'); updateAuthUI(); });
+
+    function fillEditProfileModal(){
+      const p = JSON.parse(localStorage.getItem('profile')||'{}');
+      qs('#profName').value  = p.name  || '';
+      qs('#profEmail').value = p.email || '';
+      qs('#profPhone').value = p.phone || '';
+      qs('#profAbout').value = p.about || '';
+    }
+    qs('#btnCloseEditProfile')?.addEventListener('click', closeEdit);
+    qs('#btnSaveEditProfile')?.addEventListener('click', ()=>{
+      const data = {
+        name:(qs('#profName')?.value||'').trim(),
+        email:(qs('#profEmail')?.value||'').trim(),
+        phone:(qs('#profPhone')?.value||'').trim(),
+        about:(qs('#profAbout')?.value||'').trim()
+      };
+      localStorage.setItem('profile', JSON.stringify(data));
+      closeEdit(); updateAuthUI(); showToast('Профиль сохранён');
+    });
+
+    // аватарка
+    qs('#avatarFile')?.addEventListener('change', async (e)=>{
+      const file = e.target.files?.[0]; if(!file) return;
+      try{
+        const dataUrl = await fileToAvatarDataURL(file, 256);
+        localStorage.setItem('avatar_url', dataUrl);
+        syncProfileModal(); updateAuthUI(); showToast('Аватар обновлён');
+      }catch{ showToast('Не удалось обработать изображение'); }
+    });
+    qs('#btnAvatarRemove')?.addEventListener('click', ()=>{
+      localStorage.removeItem('avatar_url'); syncProfileModal(); updateAuthUI(); showToast('Аватар удалён');
+    });
+
+    function syncProfileModal(){
+      const box = qs('#profileAvatar'); if(!box) return;
+      let u = {}; try { u = JSON.parse(localStorage.getItem('tg_user')||'{}'); } catch(_){}
+      const initial = (u.first_name?.trim()?.[0] || u.username?.trim()?.[0] || 'U').toUpperCase();
+      const localAvatar = localStorage.getItem('avatar_url');
+      box.style.backgroundImage=''; box.textContent = initial;
+      if (localAvatar){ box.style.backgroundImage = `url(${localAvatar})`; box.textContent = ''; }
+      else if (u.photo_url){ box.style.backgroundImage = `url(${u.photo_url})`; box.textContent = ''; }
+    }
+
+    function fileToAvatarDataURL(file, size=256){
+      return new Promise((resolve, reject)=>{
+        const img = new Image();
+        img.onload = ()=>{
+          const s = Math.min(img.width, img.height);
+          const sx = (img.width - s)/2, sy = (img.height - s)/2;
+          const canvas = document.createElement('canvas'); canvas.width = size; canvas.height = size;
+          const ctx = canvas.getContext('2d'); ctx.drawImage(img, sx, sy, s, s, 0, 0, size, size);
+          resolve(canvas.toDataURL('image/jpeg', 0.85));
+        };
+        img.onerror = reject;
+        const reader = new FileReader();
+        reader.onload = () => { img.src = reader.result; };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
       });
+    }
 
-      // пункты меню (демо-действия)
-      qs('#menuMyAds').addEventListener('click', ()=>{ menu.classList.add('hidden'); showToast('Мои объявления (демо)'); });
-      qs('#menuEditProfile').addEventListener('click', ()=>{ menu.classList.add('hidden'); showToast('Редактировать профиль (демо)'); });
-      qs('#menuChangeAvatar').addEventListener('click', ()=>{ menu.classList.add('hidden'); showToast('Изменить аватарку (демо)'); });
-
-      qs('#menuLogout').addEventListener('click', ()=>{
-        menu.classList.add('hidden');
-        try{
-          localStorage.removeItem('userLogged');
-          localStorage.removeItem('tg_user');
-          localStorage.removeItem('current_uid');
-        }catch(_){}
-        document.cookie = 'auth=; Max-Age=0; path=/';
-        showToast('Вы вышли из аккаунта');
-      });
-    })();
-
-    render();
+    // инициализация
+    document.addEventListener('DOMContentLoaded', ()=>{ updateAuthUI(); render(); });
   </script>
+
   <script src="/app.js"></script>
 </body>
 </html>
