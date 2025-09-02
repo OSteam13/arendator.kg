@@ -2,166 +2,133 @@
 const crypto = require('crypto');
 const { pool } = require('./_db');
 
-const PROD_DOMAIN = 'arendator.kg';
-const COOKIE_NAME = 'auth';
-const SESSION_DAYS = 14;
+function days(n){ return n * 24 * 60 * 60; }
+const COOKIE_DOMAIN = process.env.COOKIE_DOMAIN || '.arendator.kg';
+const BOT_TOKEN = process.env.TG_BOT_TOKEN; // обязателен в проде
 
-function days(n){ return n * 24 * 60 * 60; } // в секундах (для Max-Age)
-
-function readRawData(req){
-  // Telegram Login Widget кладёт всё в query ?id=...&first_name=...&auth_date=...&hash=...
-  if (req.method === 'GET' && req.query && Object.keys(req.query).length){
-    return { ...req.query };
+// Собираем user-объект из body или query
+function readPayload(req){
+  let q = req.query || {};
+  // req.body в Vercel может быть строкой или объектом
+  let b = req.body;
+  if (typeof b === 'string'){
+    try { b = JSON.parse(b); } catch { b = Object.fromEntries(new URLSearchParams(b)); }
   }
-  // Альтернатива: POST JSON (например, для локального теста)
-  if (req.body){
-    try {
-      return typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
-    } catch(_) { /* ignore */ }
-  }
-  return {};
+  const src = (b && Object.keys(b).length) ? b : q;
+  return {
+    raw: src,
+    user: src && src.id ? {
+      id        : Number(src.id),
+      first_name: src.first_name || '',
+      last_name : src.last_name  || '',
+      username  : src.username   || '',
+      photo_url : src.photo_url  || ''
+    } : null
+  };
 }
 
-function buildCheckString(data){
-  // Берём все поля кроме hash, сортируем и склеиваем "key=value" через \n
-  const { hash, ...rest } = data;
-  return Object.keys(rest)
+// Проверка подписи Telegram (https://core.telegram.org/widgets/login#checking-authorization)
+function verifyTelegram(raw){
+  if (!BOT_TOKEN) return { ok:false, reason:'tg_bot_token_missing' };
+  if (!raw || !raw.hash || !raw.auth_date) return { ok:false, reason:'missing_hash_or_auth_date' };
+
+  // Формируем checkString
+  const data = Object.keys(raw)
+    .filter(k => k !== 'hash' && raw[k] !== undefined && raw[k] !== null)
     .sort()
-    .map(k => `${k}=${rest[k]}`)
+    .map(k => `${k}=${raw[k]}`)
     .join('\n');
-}
 
-function verifyTelegram(data, botToken){
-  if (!data || !data.hash) return false;
-  const checkString = buildCheckString(data);
-  const secret = crypto.createHash('sha256').update(botToken).digest(); // secret_key
-  const hmac   = crypto.createHmac('sha256', secret).update(checkString).digest('hex');
-  if (hmac !== String(data.hash)) return false;
+  const secret = crypto.createHash('sha256').update(BOT_TOKEN).digest();
+  const calc   = crypto.createHmac('sha256', secret).update(data).digest('hex');
 
-  // Доп. защита: auth_date не старше 10 минут
-  const authDate = Number(data.auth_date || 0);
-  if (!authDate) return false;
-  const ageSec = Math.floor(Date.now()/1000) - authDate;
-  return ageSec >= 0 && ageSec <= 10 * 60;
-}
-
-function makeCookie(token, req){
-  const isHttps = (req.headers['x-forwarded-proto'] || '').toLowerCase() === 'https';
-  const host    = String(req.headers.host || '').toLowerCase();
-
-  // На чужом домене (например, *.vercel.app) браузер отвергнет Domain=.arendator.kg.
-  // Ставим Domain только если действительно на (sub)domain arendator.kg
-  const onProdDomain =
-    host === PROD_DOMAIN || host.endsWith(`.${PROD_DOMAIN}`);
-
-  const parts = [
-    `${COOKIE_NAME}=${token}`,
-    'Path=/',
-    `Max-Age=${days(SESSION_DAYS)}`,
-    'HttpOnly',
-    // Secure нужен в проде под https. Если у тебя весь прод — https, можно оставить всегда.
-    isHttps ? 'Secure' : '',
-    'SameSite=Lax',
-    onProdDomain ? `Domain=.${PROD_DOMAIN}` : ''
-  ].filter(Boolean);
-
-  return parts.join('; ');
-}
-
-function sanitizeReturnTo(urlLike){
-  // Разрешаем только относительные пути на сайте: "/...", иначе падаем на "/"
-  if (typeof urlLike !== 'string') return '/';
   try {
-    if (urlLike.startsWith('/')) return urlLike;
-    // Иногда прилетает полная ссылка нашего же домена — проверим:
-    const u = new URL(urlLike, `https://${PROD_DOMAIN}`);
-    if (u.hostname === PROD_DOMAIN || u.hostname.endsWith(`.${PROD_DOMAIN}`)){
-      return u.pathname + (u.search || '') + (u.hash || '');
-    }
-  } catch(_) {}
-  return '/';
+    const a = Buffer.from(calc, 'hex');
+    const b = Buffer.from(String(raw.hash), 'hex');
+    if (a.length !== b.length) return { ok:false, reason:'bad_hash' };
+    const equal = crypto.timingSafeEqual(a, b);
+    return { ok: equal, reason: equal ? null : 'bad_hash' };
+  } catch {
+    // если hash не hex — тоже отказ
+    return { ok:false, reason:'bad_hash_format' };
+  }
 }
 
-function canonicalRedirectIfNeeded(req, res){
-  const host = String(req.headers.host || '').toLowerCase();
-  if (host === PROD_DOMAIN || host.endsWith(`.${PROD_DOMAIN}`)) return false;
+function buildCookie(token){
+  return [
+    `auth=${token}`,
+    'Path=/',
+    `Domain=${COOKIE_DOMAIN}`,
+    'HttpOnly',
+    'Secure',
+    'SameSite=Lax',
+    `Max-Age=${days(14)}`
+  ].join('; ');
+}
 
-  // Перенаправляем на канонический домен (важно: до установки куки)
-  const original = new URL(req.url, `https://${host}`);
-  const target = new URL(original.pathname + original.search, `https://${PROD_DOMAIN}`);
-  res.writeHead(308, { Location: target.toString(), 'Cache-Control': 'no-store' });
-  res.end();
-  return true;
+function safeBack(input){
+  // принимаем только внутренние пути
+  try {
+    const val = decodeURIComponent(input || '/');
+    return (typeof val === 'string' && val.startsWith('/')) ? val : '/';
+  } catch { return '/'; }
 }
 
 module.exports = async (req, res) => {
+  // не кешировать ответы авторизации
+  res.setHeader('Cache-Control', 'no-store');
+
   try {
-    // Если пришли не на прод-домен — сразу 308 на arendator.kg, чтобы кука была общей
-    if (req.method === 'GET' && canonicalRedirectIfNeeded(req, res)) return;
+    const { raw, user } = readPayload(req);
+    const back = safeBack((req.query && (req.query.return_to || req.query.back)) || '/');
 
-    const raw = readRawData(req);
-    const isProd = process.env.NODE_ENV === 'production';
-    const BOT_TOKEN = process.env.TG_BOT_TOKEN;
-
-    // В проде требуем валидную подпись от Telegram
-    if (isProd) {
-      if (!verifyTelegram(raw, BOT_TOKEN)) {
-        res.status(400).json({ ok:false, error:'bad_signature_or_expired' });
-        return;
-      }
-    } else {
-      // В деве допускаем POST без hash (но если hash есть — проверяем по-честному)
-      if (raw.hash && !verifyTelegram(raw, BOT_TOKEN)) {
-        res.status(400).json({ ok:false, error:'bad_signature_dev' });
-        return;
-      }
-    }
-
-    const tgId = Number(raw.id || (raw.user && raw.user.id));
-    if (!tgId) { res.status(400).json({ ok:false, error:'no_user' }); return; }
-
-    const first = String(raw.first_name || (raw.user && raw.user.first_name) || '').trim();
-    const last  = String(raw.last_name  || (raw.user && raw.user.last_name)  || '').trim();
-    const uname = String(raw.username   || (raw.user && raw.user.username)   || '').trim();
-    const photo = String(raw.photo_url  || (raw.user && raw.user.photo_url)  || '').trim();
-
-    const display = (first || last) ? `${first}${first&&last?' ':''}${last}` : (uname || 'User');
-
-    // upsert пользователя по tg_id
-    const upsertSql = `
-      insert into users (tg_id, display_name, avatar_url)
-      values ($1,$2,$3)
-      on conflict (tg_id) do update
-        set display_name = excluded.display_name,
-            avatar_url   = excluded.avatar_url
-      returning id
-    `;
-    const { rows } = await pool.query(upsertSql, [tgId, display, photo || null]);
-    const userId = rows[0].id;
-
-    // создаём сессию и куку
-    const token = crypto.randomBytes(32).toString('hex');
-    const expiresAt = new Date(Date.now() + days(SESSION_DAYS) * 1000); // JS ms
-    await pool.query(
-      'insert into sessions(token, user_id, expires_at, created_at) values ($1,$2,$3, now())',
-      [token, userId, expiresAt]
-    );
-
-    res.setHeader('Set-Cookie', makeCookie(token, req));
-    res.setHeader('Cache-Control', 'no-store');
-
-    // GET — это вход через Telegram widget → делаем редирект на исходную страницу
-    if (req.method === 'GET') {
-      const back = sanitizeReturnTo((req.query && (req.query.return_to || req.query.back)) || '/');
-      res.writeHead(302, { Location: back });
-      res.end();
+    if (!user?.id){
+      // попали сюда прямой ссылкой без данных от Telegram
+      res.status(400).json({ ok:false, error:'no_user_from_telegram' });
       return;
     }
 
-    // POST — вернём JSON
-    res.json({ ok:true });
+    // Проверка подписи (в деве можно временно отключить через ALLOW_INSECURE_TG=1)
+    const skipVerify = process.env.ALLOW_INSECURE_TG === '1';
+    const ver = skipVerify ? { ok:true } : verifyTelegram(raw);
+    if (!ver.ok){
+      // Покажем понятную ошибку, чтобы не было "data must be Buffer/…"
+      res.status(400).json({ ok:false, error:`telegram_verify_failed:${ver.reason||'unknown'}` });
+      return;
+    }
 
+    // upsert пользователя по tg_id
+    const { rows } = await pool.query(
+      `insert into users (tg_id, display_name, avatar_url)
+       values ($1,$2,$3)
+       on conflict (tg_id) do update
+         set display_name = excluded.display_name,
+             avatar_url   = excluded.avatar_url
+       returning id`,
+      [user.id, user.first_name || user.username || 'User', user.photo_url || null]
+    );
+    const userId = rows[0].id;
+
+    // создаём сессию
+    const token = crypto.randomBytes(32).toString('hex');
+    const exp   = new Date(Date.now() + 14*24*3600*1000);
+    await pool.query(
+      'insert into sessions(token, user_id, expires_at) values ($1,$2,$3)',
+      [token, userId, exp]
+    );
+
+    // ставим куку на базовый домен
+    res.setHeader('Set-Cookie', buildCookie(token));
+
+    // GET → редиректим назад; POST → JSON
+    if (req.method === 'GET'){
+      res.writeHead(302, { Location: back });
+      res.end();
+    } else {
+      res.json({ ok:true });
+    }
   } catch (e) {
-    res.status(500).json({ ok:false, error: e.message });
+    // Не падаем "The 'data' argument must be ..." — отдаём понятный JSON
+    res.status(500).json({ ok:false, error: String(e && e.message || e) });
   }
 };
