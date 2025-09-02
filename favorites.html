@@ -16,6 +16,17 @@
     .card-actions{display:flex;gap:.5rem;align-items:center}
     .mask-blur{filter:blur(3px)}
     header .container>*{position:relative;z-index:10}
+
+    /* добавил для выпадающего меню аккаунта */
+    .dropdown{position:relative}
+    .dropdown-menu{
+      position:absolute; right:0; top:calc(100% + .5rem);
+      min-width:220px; z-index:60;
+      background:#fff; border:1px solid rgb(229 231 235);
+      border-radius:0.75rem; box-shadow:0 8px 30px rgba(0,0,0,.08); padding:.25rem;
+    }
+    .dropdown-menu button{width:100%; text-align:left; padding:.5rem .75rem; border-radius:.5rem}
+    .dropdown-menu button:hover{background:#f9fafb}
   </style>
 </head>
 <body class="bg-neutral-50 text-neutral-900">
@@ -25,7 +36,7 @@
     Объявления живут 24 часа · Анти-агент фильтр включён
   </div>
 
-  <!-- Шапка (та же, что на главной) -->
+  <!-- Шапка -->
   <header class="bg-white sticky top-0 z-30 border-b border-neutral-100/80">
     <div class="container mx-auto px-4 py-3 flex items-center gap-3">
       <a href="index.html" class="flex items-center gap-2 shrink-0">
@@ -45,8 +56,21 @@
           <span>·</span>
           <a class="hover:text-blue-600" href="#" aria-label="Кыр">Кыр</a>
         </div>
-        <a href="index.html" class="hover:underline text-blue-600">Мой аккаунт</a>
-        <div id="userAvatar" class="user-avatar"></div>
+
+        <!-- заменил ссылку на dropdown -->
+        <div class="dropdown" id="accountArea">
+          <button id="btnAccount" class="hover:underline text-blue-600">Мой аккаунт</button>
+          <div id="userAvatar" class="user-avatar inline-grid ml-2"></div>
+
+          <!-- выпадающее меню -->
+          <div id="accountMenu" class="dropdown-menu hidden">
+            <button id="menuMyAds">Мои объявления</button>
+            <button id="menuEditProfile">Редактировать профиль</button>
+            <button id="menuChangeAvatar">Изменить аватарку</button>
+            <div class="h-px bg-neutral-200 my-1"></div>
+            <button id="menuLogout" class="text-red-600">Выйти</button>
+          </div>
+        </div>
       </div>
     </div>
   </header>
@@ -69,7 +93,7 @@
   <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 hidden px-4 py-2 rounded-xl bg-neutral-900 text-white text-sm"></div>
 
   <script>
-    /* Тот же список демо-объявлений, чтобы по id собрать карточки */
+    /* демо-объявления */
     const listings = [
       { id:'l1', title:'2к, Центр, свежий ремонт', price:35000, district:'Центр', rooms:'2', daily:false, owner:true, img:'', phone:'+996555123456', expiresAt: Date.now()+23*3600e3+30*60e3 },
       { id:'l2', title:'1к, Майевка, уютная',      price:18000, district:'Майевка', rooms:'1', daily:false, owner:true, img:'https://images.unsplash.com/photo-1502005229762-cf1b2da7cda7?q=80&w=1200&auto=format&fit=crop', phone:'+996700222333', expiresAt: Date.now()+10*3600e3 },
@@ -151,9 +175,14 @@
       });
     }
 
-    // аватар в шапке
+    // аватар в шапке + кнопки аккаунта
     (function(){
       const avatar = qs('#userAvatar');
+      const btnAccount = qs('#btnAccount');
+      const menu = qs('#accountMenu');
+      const area = qs('#accountArea');
+
+      // заполнение аватара
       let u = {};
       try { u = JSON.parse(localStorage.getItem('tg_user')||'{}'); } catch(_){}
       const localAvatar = localStorage.getItem('avatar_url');
@@ -161,6 +190,41 @@
       if (localAvatar){ avatar.style.backgroundImage = `url(${localAvatar})`; }
       else if (u.photo_url){ avatar.style.backgroundImage = `url(${u.photo_url})`; }
       else { avatar.textContent = initial; }
+
+      // клик по "Мой аккаунт"/аватару
+      function toggleOrRedirect(){
+        const logged = !!localStorage.getItem('userLogged');
+        if (!logged){
+          // пока у нас нет локальной модалки входа здесь — отправим на главную, где есть окно входа
+          location.href = 'index.html';
+          return;
+        }
+        menu.classList.toggle('hidden');
+      }
+
+      btnAccount.addEventListener('click', (e)=>{ e.preventDefault(); toggleOrRedirect(); });
+      avatar.addEventListener('click', (e)=>{ e.preventDefault(); toggleOrRedirect(); });
+
+      // закрытие по клику вне
+      document.addEventListener('click', (ev)=>{
+        if (!area.contains(ev.target)) menu.classList.add('hidden');
+      });
+
+      // пункты меню (демо-действия)
+      qs('#menuMyAds').addEventListener('click', ()=>{ menu.classList.add('hidden'); showToast('Мои объявления (демо)'); });
+      qs('#menuEditProfile').addEventListener('click', ()=>{ menu.classList.add('hidden'); showToast('Редактировать профиль (демо)'); });
+      qs('#menuChangeAvatar').addEventListener('click', ()=>{ menu.classList.add('hidden'); showToast('Изменить аватарку (демо)'); });
+
+      qs('#menuLogout').addEventListener('click', ()=>{
+        menu.classList.add('hidden');
+        try{
+          localStorage.removeItem('userLogged');
+          localStorage.removeItem('tg_user');
+          localStorage.removeItem('current_uid');
+        }catch(_){}
+        document.cookie = 'auth=; Max-Age=0; path=/';
+        showToast('Вы вышли из аккаунта');
+      });
     })();
 
     render();
@@ -168,4 +232,3 @@
   <script src="/app.js"></script>
 </body>
 </html>
-
