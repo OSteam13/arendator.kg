@@ -1,6 +1,19 @@
 <!doctype html>
 <html lang="ru">
 <head>
+  <script>
+(function(){
+  try {
+    var p = new URLSearchParams(location.search);
+    if (p.get('tg') === 'ok') {
+      // локально помечаем как вошедшего до загрузки остального кода
+      localStorage.setItem('userLogged','1');
+      // чистим URL
+      history.replaceState(null,'',location.pathname);
+    }
+  } catch(_) {}
+})();
+</script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Arendator.kg — свежие квартиры без посредников</title>
@@ -22,13 +35,19 @@
     .card-actions>input{min-width:0}
     .mask-blur{filter:blur(3px)}
     .dropdown{position:relative}
-    .dropdown-menu{position:absolute;right:0;top:calc(100% + .5rem);min-width:220px}
+    /* Плашки аккаунта поверх ПРОДАЖА/БЛОГ/ИЗБРАННОЕ на мобилке */
+    .dropdown-menu{position:absolute;right:0;top:calc(100% + .5rem);min-width:220px;z-index:60}
     .user-avatar{width:32px;height:32px;border-radius:9999px;background:#e5e7eb;color:#374151;display:grid;place-items:center;font-weight:700;overflow:hidden;background-size:cover;background-position:center;flex-shrink:0;font-size:14px;cursor:pointer}
     .avatar-lg{width:96px;height:96px;border-radius:9999px;background:#e5e7eb;display:grid;place-items:center;overflow:hidden;background-size:cover;background-position:center;font-weight:800;font-size:36px;color:#374151;margin:0 auto}
     .nav-mobile a{font-size:13px}
     .lang-toggle{padding:.25rem .5rem;border:1px solid rgb(229 231 235);border-radius:.75rem}
     .lang-toggle span{opacity:.55}
     .lang-toggle .active{opacity:1;font-weight:700}
+
+    /* Стиль старой плашки Снять/Купить (совместимость) */
+    .seg{display:grid;grid-template-columns:1fr 1fr;border:1px solid rgb(229 231 235);border-radius:0.75rem;overflow:hidden}
+    .seg button{padding:.5rem .75rem;font-weight:600}
+    .seg button.active{background:#111827;color:#fff}
   </style>
 </head>
 <body class="bg-neutral-50 text-neutral-900">
@@ -52,16 +71,16 @@
           <span class="ru active">Рус</span> / <span class="ky">Кыр</span>
         </button>
         <div class="flex items-center gap-2 dropdown" id="accountAreaMobile">
-          <button id="btnAuthMobile" class="text-blue-600 text-sm hover:underline">Вход / регистрация</button>
+          <a id="btnAuthMobile" href="#" class="text-blue-600 text-sm hover:underline">Вход / регистрация</a>
           <div id="userBadgeMobile" class="hidden items-center">
             <div id="userAvatarMobile" class="user-avatar" title="Мой аккаунт"></div>
           </div>
           <div id="accountMenuMobile" class="dropdown-menu hidden bg-white border border-neutral-200 rounded-xl shadow-soft p-1">
-            <button class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50">Мои объявления</button>
-            <button class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50">Редактировать профиль</button>
-            <button class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50">Изменить аватарку</button>
+            <button id="menuMyAdsM" class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50">Мои объявления</button>
+            <button id="menuEditProfileM" class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50">Редактировать профиль</button>
+            <button id="menuChangeAvatarM" class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50">Изменить аватарку</button>
             <div class="h-px bg-neutral-200 my-1"></div>
-            <button class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50 text-red-600">Выйти</button>
+            <button id="menuLogoutM" class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50 text-red-600">Выйти</button>
           </div>
         </div>
       </div>
@@ -93,7 +112,7 @@
         </button>
 
         <div class="flex items-center gap-3 text-sm dropdown" id="accountArea">
-          <button id="btnAuth" class="text-blue-600 hover:underline">Вход / регистрация</button>
+          <a id="btnAuth" href="#" class="text-blue-600 hover:underline">Вход / регистрация</a>
           <div id="userBadge" class="hidden items-center">
             <div id="userAvatar" class="user-avatar" title="Мой аккаунт"></div>
           </div>
@@ -101,7 +120,7 @@
             <button id="menuMyAds" class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50">Мои объявления</button>
             <button id="menuEditProfile" class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50">Редактировать профиль</button>
             <button id="menuChangeAvatar" class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50">Изменить аватарку</button>
-            <div class="h-px bg-neutral-200 my-1"></div>
+            <div class="h-пx bg-neutral-200 my-1"></div>
             <button id="menuLogout" class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50 text-red-600">Выйти</button>
           </div>
         </div>
@@ -110,18 +129,117 @@
     </div>
   </header>
 
-  <!-- Герой и остальная верстка (без изменений) -->
+  <!-- Герой и остальная верстка -->
   <section class="container mx-auto px-4 pt-8">
     <div class="grid md:grid-cols-2 gap-8 items-stretch">
       <div class="bg-white border border-neutral-200 rounded-2xl shadow-soft p-4 sm:p-5 h-full flex flex-col">
-        <h1 class="hero-title text-3xl md:text-5xl leading-tight text-blue-600">Ищете квартиру в аренду?</h1>
+        <h1 class="hero-title text-3л md:text-5xl leading-tight text-blue-600">Ищете квартиру в аренду?</h1>
         <p class="mt-3 text-base md:text-lg text-neutral-600">Объявления обновляются каждую секунду из 30 источников. Только свежие — жильё за день!</p>
 
         <div class="mt-5 grid grid-cols-2 gap-3">
-          <select id="s1" class="px-3 py-2 rounded-xl border border-neutral-200"><option>Снять</option><option>Сдать</option></select>
-          <select id="s2" class="px-3 py-2 rounded-xl border border-neutral-200"><option>Квартира</option><option>Комната</option><option>Дом</option></select>
-          <select id="s3" class="px-3 py-2 rounded-xl border border-neutral-200"><option>Чуй / Бш</option><option>Ыссык-Куль</option><option>Ош</option></select>
-          <select id="s4" class="px-3 py-2 rounded-xl border border-neutral-200"><option>Бишкек</option><option>Округ</option></select>
+          <!-- Снять / Купить как выпадающий пункт -->
+          <select id="dealSelect" class="col-span-2 px-3 py-2 rounded-xl border border-neutral-200">
+            <option value="rent">Снять</option>
+            <option value="buy">Купить</option>
+          </select>
+
+          <select id="s2" class="px-3 py-2 rounded-xl border border-neutral-200">
+            <option>Квартира</option><option>Комната</option><option>Дом</option>
+          </select>
+
+          <!-- Области внутри плашки, отдельно Бишкек -->
+          <select id="s3" class="px-3 py-2 rounded-xl border border-neutral-200">
+            <optgroup label="Город">
+              <option>Бишкек</option>
+            </optgroup>
+            <optgroup label="Области">
+              <option>Чуйская область</option>
+              <option>Иссык-Кульская область</option>
+              <option>Таласская область</option>
+              <option>Нарынская область</option>
+              <option>Джалал-Абадская область</option>
+              <option>Ошская область</option>
+              <option>Баткенская область</option>
+            </optgroup>
+          </select>
+
+          <!-- Полный список районов Бишкек -->
+          <select id="s4" class="px-3 py-2 rounded-xl border border-neutral-200">
+            <option selected>Бишкек (все районы)</option>
+
+            <optgroup label="Ленинский район">
+              <option>Азия Молл</option><option>Ак Кеме</option><option>Ак-Орго ж/м</option><option>Ак-Ордо ж/м</option>
+              <option>Академия Наук</option><option>Ала-Тоо 3 ж-м</option><option>Ала-Тоо м-н</option><option>Арча-Бешик ж/м</option>
+              <option>Баха</option><option>БГУ</option><option>Верхний Джал м-н</option><option>Гагарина</option>
+              <option>Госрегистр</option><option>Джал 15 м-н</option><option>Джал-23 м-н (Нижний Джал)</option>
+              <option>Джал-29 м-н</option><option>Джал-30 м-н</option><option>Джальская больница</option>
+              <option>ж/м Ала-Арча 2</option><option>Завод Кока-Кола</option><option>Ипподром</option>
+              <option>Калыка Акиева – Льва Толстого</option><option>Киргизия 1 ж/м</option><option>Киргизия-2 м-н</option>
+              <option>Кызыл-Аскер ж/м</option><option>Лущихина – Льва Толстого</option><option>Молодая Гвардия</option>
+              <option>Московская – Белинка</option><option>Московская – Уметалиева</option><option>Орок ж/м</option>
+              <option>Ошский рынок</option><option>Пишпек ж/м</option><option>Рабочий Городок</option>
+              <option>с. Верхний Орок</option><option>с. Джал</option><option>с. Калтар</option><option>с. Кашка-Баш</option>
+              <option>с. Нижний Орок</option><option>с. Новопавловка</option><option>с. Орто-Сай</option><option>с. Сарбан</option>
+              <option>с. Селекционное</option><option>с. Чон-Арык</option><option>Сейил, жилой комплекс</option>
+              <option>СК. Тоо-Жели</option><option>Средний Джал м-н</option><option>Старый аэропорт</option>
+              <option>Тенир-Тоо м-н</option><option>Филармония</option><option>Шлагбаум</option><option>Ынтымак ж/м</option>
+            </optgroup>
+
+            <optgroup label="Октябрьский район">
+              <option>10 м-н</option><option>11 м-н</option><option>12 м-н</option><option>3 м-н</option><option>4 м-н</option>
+              <option>5 м-н</option><option>6 м-н</option><option>7 м-н</option><option>8 м-н</option><option>9 м-н</option>
+              <option>Айкол (с. Кок-Джар)</option><option>Ала-Арча 3</option><option>Ала-Арча ж/м</option>
+              <option>Алматинка – Магистраль</option><option>Алтын-Ордо ж/м</option><option>Анар-Бак ж/м</option>
+              <option>Асанбай м-н</option><option>АУЦА</option><option>Ахунбаева – Достоевского</option>
+              <option>АЮ Grand</option><option>Восточная Промзона</option><option>Ген прокуратура</option>
+              <option>Горького – Алма-Атинская</option><option>Жилгородок Ницца</option><option>Жилгородок Совмина ж/м</option>
+              <option>Карла Маркса</option><option>КГУСТА</option><option>Кок-Жар ж/м</option><option>Кок-Жар м-н</option>
+              <option>Кулатова – Матросова</option><option>Магистраль</option><option>Матросова</option><option>Мед. академия</option>
+              <option>Ортосайский рынок</option><option>Парк Ататюрк</option><option>Полицейский городок м-н</option>
+              <option>Проспект Айтматова</option><option>Рухий Мурас ж/м</option><option>с. Кок-Джар</option>
+              <option>Советская – Скрябина</option><option>Таш Рабат</option><option>Токольдош ж/м</option><option>Тунгуч 44</option>
+              <option>Тунгуч м-н</option><option>Улан м-н</option><option>Улан-2 м-н</option><option>Учкун-2 ж/м</option>
+              <option>Физкультурный</option><option>Чокана Валиханова – Исакеева</option>
+            </optgroup>
+
+            <optgroup label="Первомайский район">
+              <option>1000 мелочей</option><option>110 квартал ж/м</option><option>VEFA</option><option>Ак Эмир рынок</option>
+              <option>Ак-Босого ж/м</option><option>Алтын-Бешик ж/м</option><option>Алтын-Казык ж/м</option><option>Аска-Таш ж/м</option>
+              <option>Ата Журт</option><option>Бишкек-Парк</option><option>Боталиева – Тулебердиева</option><option>Вечерка</option>
+              <option>Военторг</option><option>Восточный автовокзал</option><option>Горького – Панфилова</option><option>Дворец спорта</option>
+              <option>Ден Сяопина – Фучика</option><option>Достук</option><option>Достук м-н</option><option>Душанбинка</option>
+              <option>ж/м Учкун-2 (Аэропорт)</option><option>ЖД вокзал</option><option>Западный автовокзал</option>
+              <option>Золотой квадрат</option><option>Калыс-Ордо 2</option><option>Калыс-Ордо ж/м</option><option>Касым ж/м</option>
+              <option>Керемет ж/м</option><option>КНУ</option><option>Колмо ж/м</option><option>Космос</option><option>Кудайберген</option>
+              <option>Маданият ж/м</option><option>Манаса-Кудрука</option><option>Махатма Ганди – БЧК</option><option>Моссовет</option>
+              <option>Мурас-Ордо ж/м</option><option>Парк Панфилова/Спартак</option><option>Площадь Победы</option><option>Политех</option>
+              <option>с. Дача СУ</option><option>с. Достук</option><option>с. Кернивоз</option><option>с. Лесное</option>
+              <option>с. Маевка</option><option>с. Озёрное</option><option>с. Пригородное</option><option>с. Степное</option>
+              <option>с. Учкун</option><option>Салам-Алик ж/м</option><option>Сквер Тоголок Молдо</option><option>Тендик ж/м</option>
+              <option>Тоголок Молдо – Щербакова</option><option>Тоголок-Молдо – БЧК</option><option>Тынчтык м-н</option>
+              <option>Умут ж/м</option><option>Щербакова ж/м</option><option>Юг-2 м-н</option>
+            </optgroup>
+
+            <optgroup label="Свердловский район">
+              <option>Айкол (с. Лебединовка)</option><option>Ак-Бата ж/м</option><option>Ак-Жар ж/м</option>
+              <option>Ак-Тилек 2 ж/м</option><option>Ак-Тилек ж/м</option><option>Академия МВД</option><option>Аламедин-1 м-н</option>
+              <option>Аламединский рынок</option><option>Бакай-Ата ж/м</option><option>Восток-5 м-н</option>
+              <option>Восточный автовокзал</option><option>Гоин</option><option>Городок строителей</option><option>Городок энергетиков</option>
+              <option>Дзержинского – Куренкеева</option><option>Дордой 2 ж/м</option><option>Дордой ж/м</option><option>Дордой Плаза</option>
+              <option>ж/м Биримдик Кут</option><option>Жибек-Жолу – Лермонтова</option><option>Кайынды ж/м</option>
+              <option>Карагачевая роща</option><option>Карпинка</option><option>Келечек ж/м</option><option>Керамическая ж/м</option>
+              <option>Керченский ж/м</option><option>Кожзавод</option><option>Комфорт</option><option>Красный Строитель 2 ж/м</option>
+              <option>Красный Строитель ж/м</option><option>Лебединовка</option><option>Мадина</option><option>Нижний Токольдош</option>
+              <option>Орозбекова – Жибек-Жолу</option><option>с. Аламудун</option><option>с. Восток</option><option>с. Мыкан</option>
+              <option>с. Нижняя Ала-Арча</option><option>с. Садовое</option><option>Советская – БЧК</option><option>Советская – Куренкеева</option>
+              <option>Советская – Щербакова</option><option>Станционный</option><option>Старый толчок</option><option>Таатан</option>
+              <option>Табачка</option><option>Тоголок молдо – Куренкеева</option><option>Туберкулезная больница</option><option>ТЭЦ</option>
+              <option>Учкун ж/м</option><option>Учкун м-н</option><option>Центральная мечеть</option><option>Церковь</option>
+              <option>Цирк/Дворец бракосочетания</option><option>ЦУМ</option><option>Чалбай ж/м</option><option>Чуй – Алматинка</option>
+              <option>Элебесова – Фере (Турбаза)</option><option>Эне-Сай ж/м</option><option>Юбилейка</option>
+            </optgroup>
+          </select>
+
           <input id="pMin" type="number" placeholder="Цена от" class="px-3 py-2 rounded-xl border border-neutral-200">
           <input id="pMax" type="number" placeholder="Цена до" class="px-3 py-2 rounded-xl border border-neutral-200">
         </div>
@@ -357,7 +475,7 @@
   <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 hidden px-4 py-2 rounded-xl bg-neutral-900 text-white text-sm"></div>
 
   <script>
-    /* ======= ДЕМО-данные и утилиты (как у тебя) ======= */
+    /* ======= ДЕМО-данные и утилиты ======= */
     const listings = [
       { id:'l1', title:'2к, Центр, свежий ремонт', price:35000, district:'Центр', rooms:'2', daily:false, owner:true, img:'', phone:'+996555123456', expiresAt: Date.now()+23*3600e3+30*60e3 },
       { id:'l2', title:'1к, Майевка, уютная',      price:18000, district:'Майевка', rooms:'1', daily:false, owner:true, img:'https://images.unsplash.com/photo-1502005229762-cf1b2da7cda7?q=80&w=1200&auto=format&fit=crop', phone:'+996700222333', expiresAt: Date.now()+10*3600e3 },
@@ -371,10 +489,59 @@
     const qsa = (s,el=document)=>Array.from(el.querySelectorAll(s));
     const showToast=(m)=>{const t=qs('#toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(showToast.t);showToast.t=setTimeout(()=>t.classList.add('hidden'),2200);};
     const hasAccess=()=>Date.now() < Number(localStorage.getItem('accessUntil')||0);
-    const setAccess=(h=24)=>{ localStorage.setItem('accessUntil', String(Date.now()+h*3600e3)); showToast('Доступ открыт на 24 часа'); render(); };
     const maskPhone=(p)=> p ? p.replace(/(\+\d{3})\d+/, '$1 ••• •• •••') : '•••';
 
-    /* ---------- СЕССИЯ: универсальная проверка ---------- */
+    /* ========= СИНХРОНИЗАЦИЯ АККАУНТА (мягкая; опционально, если сервер готов) ========= */
+    const SYNC_ENDPOINT = '/api/user-state';
+    let loadingServerState = false;
+    let saveTimer = null;
+
+    function collectState(){
+      let profile = {}; try { profile = JSON.parse(localStorage.getItem('profile')||'{}'); } catch(_){}
+      const avatar_url = localStorage.getItem('avatar_url') || '';
+      let favs = [];   try { favs = JSON.parse(localStorage.getItem('favs')||'[]'); } catch(_){}
+      const accessUntil = localStorage.getItem('accessUntil') || '';
+      return { profile, avatar_url, favs, accessUntil };
+    }
+    function statesEqual(a,b){ try{ return JSON.stringify(a||{})===JSON.stringify(b||{});}catch(_){return false;} }
+
+    async function loadServerState(){
+      try{
+        const r = await fetch(SYNC_ENDPOINT, { credentials:'include' });
+        if (!r.ok) return;
+        const d = await r.json();
+        if (!d || !d.ok || !d.state) return;
+        const incoming = d.state;
+        const local = collectState();
+        if (statesEqual(local, incoming)) return;
+
+        loadingServerState = true;
+        if ('profile' in incoming)      (incoming.profile ? localStorage.setItem('profile', JSON.stringify(incoming.profile)) : localStorage.removeItem('profile'));
+        if ('avatar_url' in incoming)   (incoming.avatar_url ? localStorage.setItem('avatar_url', incoming.avatar_url) : localStorage.removeItem('avatar_url'));
+        if ('favs' in incoming)         (incoming.favs ? localStorage.setItem('favs', JSON.stringify(incoming.favs)) : localStorage.removeItem('favs'));
+        if ('accessUntil' in incoming)  (incoming.accessUntil ? localStorage.setItem('accessUntil', incoming.accessUntil) : localStorage.removeItem('accessUntil'));
+        updateAuthUI(); render();
+        setTimeout(()=>{ loadingServerState=false; }, 200);
+      }catch(_){ /* оффлайн-режим */ }
+    }
+
+    async function saveServerState(){
+      try{
+        const state = collectState();
+        await fetch(SYNC_ENDPOINT, {
+          method:'POST', credentials:'include',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ state })
+        });
+      }catch(_){}
+    }
+    function saveServerStateDebounced(){
+      if (loadingServerState) return;
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(saveServerState, 600);
+    }
+
+    /* ---------- СЕССИЯ: проверка ---------- */
     let loginPoll = null;
     async function checkSession(silent=true){
       try{
@@ -384,6 +551,7 @@
           try{ localStorage.setItem('userLogged','1'); }catch(_){}
           try{ localStorage.setItem('tg_user', JSON.stringify(data.user||{})); }catch(_){}
           try{ closeLogin(); }catch(_){}
+          ensureUserScoped();
           updateAuthUI();
           if (!silent) showToast('Вход выполнен');
           return true;
@@ -396,7 +564,7 @@
     let bestItem=null;
     function renderBest(){
       bestItem = listings.find(it=>!it.daily && it.price<=25000) || listings[0];
-      const imgEl=qs('#bestImg'), noPhoto=qs('#bestNoPhoto'), btn=qs('#bestCallBtn'), masked=qs('#bestMasked');
+      const imgEl=qs('#bestImg'), noPhoto=qs('#bestNoPhoto'), btn=qs('#bestCallBtn'), masked=qs('#bestMasked']);
       if (bestItem.img){ imgEl.src=bestItem.img; imgEl.alt=bestItem.title||'Лучшее объявление'; imgEl.classList.remove('hidden'); noPhoto.classList.add('hidden'); }
       else { imgEl.removeAttribute('src'); imgEl.classList.add('hidden'); noPhoto.classList.remove('hidden'); }
       masked.textContent = maskPhone(bestItem.phone||'');
@@ -470,12 +638,13 @@
       if(favs.has(id)){ favs.delete(id); heart.textContent='♡'; heart.classList.remove('text-red-600'); showToast('Убрано из избранного'); }
       else{ favs.add(id); heart.textContent='❤'; heart.classList.add('text-red-600'); showToast('Добавлено в избранное'); }
       localStorage.setItem('favs', JSON.stringify([...favs]));
+      saveServerStateDebounced();
     }
 
     /* ======= Модалки ======= */
     const modalLogin=qs('#modalLogin'), modalPay=qs('#modalPay'), modalProfile=qs('#modalProfile'), modalEdit=qs('#modalEditProfile');
     const openLogin =()=>{ modalLogin.classList.remove('hidden'); modalLogin.classList.add('flex');
-      // Лениво вставляем виджет + запускаем короткий поллинг на 10 сек
+      // Лениво вставляем виджет + короткий поллинг на /api/me
       mountTelegramWidget();
       if (loginPoll) clearInterval(loginPoll);
       let ticks=0; loginPoll=setInterval(async ()=>{ ticks++; const ok=await checkSession(true); if(ok||ticks>10){ clearInterval(loginPoll); loginPoll=null; } },1000);
@@ -488,7 +657,7 @@
     const openEdit=()=>{ fillEditProfileModal(); modalEdit.classList.remove('hidden'); modalEdit.classList.add('flex'); }
     const closeEdit=()=>{ modalEdit.classList.add('hidden'); modalEdit.classList.remove('flex'); }
 
-    /* ======= Telegram Login — лениво монтируем виджет ======= */
+    /* ======= Telegram Login — виджет на текущем домене (без хардкода origin) ======= */
     function mountTelegramWidget(){
       if (qs('#tgLoginContainer script')) return;
       const s=document.createElement('script');
@@ -498,8 +667,8 @@
       s.setAttribute('data-size','large');
       s.setAttribute('data-userpic','false');
       s.setAttribute('data-request-access','write');
-      // пусть сервер знает, куда возвращать/что сообщать
-      const back = encodeURIComponent((location.pathname+location.search) || '/');
+      const back  = encodeURIComponent((location.pathname+location.search) || '/');
+      // ВАЖНО: относительный URL, чтобы кука ставилась на тот же хост/домен
       s.setAttribute('data-auth-url', `/api/tg-login?return_to=${back}`);
       qs('#tgLoginContainer').appendChild(s);
     }
@@ -512,6 +681,8 @@
           try{ localStorage.setItem('userLogged','1'); }catch(_){}
           try{ localStorage.setItem('tg_user', JSON.stringify(msg.user||{})); }catch(_){}
           await checkSession(true);
+          ensureUserScoped();
+          await loadServerState();
           updateAuthUI(); closeLogin(); showToast('Вход через Telegram выполнен');
         } else {
           showToast('Не удалось войти через Telegram');
@@ -519,7 +690,7 @@
       }
     }, false);
 
-    /* ======= Cookie → localStorage и обратно ======= */
+    /* ======= Cookie → localStorage и быстрое обновление UI ======= */
     const hasAuthCookie=()=> document.cookie.split("; ").some(c => c.trim().startsWith("auth="));
     function syncAuthFromCookieAndQuery(){
       const p = new URLSearchParams(location.search);
@@ -548,6 +719,20 @@
       bind('#langToggle'); bind('#langToggleMobile');
     }
 
+    /* ======= Привязка локального состояния к конкретному юзеру ======= */
+    function ensureUserScoped(){
+      let u={}; try{ u = JSON.parse(localStorage.getItem('tg_user')||'{}'); }catch(_){}
+      const uid = u.id || u.user_id || u.telegram_id || u._id || null;
+      const prev = localStorage.getItem('current_uid');
+      if (uid && prev && prev !== String(uid)){
+        localStorage.removeItem('profile');
+        localStorage.removeItem('avatar_url');
+        localStorage.removeItem('favs');
+        localStorage.removeItem('accessUntil');
+      }
+      if (uid) localStorage.setItem('current_uid', String(uid));
+    }
+
     /* ======= UI аккаунта ======= */
     function updateAuthUI(){
       const logged  = !!localStorage.getItem('userLogged');
@@ -571,37 +756,102 @@
       applyUser(avatarM, badgeM, menuM);
     }
 
+    /* ======= "Снять/Купить" как селект ======= */
+    (function initDealSelect(){
+      const sel = qs('#dealSelect');
+      if (!sel) return;
+      const saved = localStorage.getItem('dealType') || 'rent';
+      sel.value = saved;
+      sel.addEventListener('change', ()=>{ localStorage.setItem('dealType', sel.value); });
+    })();
+
+    /* ======= (устар.) плашка табов (совместимость) ======= */
+    (function initDealTabs(){
+      const tabs = qs('#dealTabs');
+      if (!tabs) return;
+      tabs.addEventListener('click', (e)=>{
+        const b = e.target.closest('button[data-deal]'); if(!b) return;
+        qsa('button', tabs).forEach(x=>x.classList.remove('active'));
+        b.classList.add('active');
+        try{ localStorage.setItem('dealType', b.dataset.deal); }catch(_){}
+      });
+      const saved = localStorage.getItem('dealType') || 'rent';
+      qsa('button', tabs).forEach(x=> x.classList.toggle('active', x.dataset.deal===saved));
+    })();
+
+    /* ======= Показ/скрытие районов Бишкек ======= */
+    (function initRegionVisibility(){
+      const region = qs('#s3');
+      const districts = qs('#s4');
+      if (!region || !districts) return;
+      const update = () => {
+        const isBishkek = (region.value||'').toLowerCase().includes('бишкек');
+        districts.style.display = isBishkek ? '' : 'none';
+      };
+      update();
+      region.addEventListener('change', update);
+    })();
+
     /* ======= События ======= */
     qs('#btnCloseLogin').addEventListener('click', closeLogin);
     qs('#btnSendCode').addEventListener('click', ()=>{ qs('#loginStep2').classList.remove('hidden'); showToast('Код отправлен (демо)'); });
-    qs('#btnConfirmOtp').addEventListener('click', async ()=>{ localStorage.setItem('userLogged','1'); await checkSession(true); closeLogin(); updateAuthUI(); showToast('Вход выполнен'); });
+    qs('#btnConfirmOtp').addEventListener('click', async ()=>{ localStorage.setItem('userLogged','1'); await checkSession(true); ensureUserScoped(); await loadServerState(); closeLogin(); updateAuthUI(); showToast('Вход выполнен'); });
+
+    // ЯВНЫЕ обработчики для кнопок входа (фикс на главной)
+    qs('#btnAuth')?.addEventListener('click', (e)=>{ e.preventDefault(); openLogin(); });
+    qs('#btnAuthMobile')?.addEventListener('click', (e)=>{ e.preventDefault(); openLogin(); });
 
     qsa('.pay').forEach(b=>b.addEventListener('click', openPay));
     qsa('.pay-method').forEach(b=> b.addEventListener('click', ()=>{ qs('#paySelected').classList.remove('hidden'); qs('#payMethodName').textContent=b.textContent; }));
     qs('#btnClosePay').addEventListener('click', closePay);
-    qs('#btnSimulatePaid').addEventListener('click', ()=>{ setAccess(24); closePay(); });
+    qs('#btnSimulatePaid').addEventListener('click', ()=>{ 
+      localStorage.setItem('accessUntil', String(Date.now()+24*3600e3)); 
+      showToast('Доступ открыт на 24 часа'); 
+      render(); 
+      saveServerStateDebounced();
+      closePay(); 
+    });
 
     document.addEventListener('click', (ev) => {
+      // Триггеры аккаунта: кнопки/аватар (работает и на страницах, где это <a>)
       const trg = ev.target.closest('#btnAuth, #btnAuthMobile, #userAvatar, #userAvatarMobile');
       if (trg){
+        ev.preventDefault();      // критично: не уезжаем на главную
+        ev.stopPropagation();     // чтобы другие обработчики не сработали
+
         const logged = !!localStorage.getItem('userLogged');
-        const isMobile = !!ev.target.closest('#accountAreaMobile');
+        const isMobile = !!trg.closest('#accountAreaMobile');
         const menu = isMobile ? qs('#accountMenuMobile') : qs('#accountMenu');
+
         if (logged){ menu?.classList.toggle('hidden'); }
         else { openLogin(); }
         return;
       }
+      // Клик вне меню — закрываем оба
       if (!ev.target.closest('#accountMenu') && !ev.target.closest('#accountArea')) qs('#accountMenu')?.classList.add('hidden');
       if (!ev.target.closest('#accountMenuMobile') && !ev.target.closest('#accountAreaMobile')) qs('#accountMenuMobile')?.classList.add('hidden');
     });
 
+    /* ПК-меню */
     qs('#menuMyAds').addEventListener('click', ()=>{ qs('#accountMenu').classList.add('hidden'); showToast('Мои объявления (демо)'); });
     qs('#menuEditProfile').addEventListener('click', ()=>{ qs('#accountMenu').classList.add('hidden'); openEdit(); });
     qs('#menuChangeAvatar').addEventListener('click', ()=>{ qs('#accountMenu').classList.add('hidden'); openProfile(); });
 
     qs('#menuLogout').addEventListener('click', ()=>{
       qs('#accountMenu').classList.add('hidden');
-      try{ localStorage.removeItem('userLogged'); localStorage.removeItem('tg_user'); }catch(_){}
+      try{ localStorage.removeItem('userLogged'); localStorage.removeItem('tg_user'); localStorage.removeItem('current_uid'); }catch(_){}
+      document.cookie = 'auth=; Max-Age=0; path=/';
+      updateAuthUI(); showToast('Вы вышли из аккаунта');
+    });
+
+    /* МОБИЛЬНОЕ МЕНЮ */
+    const accMenuM = qs('#accountMenuMobile');
+    qs('#menuMyAdsM')?.addEventListener('click', ()=>{ accMenuM?.classList.add('hidden'); showToast('Мои объявления (демо)'); });
+    qs('#menuEditProfileM')?.addEventListener('click', ()=>{ accMenuM?.classList.add('hidden'); openEdit(); });
+    qs('#menuChangeAvatarM')?.addEventListener('click', ()=>{ accMenuM?.classList.add('hidden'); openProfile(); });
+    qs('#menuLogoutM')?.addEventListener('click', ()=> {
+      accMenuM?.classList.add('hidden');
+      try{ localStorage.removeItem('userLogged'); localStorage.removeItem('tg_user'); localStorage.removeItem('current_uid'); }catch(_){}
       document.cookie = 'auth=; Max-Age=0; path=/';
       updateAuthUI(); showToast('Вы вышли из аккаунта');
     });
@@ -616,20 +866,23 @@
     qs('#btnCloseEditProfile').addEventListener('click', closeEdit);
     qs('#btnSaveEditProfile').addEventListener('click', ()=>{
       const data = { name:qs('#profName').value.trim(), email:qs('#profEmail').value.trim(), phone:qs('#profPhone').value.trim(), about:qs('#profAbout').value.trim() };
-      localStorage.setItem('profile', JSON.stringify(data)); closeEdit(); updateAuthUI(); showToast('Профиль сохранён');
+      localStorage.setItem('profile', JSON.stringify(data));
+      closeEdit(); updateAuthUI(); showToast('Профиль сохранён');
+      saveServerStateDebounced();
     });
 
     qs('#btnCloseProfile').addEventListener('click', closeProfile);
-    qs('#btnSaveProfile').addEventListener('click', ()=>{ closeProfile(); showToast('Профиль сохранён'); updateAuthUI(); });
+    qs('#btnSaveProfile').addEventListener('click', ()=>{ closeProfile(); showToast('Профиль сохранён'); updateAuthUI(); saveServerStateDebounced(); });
 
     qs('#avatarFile').addEventListener('change', async (e)=>{
       const file = e.target.files?.[0]; if (!file) return;
       try{
         const dataUrl = await fileToAvatarDataURL(file, 256);
         localStorage.setItem('avatar_url', dataUrl); syncProfileModal(); updateAuthUI(); showToast('Аватар обновлён');
+        saveServerStateDebounced();
       }catch{ showToast('Не удалось обработать изображение'); }
     });
-    qs('#btnAvatarRemove').addEventListener('click', ()=>{ localStorage.removeItem('avatar_url'); syncProfileModal(); updateAuthUI(); showToast('Аватар удалён'); });
+    qs('#btnAvatarRemove').addEventListener('click', ()=>{ localStorage.removeItem('avatar_url'); syncProfileModal(); updateAuthUI(); showToast('Аватар удалён'); saveServerStateDebounced(); });
 
     function syncProfileModal(){
       const box = qs('#profileAvatar');
@@ -674,23 +927,44 @@
 
     document.addEventListener('DOMContentLoaded', async () => {
       try { syncAuthFromCookieAndQuery(); } catch(_){}
+      updateAuthUI();
       try { initLang(); } catch(_){}
-      await checkSession(true); // если кука уже есть — сразу подтянем профиль
+      await checkSession(true);
+      ensureUserScoped();
+      await loadServerState();
       try { render(); } catch(_){}
     });
 
-    // Возврат фокуса из Telegram → проверяем сессию
-    window.addEventListener('focus', () => { checkSession(true); });
+    // Подтягиваем серверное состояние при возврате
+    window.addEventListener('focus', () => { checkSession(true).then(()=>{ updateAuthUI(); loadServerState(); }); });
+    window.addEventListener('pageshow', () => { checkSession(true).then(()=>{ updateAuthUI(); loadServerState(); }); });
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) { checkSession(true); loadServerState(); } });
+
+    // Периодическая мягкая синхронизация
+    setInterval(() => { checkSession(true).then(()=>{ updateAuthUI(); loadServerState(); }); }, 30000);
 
     window.addEventListener('storage', (e) => {
-      if (['userLogged','avatar_url','tg_user','lang'].includes(e.key)) {
+      if (['userLogged','avatar_url','tg_user','lang','profile','favs','accessUntil'].includes(e.key)) {
         try { updateAuthUI(); } catch(_){}
         if (e.key === 'lang') try { setLangUI(localStorage.getItem('lang')||'ru'); } catch(_){}
       }
     });
+
+    // Простейший таймер обратного отсчёта
+    function countdown(el, ts){
+      function tick(){
+        const ms = ts - Date.now();
+        if (ms <= 0){ el.textContent = '0ч 00м'; return; }
+        const h = Math.floor(ms/3600000);
+        const m = Math.floor((ms%3600000)/60000);
+        el.textContent = `${h}ч ${String(m).padStart(2,'0')}м`;
+        requestAnimationFrame(tick);
+      }
+      tick();
+    }
   </script>
 
-  <!-- Второй скрипт: WA/e-mail + форма контакта (без изменений функционала) -->
+  <!-- Второй скрипт: WA/e-mail + форма контакта -->
   <script>
   (() => {
     const waBtn   = document.getElementById('btnLoginWhatsApp');
