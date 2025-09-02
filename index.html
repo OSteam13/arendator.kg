@@ -400,7 +400,7 @@
       <div class="my-4 flex items-center gap-3">
         <div class="h-px flex-1 bg-neutral-200"></div>
         <div class="text-xs text-neutral-500">или Telegram</div>
-        <div class="h-пx flex-1 bg-neutral-200"></div>
+        <div class="h-px flex-1 bg-neutral-200"></div>
       </div>
       <div id="tgLoginContainer" class="flex justify-center"></div>
       <div class="text-xs text-neutral-500 text-center mt-2">После нажатия появится окно Telegram — откройте Telegram и нажмите «Принять / Allow», чтобы завершить вход.</div>
@@ -803,6 +803,10 @@
     qs('#btnSendCode').addEventListener('click', ()=>{ qs('#loginStep2').classList.remove('hidden'); showToast('Код отправлен (демо)'); });
     qs('#btnConfirmOtp').addEventListener('click', async ()=>{ localStorage.setItem('userLogged','1'); await checkSession(true); ensureUserScoped(); await loadServerState(); closeLogin(); updateAuthUI(); showToast('Вход выполнен'); });
 
+    // ЯВНЫЕ обработчики для кнопок входа (фикс на главной)
+    qs('#btnAuth')?.addEventListener('click', (e)=>{ e.preventDefault(); openLogin(); });
+    qs('#btnAuthMobile')?.addEventListener('click', (e)=>{ e.preventDefault(); openLogin(); });
+
     qsa('.pay').forEach(b=>b.addEventListener('click', openPay));
     qsa('.pay-method').forEach(b=> b.addEventListener('click', ()=>{ qs('#paySelected').classList.remove('hidden'); qs('#payMethodName').textContent=b.textContent; }));
     qs('#btnClosePay').addEventListener('click', closePay);
@@ -1037,7 +1041,7 @@
           const res = await fetch('/api/send-mail', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
           const data = await res.json();
           if (data.ok) { form.reset(); if (note) note.textContent = 'Сообщение отправлено.'; if (ts) ts.value = Date.now(); }
-          else { if (note) note.textContent = 'Ошибка: ' + (data.error || 'не удалось отправить'); }
+          else { if (note) note.textContent = 'Ошибка: ' + (data.error или 'не удалось отправить'); }
         } catch { if (note) note.textContent = 'Ошибка сети. Попробуйте ещё раз.'; }
       });
     }
@@ -1048,4 +1052,3 @@
   <script src="/app.js"></script>
 </body>
 </html>
-
