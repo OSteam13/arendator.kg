@@ -1,13 +1,13 @@
+// /api/tg-login.js
 const crypto = require('crypto');
 const { pool } = require('./_db');
 
 function days(n){ return n*24*60*60; }
-
-const BOT_TOKEN      = process.env.TELEGRAM_BOT_TOKEN;
-const COOKIE_DOMAIN  = process.env.COOKIE_DOMAIN || '.arendator.kg';
+const BOT_TOKEN        = process.env.TELEGRAM_BOT_TOKEN;
+const COOKIE_DOMAIN    = process.env.COOKIE_DOMAIN || '.arendator.kg';
 const CANONICAL_ORIGIN = process.env.CANONICAL_ORIGIN || 'https://arendator.kg';
 
-// ------- верификация (как у тебя) -------
+// --- verify Telegram query ---
 function verifyTelegramQuery(q){
   if (!BOT_TOKEN) return { ok:false, error:'telegram_verify_failed:tg_bot_token_missing' };
   if (!q || !q.hash) return { ok:false, error:'telegram_verify_failed:no_hash' };
@@ -27,33 +27,39 @@ function verifyTelegramQuery(q){
   return { ok:true };
 }
 
-function absBack(back){
-  // Разрешаем только относительные возвраты, любые абсолютные чистим до '/'
-  try {
+function toAbs(back){
+  try{
     if (!back || typeof back !== 'string') return `${CANONICAL_ORIGIN}/`;
     if (/^https?:/i.test(back)) return `${CANONICAL_ORIGIN}/`;
-    // нормализуем двойные слэши
     return `${CANONICAL_ORIGIN}${back.startsWith('/') ? back : `/${back}`}`;
-  } catch { return `${CANONICAL_ORIGIN}/`; }
+  }catch{ return `${CANONICAL_ORIGIN}/`; }
+}
+
+function htmlRedirect(res, url){
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+  // meta-refresh + JS → покрываем любые режимы
+  const safe = String(url);
+  res.end(`<!doctype html><meta http-equiv="refresh" content="0;url=${safe}">
+<script>try{location.replace(${JSON.stringify(safe)})}catch(_){location.href=${JSON.stringify(safe)}};</script>
+Logged in, redirecting…`);
 }
 
 module.exports = async (req, res) => {
   try {
     const q = req.query || {};
-    const backRel = (q.return_to || q.back || '/').toString();
-    const backAbs = absBack(backRel);
+    const backAbs = toAbs((q.return_to || q.back || '/').toString());
 
     const ver = verifyTelegramQuery(q);
-    if (!ver.ok) {
-      res.setHeader('Cache-Control','no-store, no-cache, must-revalidate');
+    if (!ver.ok){
       const url = new URL(backAbs);
       url.searchParams.set('tg','err');
       url.searchParams.set('reason', ver.error);
-      res.writeHead(302, { Location: url.toString() });
-      return res.end();
+      return htmlRedirect(res, url.toString());
     }
 
-    // собрать объект tg-пользователя
+    // собрать профиль
     let tg = null;
     if (q.user) { try { tg = JSON.parse(q.user); } catch(_){} }
     if (!tg) {
@@ -65,16 +71,14 @@ module.exports = async (req, res) => {
         photo_url : q.photo_url  || null
       };
     }
-    if (!tg?.id) {
-      res.setHeader('Cache-Control','no-store, no-cache, must-revalidate');
+    if (!tg?.id){
       const url = new URL(backAbs);
       url.searchParams.set('tg','err');
       url.searchParams.set('reason','no_user');
-      res.writeHead(302, { Location: url.toString() });
-      return res.end();
+      return htmlRedirect(res, url.toString());
     }
 
-    // upsert юзера
+    // upsert пользователя
     const up = await pool.query(
       `insert into users (tg_id, display_name, avatar_url)
        values ($1,$2,$3)
@@ -86,13 +90,10 @@ module.exports = async (req, res) => {
     );
     const userId = up.rows[0].id;
 
-    // сессия
+    // создать сессию
     const token = crypto.randomBytes(32).toString('hex');
     const exp   = new Date(Date.now() + 14*24*3600*1000);
-    await pool.query(
-      'insert into sessions(token, user_id, expires_at) values ($1,$2,$3)',
-      [token, userId, exp]
-    );
+    await pool.query('insert into sessions(token, user_id, expires_at) values ($1,$2,$3)', [token, userId, exp]);
 
     // кука
     const cookie = [
@@ -106,21 +107,14 @@ module.exports = async (req, res) => {
     ].filter(Boolean).join('; ');
     res.setHeader('Set-Cookie', cookie);
 
-    // очень важно: запрет кэширования 302 с Set-Cookie
-    res.setHeader('Cache-Control','no-store, no-cache, must-revalidate');
-
-    // редиректим обратно на абсолютный адрес
+    // редирект уже HTML-ом (не 302)
     const url = new URL(backAbs);
     url.searchParams.set('tg','ok');
-    res.writeHead(302, { Location: url.toString() });
-    return res.end();
+    return htmlRedirect(res, url.toString());
   } catch (e) {
-    res.setHeader('Cache-Control','no-store');
-    const back = absBack((req.query && (req.query.return_to || req.query.back)) || '/');
-    const url = new URL(back);
+    const url = new URL(toAbs((req.query && (req.query.return_to || req.query.back)) || '/'));
     url.searchParams.set('tg','err');
     url.searchParams.set('reason', e.message || 'server_error');
-    res.writeHead(302, { Location: url.toString() });
-    return res.end();
+    return htmlRedirect(res, url.toString());
   }
 };
