@@ -22,7 +22,7 @@
     .card-actions>input{min-width:0}
     .mask-blur{filter:blur(3px)}
     .dropdown{position:relative}
-    .dropdown-menu{position:absolute;right:0;top:calc(100% + .5rem);min-width:220px}
+    .dropdown-menu{position:absolute;right:0;top:calc(100% + .5rem);min-width:220px;z-index:60}
     .user-avatar{width:32px;height:32px;border-radius:9999px;background:#e5e7eb;color:#374151;display:grid;place-items:center;font-weight:700;overflow:hidden;background-size:cover;background-position:center;flex-shrink:0;font-size:14px;cursor:pointer}
     .avatar-lg{width:96px;height:96px;border-radius:9999px;background:#e5e7eb;display:grid;place-items:center;overflow:hidden;background-size:cover;background-position:center;font-weight:800;font-size:36px;color:#374151;margin:0 auto}
     .nav-mobile a{font-size:13px}
@@ -30,7 +30,7 @@
     .lang-toggle span{opacity:.55}
     .lang-toggle .active{opacity:1;font-weight:700}
 
-    /* Плашка Снять/Купить */
+    /* (не используется после правок, но оставлено без изменения остального кода) */
     .seg{display:grid;grid-template-columns:1fr 1fr;border:1px solid rgb(229 231 235);border-radius:0.75rem;overflow:hidden}
     .seg button{padding:.5rem .75rem;font-weight:600}
     .seg button.active{background:#111827;color:#fff}
@@ -62,11 +62,11 @@
             <div id="userAvatarMobile" class="user-avatar" title="Мой аккаунт"></div>
           </div>
           <div id="accountMenuMobile" class="dropdown-menu hidden bg-white border border-neutral-200 rounded-xl shadow-soft p-1">
-            <button class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50">Мои объявления</button>
-            <button class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50">Редактировать профиль</button>
-            <button class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50">Изменить аватарку</button>
+            <button id="menuMyAdsM" class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50">Мои объявления</button>
+            <button id="menuEditProfileM" class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50">Редактировать профиль</button>
+            <button id="menuChangeAvatarM" class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50">Изменить аватарку</button>
             <div class="h-px bg-neutral-200 my-1"></div>
-            <button class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50 text-red-600">Выйти</button>
+            <button id="menuLogoutM" class="w-full text-left px-3 py-2 rounded-lg hover:bg-neutral-50 text-red-600">Выйти</button>
           </div>
         </div>
       </div>
@@ -123,18 +123,30 @@
         <p class="mt-3 text-base md:text-lg text-neutral-600">Объявления обновляются каждую секунду из 30 источников. Только свежие — жильё за день!</p>
 
         <div class="mt-5 grid grid-cols-2 gap-3">
-          <!-- Плашка Снять / Купить -->
-          <div class="seg col-span-2" id="dealTabs">
-            <button type="button" data-deal="rent" class="active">Снять</button>
-            <button type="button" data-deal="buy">Купить</button>
-          </div>
+          <!-- СДЕЛАНО: Снять / Купить как выпадающий пункт -->
+          <select id="dealSelect" class="col-span-2 px-3 py-2 rounded-xl border border-neutral-200">
+            <option value="rent">Снять</option>
+            <option value="buy">Купить</option>
+          </select>
 
           <select id="s2" class="px-3 py-2 rounded-xl border border-neutral-200">
             <option>Квартира</option><option>Комната</option><option>Дом</option>
           </select>
 
+          <!-- СДЕЛАНО: Развернутые области -->
           <select id="s3" class="px-3 py-2 rounded-xl border border-neutral-200">
-            <option>Чуй / Бш</option><option>Ыссык-Куль</option><option>Ош</option>
+            <optgroup label="Город">
+              <option>Бишкек</option>
+            </optgroup>
+            <optgroup label="Области">
+              <option>Чуйская область</option>
+              <option>Иссык-Кульская область</option>
+              <option>Таласская область</option>
+              <option>Нарынская область</option>
+              <option>Джалал-Абадская область</option>
+              <option>Ошская область</option>
+              <option>Баткенская область</option>
+            </optgroup>
           </select>
 
           <!-- Полный список районов Бишкек -->
@@ -662,7 +674,16 @@
       applyUser(avatarM, badgeM, menuM);
     }
 
-    /* ======= Плашка "Снять/Купить" ======= */
+    /* ======= "Снять/Купить" как селект ======= */
+    (function initDealSelect(){
+      const sel = qs('#dealSelect');
+      if (!sel) return;
+      const saved = localStorage.getItem('dealType') || 'rent';
+      sel.value = saved;
+      sel.addEventListener('change', ()=>{ localStorage.setItem('dealType', sel.value); });
+    })();
+
+    /* ======= (устар.) плашка табов оставлена для совместимости, если где-то еще используется ======= */
     (function initDealTabs(){
       const tabs = qs('#dealTabs');
       if (!tabs) return;
@@ -674,6 +695,19 @@
       });
       const saved = localStorage.getItem('dealType') || 'rent';
       qsa('button', tabs).forEach(x=> x.classList.toggle('active', x.dataset.deal===saved));
+    })();
+
+    /* ======= Показ/скрытие районов Бишкек по выбору области ======= */
+    (function initRegionVisibility(){
+      const region = qs('#s3');
+      const districts = qs('#s4');
+      if (!region || !districts) return;
+      const update = () => {
+        const isBishkek = (region.value||'').toLowerCase().includes('бишкек');
+        districts.style.display = isBishkek ? '' : 'none';
+      };
+      update();
+      region.addEventListener('change', update);
     })();
 
     /* ======= События ======= */
@@ -700,12 +734,25 @@
       if (!ev.target.closest('#accountMenuMobile') && !ev.target.closest('#accountAreaMobile')) qs('#accountMenuMobile')?.classList.add('hidden');
     });
 
+    /* ПК-меню */
     qs('#menuMyAds').addEventListener('click', ()=>{ qs('#accountMenu').classList.add('hidden'); showToast('Мои объявления (демо)'); });
     qs('#menuEditProfile').addEventListener('click', ()=>{ qs('#accountMenu').classList.add('hidden'); openEdit(); });
     qs('#menuChangeAvatar').addEventListener('click', ()=>{ qs('#accountMenu').classList.add('hidden'); openProfile(); });
 
     qs('#menuLogout').addEventListener('click', ()=>{
       qs('#accountMenu').classList.add('hidden');
+      try{ localStorage.removeItem('userLogged'); localStorage.removeItem('tg_user'); }catch(_){}
+      document.cookie = 'auth=; Max-Age=0; path=/';
+      updateAuthUI(); showToast('Вы вышли из аккаунта');
+    });
+
+    /* МОБИЛЬНОЕ МЕНЮ — СДЕЛАНО: все кнопки полноценно работают */
+    const accMenuM = qs('#accountMenuMobile');
+    qs('#menuMyAdsM')?.addEventListener('click', ()=>{ accMenuM?.classList.add('hidden'); showToast('Мои объявления (демо)'); });
+    qs('#menuEditProfileM')?.addEventListener('click', ()=>{ accMenuM?.classList.add('hidden'); openEdit(); });
+    qs('#menuChangeAvatarM')?.addEventListener('click', ()=>{ accMenuM?.classList.add('hidden'); openProfile(); });
+    qs('#menuLogoutM')?.addEventListener('click', ()=> {
+      accMenuM?.classList.add('hidden');
       try{ localStorage.removeItem('userLogged'); localStorage.removeItem('tg_user'); }catch(_){}
       document.cookie = 'auth=; Max-Age=0; path=/';
       updateAuthUI(); showToast('Вы вышли из аккаунта');
@@ -789,6 +836,9 @@
     window.addEventListener('focus', () => { checkSession(true); updateAuthUI(); });
     window.addEventListener('pageshow', () => { checkSession(true); updateAuthUI(); });
     document.addEventListener('visibilitychange', () => { if (!document.hidden) checkSession(true); });
+
+    // Периодическая проверки сессии (мягкая синхронизация между устройствами при наличии серверной сессии)
+    setInterval(() => { checkSession(true).then(()=>updateAuthUI()); }, 30000);
 
     window.addEventListener('storage', (e) => {
       if (['userLogged','avatar_url','tg_user','lang'].includes(e.key)) {
