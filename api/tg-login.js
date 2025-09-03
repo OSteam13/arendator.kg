@@ -1,6 +1,6 @@
 // /api/tg-login.js
 const crypto = require('crypto');
-const { pool } = require('./_db');
+const { supabase } = require('../lib/_supabase');
 
 function days(n){ return n*24*60*60; }
 const BOT_TOKEN        = process.env.TELEGRAM_BOT_TOKEN;
@@ -39,7 +39,6 @@ function htmlRedirect(res, url){
   res.statusCode = 200;
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
-  // meta-refresh + JS → покрываем любые режимы
   const safe = String(url);
   res.end(`<!doctype html><meta http-equiv="refresh" content="0;url=${safe}">
 <script>try{location.replace(${JSON.stringify(safe)})}catch(_){location.href=${JSON.stringify(safe)}};</script>
@@ -51,6 +50,7 @@ module.exports = async (req, res) => {
     const q = req.query || {};
     const backAbs = toAbs((q.return_to || q.back || '/').toString());
 
+    // 1) Верификация подписи Telegram
     const ver = verifyTelegramQuery(q);
     if (!ver.ok){
       const url = new URL(backAbs);
@@ -59,7 +59,7 @@ module.exports = async (req, res) => {
       return htmlRedirect(res, url.toString());
     }
 
-    // собрать профиль
+    // 2) Разобрать профиль пользователя
     let tg = null;
     if (q.user) { try { tg = JSON.parse(q.user); } catch(_){} }
     if (!tg) {
@@ -78,24 +78,33 @@ module.exports = async (req, res) => {
       return htmlRedirect(res, url.toString());
     }
 
-    // upsert пользователя
-    const up = await pool.query(
-      `insert into users (tg_id, display_name, avatar_url)
-       values ($1,$2,$3)
-       on conflict (tg_id) do update
-         set display_name = excluded.display_name,
-             avatar_url   = excluded.avatar_url
-       returning id`,
-      [tg.id, (tg.first_name || tg.username || 'User'), tg.photo_url || null]
-    );
-    const userId = up.rows[0].id;
+    // 3) Upsert пользователя в таблицу users по tg_id
+    const display_name = (tg.first_name || tg.username || 'User');
+    const avatar_url   = tg.photo_url || null;
 
-    // создать сессию
+    const { data: userRow, error: upError } = await supabase
+      .from('users')
+      .upsert(
+        { tg_id: tg.id, display_name, avatar_url },
+        { onConflict: 'tg_id' }
+      )
+      .select('id')
+      .single();
+
+    if (upError) throw upError;
+    const userId = userRow.id;
+
+    // 4) Создать сессию (sessions)
     const token = crypto.randomBytes(32).toString('hex');
     const exp   = new Date(Date.now() + 14*24*3600*1000);
-    await pool.query('insert into sessions(token, user_id, expires_at) values ($1,$2,$3)', [token, userId, exp]);
 
-    // кука
+    const { error: sessErr } = await supabase
+      .from('sessions')
+      .insert({ token, user_id: userId, expires_at: exp });
+
+    if (sessErr) throw sessErr;
+
+    // 5) Поставить cookie
     const cookie = [
       `auth=${token}`,
       'Path=/',
@@ -107,7 +116,7 @@ module.exports = async (req, res) => {
     ].filter(Boolean).join('; ');
     res.setHeader('Set-Cookie', cookie);
 
-    // редирект уже HTML-ом (не 302)
+    // 6) Вернуть HTML-редирект с tg=ok
     const url = new URL(backAbs);
     url.searchParams.set('tg','ok');
     return htmlRedirect(res, url.toString());
