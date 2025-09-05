@@ -298,7 +298,7 @@
 
     <div class="grid sm:grid-cols-2 gap-4">
       <div class="rounded-2xl border border-neutral-200 bg-white p-5 shadow-soft">
-        <div class="text-xl font-bold mb-1">200 сом — Неделя</div>
+        <div class="text-xl font-bold mb-1">300 сом — Неделя</div>
         <ul class="space-y-1 text-neutral-700 text-sm mb-4">
           <li>• Телефоны владельцев без лимита</li>
           <li>• Анти-агент фильтр — скрываем посредников</li>
@@ -310,7 +310,7 @@
       </div>
 
       <div class="rounded-2xl border border-neutral-200 bg-white p-5 shadow-soft">
-        <div class="text-xl font-bold mb-1">500 сом — Месяц</div>
+        <div class="text-xl font-bold mb-1">600 сом — Месяц</div>
         <ul class="space-y-1 text-neutral-700 text-sm mb-4">
           <li>• Телефоны владельцев без лимита</li>
           <li>• Анти-агент фильтр — скрываем посредников</li>
@@ -503,6 +503,8 @@
       { id:'l4', title:'Студия, Московский',       price:22000, district:'Московский',rooms:'1', daily:false, owner:true, img:'https://images.unsplash.com/photo-1493809842364-78817add7ffb?q=80&w=1200&auto=format&fit=crop', phone:'+996555987654', expiresAt: Date.now()+12*3600e3 },
       { id:'l5', title:'Посуточно 2к, Центр',      price:3000,  district:'Центр', rooms:'2', daily:true,  owner:true, img:'https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?q=80&w=1200&auto=format&fit=crop', phone:'+996709111222', expiresAt: Date.now()+20*3600e3 },
       { id:'l6', title:'3к, Свердловский, новая мебель', price:45000, district:'Свердловский', rooms:'3+', daily:false, owner:true, img:'https://images.unsplash.com/photo-1494526585095-c41746248156?q=80&w=1200&auto=format&fit=crop', phone:'+996500321654', expiresAt: Date.now()+5*3600e3 },
+      { id:'l7', title:'1к, Восток-5, светлая',   price:20000, district:'Восток-5', rooms:'1', daily:false, owner:true, img:'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=1200&auto=format&fit=crop', phone:'+996700555777', expiresAt: Date.now()+18*3600e3 },
+      { id:'l8', title:'2к, Центр, паркинг',       price:40000, district:'Центр', rooms:'2', daily:false, owner:false,img:'https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?q=80&w=1200&auto=format&fit=crop', phone:'+996775000111', expiresAt: Date.now()+9*3600e3 }
     ];
 
     const qs  = (s,el=document)=>el.querySelector(s);
@@ -830,6 +832,12 @@
       closePay();
     });
 
+    // Ф-ия полного выхода: чистим LS и обе версии куки
+    function killAuthCookies(){
+      document.cookie = 'auth=; Max-Age=0; path=/';
+      document.cookie = 'auth=; Max-Age=0; path=/; domain=.arendator.kg';
+    }
+
     document.addEventListener('click', (ev) => {
       const trg = ev.target.closest('#btnAuth, #btnAuthMobile, #userAvatar, #userAvatarMobile');
       if (trg){
@@ -856,7 +864,7 @@
     qs('#menuLogout').addEventListener('click', ()=>{
       qs('#accountMenu').classList.add('hidden');
       try{ localStorage.removeItem('userLogged'); localStorage.removeItem('tg_user'); localStorage.removeItem('current_uid'); }catch(_){}
-      document.cookie = 'auth=; Max-Age=0; path=/';
+      killAuthCookies();
       updateAuthUI(); showToast('Вы вышли из аккаунта');
     });
 
@@ -868,7 +876,7 @@
     qs('#menuLogoutM')?.addEventListener('click', ()=> {
       accMenuM?.classList.add('hidden');
       try{ localStorage.removeItem('userLogged'); localStorage.removeItem('tg_user'); localStorage.removeItem('current_uid'); }catch(_){}
-      document.cookie = 'auth=; Max-Age=0; path=/';
+      killAuthCookies();
       updateAuthUI(); showToast('Вы вышли из аккаунта');
     });
 
@@ -1062,4 +1070,3 @@
   <script src="/app.js"></script>
 </body>
 </html>
-
