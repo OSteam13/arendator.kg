@@ -3,129 +3,302 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Arendator.kg — Блог</title>
+  <title>Блог — как снимать квартиру в Бишкеке без посредников | Arendator.kg</title>
+  <meta name="description" content="Свежая статистика по аренде в Бишкеке, советы по проверке квартиры и договора, чек-лист осмотра, как торговаться этично и безопасно платить.">
   <link rel="icon" href="./images/Arendatorkg.png">
   <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     :root{--container:1180px}
-    html,body{overflow-x:hidden;font-family:'Onest',system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
     .container{max-width:var(--container)}
-    header .container>*{position:relative;z-index:10}
-    .user-avatar{width:32px;height:32px;border-radius:9999px;background:#e5e7eb;color:#374151;display:grid;place-items:center;font-weight:700;overflow:hidden;background-size:cover;background-position:center;flex-shrink:0}
+    html,body{overflow-x:hidden;font-family:'Onest',system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-weight:400}
+    .shadow-soft{box-shadow:0 8px 30px rgba(0,0,0,.08)}
+    .hero-title{font-weight:800}
+    .lang-toggle{padding:.25rem .5rem;border:1px solid rgb(229 231 235);border-radius:.75rem}
+    .lang-toggle span{opacity:.55}
+    .lang-toggle .active{opacity:1;font-weight:700}
+    .lead{max-width:70ch}
+    .note{font-size:.9rem}
+    .tgbtn svg{width:18px;height:18px}
+    .toc a{color:#2563eb}
   </style>
 </head>
 <body class="bg-neutral-50 text-neutral-900">
-  <div class="bg-emerald-600 text-white text-center text-xs sm:text-sm py-2">Объявления живут 24 часа · Анти-агент фильтр включён</div>
 
+  <!-- верхняя полоса -->
+  <div class="bg-emerald-600 text-white text-center text-xs sm:text-sm py-2">
+    Объявления живут 24 часа · Анти-агент фильтр включён · Контакты — в Telegram
+  </div>
+
+  <!-- Хедер (две строки, моб — без меню) -->
   <header class="bg-white sticky top-0 z-30 border-b border-neutral-100/80">
-    <div class="container mx-auto px-4 py-3 flex items-center gap-3">
-      <a href="index.html" class="flex items-center gap-2 shrink-0">
-        <img src="./images/Arendatorkg.png" alt="Arendator.kg" class="w-8 h-8 rounded-full object-contain">
-      </a>
-
-      <nav class="ml-2 flex items-center gap-5 text-sm">
-        <a href="post.html" class="px-3 py-1.5 rounded-xl bg-neutral-900 text-white hover:bg-neutral-800">Добавить объявление</a>
-        <a href="sell.html" class="hover:text-blue-600">Продажа</a>
-        <a href="blog.html" class="text-blue-600 font-medium">Блог</a>
-        <a id="navFav" href="favorites.html" class="hover:text-blue-600">Избранное</a>
-      </nav>
-
-      <div class="ml-auto flex items-center gap-3 text-sm">
-        <div class="hidden sm:flex items-center gap-2 text-neutral-600 mr-1">
-          <a class="hover:text-blue-600" href="#">Рус</a><span>·</span><a class="hover:text-blue-600" href="#">Кыр</a>
-        </div>
-        <button id="btnAuth" class="text-blue-600 hover:underline">Вход / регистрация</button>
-        <div id="userBadge" class="hidden items-center"><div id="userAvatar" class="user-avatar ml-2 cursor-pointer" title="Мой аккаунт"></div></div>
+    <div class="container mx-auto px-4 py-2 md:py-3">
+      <div class="flex items-center gap-3">
+        <a href="/" class="flex items-center gap-2 shrink-0">
+          <img src="./images/Arendatorkg.png" alt="Arendator.kg" class="w-8 h-8 rounded-full object-contain">
+          <span class="font-semibold hidden sm:inline">Arendator.kg</span>
+        </a>
+        <div class="flex-1"></div>
+        <a href="https://t.me/arendatorkg" target="_blank" class="tgbtn inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#27A7E7] text-white hover:brightness-95">
+          <svg viewBox="0 0 240 240" fill="currentColor" aria-hidden="true"><path d="M120 0a120 120 0 1 0 0 240 120 120 0 0 0 0-240Zm52.5 82.6-17.7 83.4c-1.3 5.9-4.8 7.3-9.8 4.6l-27-19.9-13 12.5c-1.4 1.4-2.7 2.7-5.6 2.7l2-28.7 52.3-47c2.3-2  -0.5-3.1-3.5-1.1l-64.6 40.7-27.8-8.7c-6.1-1.9-6.2-6.1 1.3-9l108.6-41.9c5-1.9 9.4 1.2 7.8 9Z"/></svg>
+          <span>Перейти в Telegram</span>
+        </a>
+        <button id="langToggle" class="lang-toggle text-sm ml-2" type="button">
+          <span class="ru active">Рус</span> / <span class="ky">Кыр</span>
+        </button>
       </div>
+
+      <!-- вторая строка навигации -->
+      <nav class="mt-2 flex flex-wrap items-center gap-3 text-sm">
+        <a href="/post.html" class="px-3 py-1.5 rounded-xl bg-neutral-900 text-white hover:bg-neutral-800 whitespace-nowrap">Добавить объявление</a>
+        <a href="/blog.html" class="hover:text-blue-600 whitespace-nowrap font-medium">Блог</a>
+        <a href="/favorites.html" class="hover:text-blue-600 whitespace-nowrap">Избранное</a>
+      </nav>
     </div>
   </header>
 
-  <section class="container mx-auto px-4 pt-8">
-    <h1 class="text-3xl md:text-5xl font-extrabold leading-tight text-blue-600">Блог о поиске жилья</h1>
-    <p class="mt-3 text-neutral-600">Советы арендаторам и покупателям, разбор районов и цен.</p>
-
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
-      <article class="rounded-2xl border border-neutral-200 bg-white overflow-hidden shadow-sm">
-        <img src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?q=80&w=1200&auto=format&fit=crop" class="w-full h-44 object-cover" alt="">
-        <div class="p-4">
-          <h3 class="font-semibold">Как снять квартиру за 1–2 дня</h3>
-          <p class="text-sm text-neutral-600 mt-1">Чек-лист из 7 шагов: от фильтров до звонка владельцу.</p>
-          <a href="#" class="inline-block mt-3 text-blue-600">Читать →</a>
-        </div>
-      </article>
-      <article class="rounded-2xl border border-neutral-200 bg-white overflow-hidden shadow-sm">
-        <img src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?q=80&w=1200&auto=format&fit=crop" class="w-full h-44 object-cover" alt="">
-        <div class="p-4">
-          <h3 class="font-semibold">Районы Бишкека: быстрый гид</h3>
-          <p class="text-sm text-neutral-600 mt-1">Сильные стороны Центра, Асанбая, Учкуна и др.</p>
-          <a href="#" class="inline-block mt-3 text-blue-600">Читать →</a>
-        </div>
-      </article>
-      <article class="rounded-2xl border border-neutral-200 bg-white overflow-hidden shadow-sm">
-        <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=1200&auto=format&fit=crop" class="w-full h-44 object-cover" alt="">
-        <div class="p-4">
-          <h3 class="font-semibold">Как отличить агента от владельца</h3>
-          <p class="text-sm text-neutral-600 mt-1">Признаки объявлений-посредников и как их фильтровать.</p>
-          <a href="#" class="inline-block mt-3 text-blue-600">Читать →</a>
-        </div>
-      </article>
+  <!-- Герой -->
+  <section class="container mx-auto px-4 pt-8 pb-2">
+    <div class="rounded-2xl bg-white border border-neutral-200 shadow-soft p-5 md:p-8">
+      <h1 class="hero-title text-3xl md:text-5xl leading-tight text-blue-600">Блог и советы: как снимать квартиру в Бишкеке без лишних нервов</h1>
+      <p class="lead mt-3 text-neutral-700">Ниже — свежие цифры по рынку, краткие выводы и практические чек-листы. Всё просто и по делу.</p>
+      <div class="mt-4 toc text-sm">
+        <span class="text-neutral-500 mr-2">Содержание:</span>
+        <a href="#snapshot" class="hover:underline">Срез рынка</a> ·
+        <a href="#check" class="hover:underline">Проверка квартиры/договора</a> ·
+        <a href="#money" class="hover:underline">Оплата и залог</a> ·
+        <a href="#bargain" class="hover:underline">Этичный торг</a> ·
+        <a href="#checklist" class="hover:underline">Чек-лист осмотра</a> ·
+        <a href="#season" class="hover:underline">Сезонность</a> ·
+        <a href="#fraud" class="hover:underline">Мошенники</a>
+      </div>
     </div>
   </section>
 
-  <footer class="border-t border-neutral-100 bg-white mt-10">
+  <!-- Срез рынка -->
+  <section id="snapshot" class="container mx-auto px-4 pb-6">
+    <div class="grid md:grid-cols-3 gap-4">
+      <article class="rounded-2xl border border-neutral-200 bg-white p-5 shadow-soft">
+        <div class="text-sm text-neutral-500">Аренда (1к)</div>
+        <div class="text-2xl font-extrabold mt-1">30–59 тыс. сом в центре</div>
+        <p class="note mt-2 text-neutral-600">Оценка по данным агрегаторов: вне центра — ~25–40 тыс. сом/мес. Диапазон зависит от серии дома, состояния и локации.</p>
+      </article>
+      <article class="rounded-2xl border border-neutral-200 bg-white p-5 shadow-soft">
+        <div class="text-sm text-neutral-500">Цена метра (кв-ры)</div>
+        <div class="text-2xl font-extrabold mt-1">~95–130 тыс. сом/м²</div>
+        <p class="note mt-2 text-neutral-600">За 2024–весну 2025 фиксировался рост, в отдельных месяцах до ~130 тыс. сом/м² по данным госагентства/обзоров.</p>
+      </article>
+      <article class="rounded-2xl border border-neutral-200 bg-white p-5 shadow-soft">
+        <div class="text-sm text-neutral-500">Доходность аренды</div>
+        <div class="text-2xl font-extrabold mt-1">~7% брутто</div>
+        <p class="note mt-2 text-neutral-600">Оценка валовой доходности по центру/периферии. Реальная — ниже с учётом простоев и расходов.</p>
+      </article>
+    </div>
+
+    <div class="mt-4 grid md:grid-cols-2 gap-4">
+      <article class="rounded-2xl border border-neutral-200 bg-white p-5 shadow-soft">
+        <h3 class="font-bold text-lg">Что влияет на цены</h3>
+        <ul class="mt-2 space-y-1 text-neutral-700">
+          <li>• Общая инфляция держалась в коридоре цели НБКР (5–7%) в 2024 г.</li>
+          <li>• Ключевая ставка НБКР — около 9.25% в 2025 г. (влияет на ипотеки/стоимость денег).</li>
+          <li>• Сезонность: пик заселений — май/сентябрь; спокойнее — зима.</li>
+        </ul>
+        <p class="note text-neutral-500 mt-2">Цифры — усреднения. Важнее конкретная серия дома, адрес, состояние и спрос «здесь и сейчас».</p>
+      </article>
+
+      <aside class="rounded-2xl border border-neutral-200 bg-white p-5 shadow-soft">
+        <h3 class="font-bold text-lg">Быстрые выводы</h3>
+        <ul class="mt-2 space-y-1 text-neutral-700">
+          <li>• Проверяйте 5–7 вариантов подряд: разброс цен объясняется состоянием и этажом.</li>
+          <li>• Следите за новым фидом — лучшие варианты уходят за часы.</li>
+          <li>• Договор + депозит = меньше рисков и споров.</li>
+        </ul>
+        <a href="https://t.me/arendatorkg" target="_blank" class="mt-3 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700">
+          <svg viewBox="0 0 240 240" class="w-4 h-4" fill="currentColor"><path d="M120 0a120 120 0 1 0 0 240 120 120 0 0 0 0-240Zm52.5 82.6-17.7 83.4c-1.3 5.9-4.8 7.3-9.8 4.6l-27-19.9-13 12.5c-1.4 1.4-2.7 2.7-5.6 2.7l2-28.7 52.3-47c2.3-2  -0.5-3.1-3.5-1.1l-64.6 40.7-27.8-8.7c-6.1-1.9-6.2-6.1 1.3-9l108.6-41.9c5-1.9 9.4 1.2 7.8 9Z"/></svg>
+          Подписаться на свежие
+        </a>
+      </aside>
+    </div>
+    <p class="note text-neutral-500 mt-3">Примечание: источники и ссылки на методики — внизу страницы.</p>
+  </section>
+
+  <!-- Проверка квартиры и договора -->
+  <section id="check" class="container mx-auto px-4 pb-6">
+    <div class="rounded-2xl border border-neutral-200 bg-white p-5 shadow-soft">
+      <h2 class="text-xl md:text-2xl font-bold">Проверка квартиры и договора — быстро</h2>
+      <div class="grid md:grid-cols-2 gap-4 mt-3">
+        <ul class="space-y-2 text-neutral-800">
+          <li>• Сверьте паспорт владельца с данными в договоре. Если действует представитель — пусть покажет доверенность.</li>
+          <li>• Посмотрите документ на право собственности (свидетельство/выписка). Сфотографируйте номер и ФИО.</li>
+          <li>• Зафиксируйте показания счётчиков, составьте опись мебели/техники с фото.</li>
+          <li>• В договоре пропишите: срок, сумму, депозит, коммунальные, штрафы, порядок расторжения и возврата залога.</li>
+        </ul>
+        <ul class="space-y-2 text-neutral-800">
+          <li>• Платите безналом с пометкой в назначении или берите расписку. Скрин/квитанцию сохраняйте.</li>
+          <li>• Не отправляйте предоплату «за просмотр». Депозит — только после осмотра и подписания.</li>
+          <li>• Проверяйте дом и подъезд вечером: шум, парковка, освещение — половина комфорта.</li>
+          <li>• Не торопитесь: поспать «с этим решением» одну ночь — дешевле, чем спешить в плохой вариант.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Оплата и залог -->
+  <section id="money" class="container mx-auto px-4 pb-6">
+    <div class="rounded-2xl border border-neutral-200 bg-white p-5 shadow-soft">
+      <h2 class="text-xl md:text-2xl font-bold">Оплата и залог: как безопасно</h2>
+      <div class="grid md:grid-cols-2 gap-4 mt-3">
+        <div>
+          <h3 class="font-semibold">Минимум риска</h3>
+          <ul class="mt-2 space-y-2 text-neutral-800">
+            <li>• Депозит = 0.5–1 месяц. В договоре чётко указать, когда и как возвращается.</li>
+            <li>• Переводы на карту/счёт владельца; если наличные — расписка с паспортными данными.</li>
+            <li>• Коммуналка: приложите фото чеков к переписке раз в месяц.</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-semibold">Красные флаги</h3>
+          <ul class="mt-2 space-y-2 text-neutral-800">
+            <li>• Сильно ниже рынка «только сегодня» + предоплата за просмотр.</li>
+            <li>• «Владелец в разъездах, ключ у знакомого» — просит задаток заранее.</li>
+            <li>• Отказ выдать копию договора/паспортные данные.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Торг -->
+  <section id="bargain" class="container mx-auto px-4 pb-6">
+    <div class="rounded-2xl border border-neutral-200 bg-white p-5 shadow-soft">
+      <h2 class="text-xl md:text-2xl font-bold">Этичный торг, который работает</h2>
+      <ul class="mt-2 space-y-2 text-neutral-800">
+        <li>• Предлагайте «пакетом»: аванс за 2–3 месяца → просьба о -5–8% к ставке.</li>
+        <li>• Аргументируйте: «мы не курим, без животных, платим в первый день» — это снижает риски для владельца.</li>
+        <li>• Непопулярные этажи/без лифта — хороший повод для мягкой скидки.</li>
+        <li>• Просите заменить одну «дорогую проблему» (холодильник/стиралку) или дисконт на это.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Чек-лист осмотра -->
+  <section id="checklist" class="container mx-auto px-4 pb-6">
+    <div class="rounded-2xl border border-neutral-200 bg-white p-5 shadow-soft">
+      <h2 class="text-xl md:text-2xl font-bold">Чек-лист осмотра (сохрани в заметки)</h2>
+      <div class="grid md:grid-cols-3 gap-4 mt-3 text-neutral-800">
+        <ul class="space-y-2">
+          <li>• Входная дверь, замки, домофон, камеры, мусоропровод.</li>
+          <li>• Окна/балкон: продувания, москитки, шум с улицы.</li>
+          <li>• Электрика: автомат, розетки, УЗО, заземление кухни.</li>
+        </ul>
+        <ul class="space-y-2">
+          <li>• Вода: давление, бойлер, потёки, сифон, счетчики.</li>
+          <li>• Тепло: батареи, стояк, утепление углов.</li>
+          <li>• Интернет: провайдеры, роутер, уровень сигнала.</li>
+        </ul>
+        <ul class="space-y-2">
+          <li>• Быттехника: холодильник, плита, стиралка — фото серийников.</li>
+          <li>• Мебель: сколы/пятна — отмечаем в описи.</li>
+          <li>• Подъезд и двор: парковка, освещение, соседи.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Сезонность -->
+  <section id="season" class="container mx-auto px-4 pb-6">
+    <div class="rounded-2xl border border-neutral-200 bg-white p-5 shadow-soft">
+      <h2 class="text-xl md:text-2xl font-bold">Когда искать выгоднее</h2>
+      <p class="mt-2 text-neutral-800">Зимой конкуренция ниже, выбор спокойнее. Конец августа–сентябрь — пик спроса (студенты, ротации), цены и скорость сделок выше. Если сроки плавающие — цельте в «окна» между праздниками и в будние дни до обеда.</p>
+    </div>
+  </section>
+
+  <!-- Мошенники -->
+  <section id="fraud" class="container mx-auto px-4 pb-10">
+    <div class="rounded-2xl border border-neutral-200 bg-white p-5 shadow-soft">
+      <h2 class="text-xl md:text-2xl font-bold">Частые схемы мошенников</h2>
+      <ul class="mt-2 space-y-2 text-neutral-800">
+        <li>• «Залог за показ» или «бронь до вечера» — без договора и документов.</li>
+        <li>• Клон-объявление с украденными фото; просьба уйти в мессенджер и прислать предоплату.</li>
+        <li>• Подмена условий: «коммуналка включена» → «по счётчикам» после заселения — фиксируйте в договоре.</li>
+        <li>• Неформальные «агенты», берущие плату «за базу контактов» — это бесполезно и часто незаконно.</li>
+      </ul>
+      <div class="mt-4">
+        <a href="https://t.me/arendatorkg" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700">
+          <svg viewBox="0 0 240 240" class="w-4 h-4" fill="currentColor"><path d="M120 0a120 120 0 1 0 0 240 120 120 0 0 0 0-240Zm52.5 82.6-17.7 83.4c-1.3 5.9-4.8 7.3-9.8 4.6l-27-19.9-13 12.5c-1.4 1.4-2.7 2.7-5.6 2.7l2-28.7 52.3-47c2.3-2  -0.5-3.1-3.5-1.1l-64.6 40.7-27.8-8.7c-6.1-1.9-6.2-6.1 1.3-9l108.6-41.9c5-1.9 9.4 1.2 7.8 9Z"/></svg>
+          Смотреть свежие объявления
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Футер -->
+  <footer class="border-t border-neutral-100 bg-white">
     <div class="container mx-auto px-4 py-8 grid md:grid-cols-4 gap-6 text-sm">
       <div class="md:col-span-2">
         <div class="flex items-center gap-2">
-          <img src="./images/Arendatorkg.png" class="w-7 h-7 rounded-full object-contain" alt="">
+          <img src="./images/Arendatorkg.png" alt="Arendator.kg" class="w-7 h-7 rounded-full object-contain">
           <span class="font-semibold">Arendator.kg</span>
         </div>
-        <p class="text-neutral-600 mt-2">Подбираем лучшие предложения и убираем посредников.</p>
+        <p class="text-neutral-600 mt-2 max-w-[60ch]">Мы мониторим свежие объявления от владельцев и проверенных источников. Лента и контакты — в Telegram.</p>
       </div>
-      <div><div class="font-semibold">Навигация</div>
+      <div>
+        <div class="font-semibold">Навигация</div>
         <ul class="mt-2 space-y-1 text-neutral-600">
-          <li><a href="index.html" class="hover:text-blue-600">Аренда</a></li>
-          <li><a href="sell.html" class="hover:text-blue-600">Продажа</a></li>
-          <li><a href="blog.html" class="hover:text-blue-600">Блог</a></li>
+          <li><a href="/post.html" class="hover:text-blue-600">Добавить объявление</a></li>
+          <li><a href="/blog.html" class="hover:text-blue-600">Блог</a></li>
+          <li><a href="/favorites.html" class="hover:text-blue-600">Избранное</a></li>
         </ul>
       </div>
-      <div><div class="font-semibold">Правовое</div>
+      <div>
+        <div class="font-semibold">Правовое</div>
         <ul class="mt-2 space-y-1 text-neutral-600">
-          <li><a href="#" class="hover:text-blue-600">Пользовательское соглашение</a></li>
-          <li><a href="#" class="hover:text-blue-600">Политика конфиденциальности</a></li>
+          <li><a class="hover:text-blue-600" href="data-deletion.html">Удаление данных</a></li>
+          <li><a class="hover:text-blue-600" href="#">Политика конфиденциальности</a></li>
         </ul>
       </div>
     </div>
     <div class="text-center text-xs text-neutral-500 pb-6">© 2025 — Arendator.kg</div>
   </footer>
 
-  <!-- лёгкий auth как на sell.html -->
-  <div id="modalLogin" class="fixed inset-0 hidden items-center justify-center bg-black/40 p-4">
-    <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-soft">
-      <div class="text-lg font-semibold">Вход</div>
-      <div class="my-4 flex items-center gap-3">
-        <div class="h-px flex-1 bg-neutral-200"></div>
-        <div class="text-xs text-neutral-500">Telegram</div>
-        <div class="h-px flex-1 bg-neutral-200"></div>
-      </div>
-      <div id="tgLoginContainer" class="flex justify-center"></div>
-      <div class="mt-4 text-right"><button id="btnCloseLogin" class="px-4 py-2 rounded-xl border border-neutral-200">Закрыть</button></div>
-    </div>
-  </div>
-
-  <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 hidden px-4 py-2 rounded-xl bg-neutral-900 text-white text-sm"></div>
-
   <script>
-    const qs=(s,el=document)=>el.querySelector(s);
-    const showToast=(m)=>{const t=qs('#toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(showToast.t);showToast.t=setTimeout(()=>t.classList.add('hidden'),2200);};
-    function mountTelegramWidget(){ if(qs('#tgLoginContainer script'))return; const s=document.createElement('script'); s.src='https://telegram.org/js/telegram-widget.js?22'; s.async=true; s.setAttribute('data-telegram-login','ArendatorKGbot'); s.setAttribute('data-size','large'); s.setAttribute('data-userpic','false'); s.setAttribute('data-request-access','write'); s.setAttribute('data-auth-url','/api/tg-login'); qs('#tgLoginContainer').appendChild(s); }
-    function updateAuthUI(){ const logged=!!localStorage.getItem('userLogged'); qs('#btnAuth').textContent= logged?'Мой аккаунт':'Вход / регистрация'; const badge=qs('#userBadge'), av=qs('#userAvatar'); if(logged){badge?.classList.remove('hidden'); let u={}; try{u=JSON.parse(localStorage.getItem('tg_user')||'{}')}catch{} const loc=localStorage.getItem('avatar_url'); const L=(u.first_name?.[0]||u.username?.[0]||'U').toUpperCase(); av.style.backgroundImage=''; av.textContent=L; if(loc){av.style.backgroundImage=`url(${loc})`; av.textContent='';} else if(u.photo_url){av.style.backgroundImage=`url(${u.photo_url})`; av.textContent='';}} else {badge?.classList.add('hidden');}}
-    window.addEventListener('message',(ev)=>{const m=ev.data||{}; if(m.type==='tg-auth'&&m.ok){localStorage.setItem('userLogged','1'); localStorage.setItem('tg_user',JSON.stringify(m.user||{})); showToast('Вход через Telegram выполнен'); updateAuthUI();}});
-    document.addEventListener('click',(e)=>{const t=e.target.closest('#btnAuth,#userAvatar'); if(!t)return; e.preventDefault(); if(localStorage.getItem('userLogged')) location.href='index.html#account'; else {qs('#modalLogin').classList.remove('hidden');qs('#modalLogin').classList.add('flex'); mountTelegramWidget();}});
-    qs('#btnCloseLogin').onclick=()=>{qs('#modalLogin').classList.add('hidden');qs('#modalLogin').classList.remove('flex');};
-    updateAuthUI();
+    // простой переключатель языка (для навигации/кнопок). Контент блога — на русском.
+    (function(){
+      const btn = document.getElementById('langToggle');
+      const set = (lang) => {
+        btn.querySelector('.ru').classList.toggle('active', lang==='ru');
+        btn.querySelector('.ky').classList.toggle('active', lang==='ky');
+        // подписи навигации
+        const nav = document.querySelector('header nav');
+        if (!nav) return;
+        const items = {
+          ru: ['Добавить объявление','Блог','Избранное','Перейти в Telegram'],
+          ky: ['Жарна кошуу','Блог','Тандалгандар','Telegramга өтүү']
+        };
+        const [add,blog,fav,tg] = items[lang];
+        nav.children[0].textContent = add;
+        nav.children[1].textContent = blog;
+        nav.children[2].textContent = fav;
+        const tgBtn = document.querySelector('.tgbtn span');
+        if (tgBtn) tgBtn.textContent = tg;
+      };
+      let cur = localStorage.getItem('lang') || 'ru';
+      set(cur);
+      btn.addEventListener('click', () => { cur = (cur==='ru'?'ky':'ru'); localStorage.setItem('lang',cur); set(cur); });
+    })();
   </script>
-</body>
-<script src="/app.js"></script>
-</html>
 
+  <!-- Источники (видны пользователю внизу) -->
+  <section class="container mx-auto px-4 pb-10">
+    <details class="rounded-2xl border border-neutral-200 bg-white p-5 shadow-soft">
+      <summary class="cursor-pointer font-semibold">Источники и методики</summary>
+      <div class="mt-3 text-sm text-neutral-700 space-y-2">
+        <p>Аренда (1к) 30–59 тыс. сом в центре; вне центра 25–40 тыс. — усреднённые коридоры по данным открытых агрегаторов цен на 2025 год. См. диапазоны у Wise/Numbeo. (См. ссылки ниже.)</p>
+        <p>Цена метра: сообщения госагентств и сводки СМИ о динамике в 2024–весной 2025 (рост и значения по месяцам).</p>
+        <p>Доходность ~7% — ориентиры по брутто-yield из открытых калькуляторов/сборников (без учёта простоев/ремонтов).</p>
+        <p>Контекст: CPI по KR и ставка НБКР (влияние на стоимость денег и ипотеку).</p>
+      </div>
+    </details>
+  </section>
+</body>
+</html>
