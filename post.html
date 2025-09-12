@@ -3,369 +3,310 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Arendator.kg — Добавить объявление</title>
+  <title>Добавить объявление | Arendator.kg</title>
+  <meta name="description" content="Добавьте объявление об аренде квартиры в Бишкеке — фото, описание, цена.">
   <link rel="icon" href="./images/Arendatorkg.png">
   <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     :root{--container:1180px}
-    html,body{overflow-x:hidden;font-family:'Onest',system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
     .container{max-width:var(--container)}
-    header .container>*{position:relative;z-index:10}
+    html,body{overflow-x:hidden;font-family:'Onest',system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
     .shadow-soft{box-shadow:0 8px 30px rgba(0,0,0,.08)}
-    .user-avatar{width:32px;height:32px;border-radius:9999px;background:#e5e7eb;color:#374151;display:grid;place-items:center;font-weight:700;overflow:hidden;background-size:cover;background-position:center;flex-shrink:0}
-    .avatar-lg{width:96px;height:96px;border-radius:9999px;background:#e5e7eb;display:grid;place-items:center;overflow:hidden;background-size:cover;background-position:center;font-weight:800;font-size:36px;color:#374151;margin:0 auto}
-    .req:after{content:" *"; color:#ef4444}
+    .hero-title{font-weight:800}
+    .lang-toggle{padding:.25rem .5rem;border:1px solid rgb(229 231 235);border-radius:.75rem}
+    .lang-toggle span{opacity:.55}
+    .lang-toggle .active{opacity:1;font-weight:700}
+    .card{transition:box-shadow .2s ease}
+    .card:hover{box-shadow:0 10px 30px rgba(0,0,0,.08)}
   </style>
 </head>
 <body class="bg-neutral-50 text-neutral-900">
 
-  <!-- Верхняя плашка -->
+  <!-- верхняя полоса -->
   <div class="bg-emerald-600 text-white text-center text-xs sm:text-sm py-2">
-    Объявления живут 24 часа · Анти-агент фильтр включён
+    Объявления живут 24 часа · Анти-агент фильтр включён · Контакты — в Telegram
   </div>
 
-  <!-- Хедер -->
+  <!-- Хедер: как на главной (две строки, без «Меню» на мобиле) -->
   <header class="bg-white sticky top-0 z-30 border-b border-neutral-100/80">
-    <div class="container mx-auto px-4 py-3 flex items-center gap-3">
-      <a href="index.html" class="flex items-center gap-2 shrink-0">
-        <img src="./images/Arendatorkg.png" alt="Arendator.kg" class="w-8 h-8 rounded-full object-contain">
-      </a>
-
-      <nav class="ml-2 flex items-center gap-5 text-sm">
-        <a href="post.html" class="px-3 py-1.5 rounded-xl bg-neutral-900 text-white">Добавить объявление</a>
-        <a href="sell.html" class="hover:text-blue-600">Продажа</a>
-        <a href="blog.html" class="hover:text-blue-600">Блог</a>
-        <a href="favorites.html" class="hover:text-blue-600">Избранное</a>
-      </nav>
-
-      <div class="ml-auto flex items-center gap-3 text-sm">
-        <div class="hidden sm:flex items-center gap-2 text-neutral-600 mr-1">
-          <a class="hover:text-blue-600" href="#">Рус</a><span>·</span><a class="hover:text-blue-600" href="#">Кыр</a>
-        </div>
-        <button id="btnAuth" class="text-blue-600 hover:underline">Вход / регистрация</button>
-        <div id="userBadge" class="hidden items-center"><div id="userAvatar" class="user-avatar ml-2 cursor-pointer" title="Мой аккаунт"></div></div>
+    <div class="container mx-auto px-4 py-2 md:py-3">
+      <div class="flex items-center gap-3">
+        <a href="/" class="flex items-center gap-2 shrink-0">
+          <img src="./images/Arendatorkg.png" alt="Arendator.kg" class="w-8 h-8 rounded-full object-contain">
+          <span class="font-semibold hidden sm:inline">Arendator.kg</span>
+        </a>
+        <div class="flex-1"></div>
+        <a href="https://t.me/arendatorkg" target="_blank" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#27A7E7] text-white hover:brightness-95">
+          <!-- Иконка Telegram -->
+          <svg viewBox="0 0 240 240" fill="currentColor" class="w-4 h-4" aria-hidden="true"><path d="M120 0a120 120 0 1 0 0 240 120 120 0 0 0 0-240Zm52.5 82.6-17.7 83.4c-1.3 5.9-4.8 7.3-9.8 4.6l-27-19.9-13 12.5c-1.4 1.4-2.7 2.7-5.6 2.7l2-28.7 52.3-47c2.3-2  -0.5-3.1-3.5-1.1l-64.6 40.7-27.8-8.7c-6.1-1.9-6.2-6.1 1.3-9l108.6-41.9c5-1.9 9.4 1.2 7.8 9Z"/></svg>
+          <span>Перейти в Telegram</span>
+        </a>
+        <button id="langToggle" class="lang-toggle text-sm ml-2" type="button">
+          <span class="ru active">Рус</span> / <span class="ky">Кыр</span>
+        </button>
       </div>
+
+      <!-- навигация второй строкой -->
+      <nav class="mt-2 flex flex-wrap items-center gap-3 text-sm">
+        <a href="/post.html" class="px-3 py-1.5 rounded-xl bg-neutral-900 text-white hover:bg-neutral-800 whitespace-nowrap">Добавить объявление</a>
+        <a href="/blog.html" class="hover:text-blue-600 whitespace-nowrap">Блог</a>
+        <a href="/favorites.html" class="hover:text-blue-600 whitespace-nowrap">Избранное</a>
+      </nav>
     </div>
   </header>
 
-  <!-- Контент -->
-  <section class="container mx-auto px-4 pt-8">
-    <div class="bg-white border border-neutral-200 rounded-2xl shadow-soft p-5">
-      <h1 class="text-3xl md:text-5xl font-extrabold leading-tight text-blue-600">Добавить объявление</h1>
-      <p class="mt-2 text-neutral-600">Заполните форму. Хорошие фото и точная цена ускоряют отклик.</p>
-
-      <form id="adForm" class="mt-6 grid md:grid-cols-3 gap-6">
-        <!-- левая колонка -->
-        <div class="md:col-span-2 grid sm:grid-cols-2 gap-4">
-          <label class="block">
-            <span class="req text-sm text-neutral-700">Заголовок</span>
-            <input id="fTitle" required class="mt-1 w-full px-3 py-2 rounded-xl border border-neutral-200" placeholder="2к, Центр, свежий ремонт">
-          </label>
-
-          <label class="block">
-            <span class="req text-sm text-neutral-700">Цена (сом)</span>
-            <input id="fPrice" type="number" min="0" required class="mt-1 w-full px-3 py-2 rounded-xl border border-neutral-200" placeholder="35000">
-          </label>
-
-          <label class="block">
-            <span class="req text-sm text-neutral-700">Район / локация</span>
-            <input id="fDistrict" required class="mt-1 w-full px-3 py-2 rounded-xl border border-neutral-200" placeholder="Центр">
-          </label>
-
-          <label class="block">
-            <span class="req text-sm text-neutral-700">Комнат</span>
-            <select id="fRooms" required class="mt-1 w-full px-3 py-2 rounded-xl border border-neutral-200">
-              <option value="" disabled selected>Выберите…</option>
-              <option>Студия</option>
-              <option>1</option>
-              <option>2</option>
-              <option>3+</option>
-            </select>
-          </label>
-
-          <label class="block">
-            <span class="req text-sm text-neutral-700">Телефон</span>
-            <input id="fPhone" required class="mt-1 w-full px-3 py-2 rounded-xl border border-neutral-200" placeholder="+996 555 123 456">
-          </label>
-
-          <div class="block">
-            <span class="text-sm text-neutral-700">Формат</span>
-            <div class="mt-2 flex items-center gap-4">
-              <label class="inline-flex items-center gap-2">
-                <input id="fDaily" type="checkbox"> посуточно
-              </label>
-              <label class="inline-flex items-center gap-2">
-                <input id="fOwner" type="checkbox" checked> от владельца
-              </label>
-            </div>
-          </div>
-
-          <label class="sm:col-span-2 block">
-            <span class="text-sm text-neutral-700">Описание</span>
-            <textarea id="fDesc" rows="4" class="mt-1 w-full px-3 py-2 rounded-xl border border-neutral-200" placeholder="Кратко опишите квартиру, мебель, условия…"></textarea>
-          </label>
-        </div>
-
-        <!-- правая колонка -->
-        <div>
-          <div class="text-sm text-neutral-700">Фотография</div>
-          <div class="mt-2 aspect-[4/3] bg-neutral-100 rounded-xl grid place-items-center overflow-hidden border border-neutral-200">
-            <img id="imgPreview" class="hidden w-full h-full object-cover" alt="">
-            <div id="imgPlaceholder" class="text-neutral-500 text-sm">Нет фото</div>
-          </div>
-          <div class="mt-3 grid grid-cols-2 gap-2">
-            <label class="px-3 py-2 rounded-xl bg-neutral-900 text-white text-center cursor-pointer">
-              <input id="fImage" type="file" accept="image/*" class="hidden">Загрузить
-            </label>
-            <button id="btnImgRemove" type="button" class="px-3 py-2 rounded-xl border border-neutral-200">Убрать</button>
-          </div>
-
-          <div class="mt-6 grid grid-cols-2 gap-2">
-            <button type="button" id="btnCancel" class="px-4 py-2 rounded-xl border border-neutral-200">Отмена</button>
-            <button type="submit" class="px-4 py-2 rounded-xl bg-blue-600 text-white">Опубликовать</button>
-          </div>
-
-          <p class="mt-3 text-xs text-neutral-500">
-            Фото автоматически обрежем по центру и сожмём до 1200×900 для быстрой загрузки.
-          </p>
-        </div>
-      </form>
+  <!-- Герой -->
+  <section class="container mx-auto px-4 pt-8 pb-6">
+    <div class="rounded-2xl bg-white border border-neutral-200 shadow-soft p-5 md:p-8">
+      <h1 class="hero-title text-3xl md:text-4xl leading-tight text-blue-600">Добавить объявление</h1>
+      <p class="mt-2 text-neutral-700">Заполните форму, прикрепите 1–8 фото. Объявление сохранится локально и появится в ленте на главной.</p>
     </div>
   </section>
 
-  <!-- Футер -->
-  <footer class="border-t border-neutral-100 bg-white mt-10">
-    <div class="container mx-auto px-4 py-8 grid md:grid-cols-4 gap-6 text-sm">
-      <div class="md:col-span-2">
-        <div class="flex items-center gap-2">
-          <img src="./images/Arendatorkg.png" class="w-7 h-7 rounded-full object-contain" alt="">
-          <span class="font-semibold">Arendator.kg</span>
+  <!-- Форма + предпросмотр -->
+  <section class="container mx-auto px-4 pb-10">
+    <div class="grid lg:grid-cols-2 gap-6">
+      <!-- Форма -->
+      <form id="postForm" class="rounded-2xl bg-white border border-neutral-200 shadow-soft p-5 grid gap-3">
+        <div class="grid sm:grid-cols-2 gap-3">
+          <div>
+            <label class="text-sm text-neutral-600">Тип</label>
+            <select id="fType" class="mt-1 w-full px-3 py-2 rounded-xl border border-neutral-200">
+              <option value="Квартира">Квартира</option>
+              <option value="Комната">Комната</option>
+              <option value="Дом">Дом</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-sm text-neutral-600">Комнат</label>
+            <select id="fRooms" class="mt-1 w-full px-3 py-2 rounded-xl border border-neutral-200">
+              <option>1</option><option>2</option><option>3</option><option>3+</option>
+            </select>
+          </div>
         </div>
-        <p class="text-neutral-600 mt-2">Публикуйте и находите жильё без посредников.</p>
-      </div>
-      <div><div class="font-semibold">Навигация</div>
-        <ul class="mt-2 space-y-1 text-neutral-600">
-          <li><a href="index.html" class="hover:text-blue-600">Аренда</a></li>
-          <li><a href="sell.html" class="hover:text-blue-600">Продажа</a></li>
-          <li><a href="blog.html" class="hover:text-blue-600">Блог</a></li>
-        </ul>
-      </div>
-      <div><div class="font-semibold">Правовое</div>
-        <ul class="mt-2 space-y-1 text-neutral-600">
-          <li><a href="#" class="hover:text-blue-600">Пользовательское соглашение</a></li>
-          <li><a href="#" class="hover:text-blue-600">Политика конфиденциальности</a></li>
-        </ul>
-      </div>
+
+        <div class="grid sm:grid-cols-2 gap-3">
+          <div>
+            <label class="text-sm text-neutral-600">Район / локация</label>
+            <input id="fDistrict" placeholder="Центр, Асанбай, Восток-5…" class="mt-1 w-full px-3 py-2 rounded-xl border border-neutral-200">
+          </div>
+          <div>
+            <label class="text-sm text-neutral-600">Цена (сом/мес или сом/сут)</label>
+            <input id="fPrice" type="number" min="0" placeholder="35000" class="mt-1 w-full px-3 py-2 rounded-xl border border-neutral-200">
+          </div>
+        </div>
+
+        <div>
+          <label class="text-sm text-neutral-600">Заголовок</label>
+          <input id="fTitle" maxlength="80" placeholder="2к, Центр, свежий ремонт" class="mt-1 w-full px-3 py-2 rounded-xl border border-neutral-200">
+        </div>
+
+        <div>
+          <label class="text-sm text-neutral-600">Описание</label>
+          <textarea id="fDesc" rows="4" placeholder="Кратко опишите состояние, мебель, условия…" class="mt-1 w-full px-3 py-2 rounded-xl border border-neutral-200"></textarea>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-3">
+          <label class="inline-flex items-center gap-2">
+            <input id="fDaily" type="checkbox"> <span>Посуточно</span>
+          </label>
+          <label class="inline-flex items-center gap-2">
+            <input id="fOwner" type="checkbox" checked> <span>Я владелец (без посредников)</span>
+          </label>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-3">
+          <div>
+            <label class="text-sm text-neutral-600">Телефон для связи</label>
+            <input id="fPhone" placeholder="+996 555 123-456" class="mt-1 w-full px-3 py-2 rounded-xl border border-neutral-200">
+          </div>
+          <div>
+            <label class="text-sm text-neutral-600">Фото (1–8)</label>
+            <input id="fPhotos" type="file" accept="image/*" multiple class="mt-1 w-full px-3 py-2 rounded-xl border border-neutral-200">
+          </div>
+        </div>
+
+        <div id="photoPreview" class="mt-1 grid grid-cols-3 sm:grid-cols-4 gap-2"></div>
+
+        <div class="grid sm:grid-cols-2 gap-3 pt-2">
+          <button type="submit" class="px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700">Опубликовать</button>
+          <button id="btnClear" type="button" class="px-4 py-2 rounded-xl border border-neutral-200 hover:bg-neutral-50">Сбросить</button>
+        </div>
+        <div id="note" class="text-xs text-neutral-500"></div>
+      </form>
+
+      <!-- Превью карточки -->
+      <aside class="rounded-2xl bg-white border border-neutral-200 shadow-soft p-5">
+        <h2 class="font-semibold mb-3">Предпросмотр</h2>
+        <div id="previewCard" class="card rounded-2xl border border-neutral-200 bg-white overflow-hidden">
+          <div class="aspect-[4/3] bg-neutral-100 grid place-items-center text-neutral-500">Фото</div>
+          <div class="p-4 space-y-3">
+            <div class="flex items-start gap-2">
+              <h3 class="font-semibold leading-snug" id="pTitle">Заголовок</h3>
+              <span class="ml-auto inline-flex items-center text-xs px-2 py-1 rounded-full whitespace-nowrap bg-emerald-100 text-emerald-700" id="pOwner">Без посредников</span>
+            </div>
+            <div class="text-2xl font-bold" id="pPrice">0 <span class="text-sm font-medium text-neutral-500">сом/мес</span></div>
+            <div class="flex items-center gap-2 text-sm text-neutral-600"><div id="pDistrict">Район</div><div>·</div><div>Комнат: <span id="pRooms">1</span></div></div>
+            <div class="grid grid-cols-1">
+              <span class="px-3 py-2 rounded-xl bg-blue-600 text-white text-sm text-center">Номер в Telegram</span>
+            </div>
+          </div>
+        </div>
+        <p class="text-xs text-neutral-500 mt-3">* На главной карточка будет выглядеть так же.</p>
+      </aside>
     </div>
-    <div class="text-center text-xs text-neutral-500 pb-6">© 2025 — Arendator.kg</div>
+  </section>
+
+  <footer class="border-t border-neutral-100 bg-white">
+    <div class="container mx-auto px-4 py-6 text-xs text-neutral-500 text-center">© 2025 — Arendator.kg</div>
   </footer>
 
-  <!-- Модалки: вход / профиль -->
-  <div id="modalLogin" class="fixed inset-0 hidden items-center justify-center bg-black/40 p-4">
-    <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-soft">
-      <div class="text-lg font-semibold">Вход</div>
-      <p class="text-sm text-neutral-600 mt-1">Войдите по SMS или через Telegram.</p>
-      <div class="my-4 flex items-center gap-3">
-        <div class="h-px flex-1 bg-neutral-200"></div>
-        <div class="text-xs text-neutral-500">Telegram</div>
-        <div class="h-px flex-1 bg-neutral-200"></div>
-      </div>
-      <div id="tgLoginContainer" class="flex justify-center"></div>
-      <div class="mt-4 text-right"><button id="btnCloseLogin" class="px-4 py-2 rounded-xl border border-neutral-200">Закрыть</button></div>
-    </div>
-  </div>
-
-  <div id="modalProfile" class="fixed inset-0 hidden items-center justify-center bg-black/40 p-4">
-    <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-soft">
-      <div class="text-lg font-semibold">Мой профиль</div>
-      <div class="mt-4">
-        <div id="profileAvatar" class="avatar-lg">U</div>
-        <div class="mt-4 grid grid-cols-2 gap-2">
-          <label class="px-4 py-2 rounded-xl bg-neutral-900 text-white text-center cursor-pointer">
-            <input id="avatarFile" type="file" accept="image/*" class="hidden">Загрузить
-          </label>
-          <button id="btnAvatarRemove" class="px-4 py-2 rounded-xl border border-neutral-200">Удалить</button>
-        </div>
-      </div>
-      <div class="mt-6 grid grid-cols-2 gap-2">
-        <button id="btnCloseProfile" class="px-4 py-2 rounded-xl border border-neutral-200">Закрыть</button>
-        <button id="btnSaveProfile" class="px-4 py-2 rounded-xl bg-blue-600 text-white">Сохранить</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Toast -->
-  <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 hidden px-4 py-2 rounded-xl bg-neutral-900 text-white text-sm"></div>
-
   <script>
-    /* ===== helpers ===== */
-    const qs=(s,el=document)=>el.querySelector(s);
-    const showToast=(m)=>{const t=qs('#toast'); t.textContent=m; t.classList.remove('hidden'); clearTimeout(showToast.t); showToast.t=setTimeout(()=>t.classList.add('hidden'),2200);};
+    // ======= УТИЛИТЫ =======
+    const qs = (s,el=document)=>el.querySelector(s);
+    const qsa = (s,el=document)=>Array.from(el.querySelectorAll(s));
+    const escapeHtml = s => String(s||'').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    const note = (m)=>{ const n=qs('#note'); if(n) n.textContent=m||''; };
 
-    function mountTelegramWidget(){
-      if(qs('#tgLoginContainer script')) return;
-      const s=document.createElement('script');
-      s.src='https://telegram.org/js/telegram-widget.js?22';
-      s.async=true;
-      s.setAttribute('data-telegram-login','ArendatorKGbot');
-      s.setAttribute('data-size','large');
-      s.setAttribute('data-userpic','false');
-      s.setAttribute('data-request-access','write');
-      s.setAttribute('data-auth-url','/api/tg-login');
-      qs('#tgLoginContainer').appendChild(s);
-    }
-    window.addEventListener('message',(ev)=>{
-      const m=ev.data||{};
-      if(m.type==='tg-auth'&&m.ok){
-        localStorage.setItem('userLogged','1');
-        localStorage.setItem('tg_user', JSON.stringify(m.user||{}));
-        updateAuthUI();
-        showToast('Вход через Telegram выполнен');
-      }
-    });
-
-    function updateAuthUI(){
-      const logged = !!localStorage.getItem('userLogged');
-      const btn=qs('#btnAuth'); const badge=qs('#userBadge'); const av=qs('#userAvatar');
-      if(logged){
-        btn.textContent='Мой аккаунт';
-        badge.classList.remove('hidden');
-        let u={}; try{u=JSON.parse(localStorage.getItem('tg_user')||'{}')}catch{}
-        const loc=localStorage.getItem('avatar_url');
-        const L=(u.first_name?.[0]||u.username?.[0]||'U').toUpperCase();
-        av.style.backgroundImage=''; av.textContent=L;
-        if(loc){av.style.backgroundImage=`url(${loc})`; av.textContent='';}
-        else if(u.photo_url){av.style.backgroundImage=`url(${u.photo_url})`; av.textContent='';}
-      } else {
-        btn.textContent='Вход / регистрация';
-        badge.classList.add('hidden');
-      }
-    }
-
-    document.addEventListener('click',(e)=>{
-      const t=e.target.closest('#btnAuth,#userAvatar');
-      if(!t) return;
-      e.preventDefault();
-      if(localStorage.getItem('userLogged')){ // открыть профиль
-        qs('#modalProfile').classList.remove('hidden'); qs('#modalProfile').classList.add('flex'); syncProfile();
-      }else{
-        qs('#modalLogin').classList.remove('hidden'); qs('#modalLogin').classList.add('flex'); mountTelegramWidget();
-      }
-    });
-    qs('#btnCloseLogin').onclick=()=>{qs('#modalLogin').classList.add('hidden');qs('#modalLogin').classList.remove('flex');};
-    qs('#btnCloseProfile').onclick=()=>{qs('#modalProfile').classList.add('hidden');qs('#modalProfile').classList.remove('flex');};
-    qs('#btnSaveProfile').onclick=()=>{qs('#modalProfile').classList.add('hidden');qs('#modalProfile').classList.remove('flex'); showToast('Профиль сохранён');};
-
-    // аватар в профиле
-    qs('#avatarFile').addEventListener('change', async (e)=>{
-      const f=e.target.files?.[0]; if(!f) return;
-      const url = await fileToAvatarDataURL(f,256);
-      localStorage.setItem('avatar_url', url);
-      syncProfile(); updateAuthUI();
-    });
-    qs('#btnAvatarRemove').onclick=()=>{ localStorage.removeItem('avatar_url'); syncProfile(); updateAuthUI(); };
-    function syncProfile(){
-      const box=qs('#profileAvatar');
-      let u={}; try{u=JSON.parse(localStorage.getItem('tg_user')||'{}')}catch{}
-      const letter=(u.first_name?.[0]||u.username?.[0]||'U').toUpperCase();
-      const loc=localStorage.getItem('avatar_url');
-      box.style.backgroundImage=''; box.textContent=letter;
-      if(loc){box.style.backgroundImage=`url(${loc})`; box.textContent='';}
-      else if(u.photo_url){box.style.backgroundImage=`url(${u.photo_url})`; box.textContent='';}
-    }
-    function fileToAvatarDataURL(file,size=256){
-      return new Promise((res,rej)=>{
-        const img=new Image();
-        img.onload=()=>{const s=Math.min(img.width,img.height),sx=(img.width-s)/2,sy=(img.height-s)/2;
-          const c=document.createElement('canvas'); c.width=size; c.height=size;
-          const ctx=c.getContext('2d'); ctx.drawImage(img,sx,sy,s,s,0,0,size,size);
-          res(c.toDataURL('image/jpeg',0.85));
-        };
-        img.onerror=rej;
-        const r=new FileReader(); r.onload=()=>img.src=r.result; r.onerror=rej; r.readAsDataURL(file);
-      });
-    }
-
-    /* ===== загрузка фото для объявления (обрезка 1200×900) ===== */
-    let imageDataUrl = ""; // финальный dataURL
-    qs('#fImage').addEventListener('change', async (e)=>{
-      const f=e.target.files?.[0]; if(!f) return;
-      try{
-        imageDataUrl = await cropToRatio(f, 1200, 900); // 4:3
-        qs('#imgPreview').src=imageDataUrl;
-        qs('#imgPreview').classList.remove('hidden');
-        qs('#imgPlaceholder').classList.add('hidden');
-      }catch(err){ showToast('Не удалось обработать изображение'); }
-    });
-    qs('#btnImgRemove').onclick=()=>{ imageDataUrl=""; qs('#imgPreview').src=""; qs('#imgPreview').classList.add('hidden'); qs('#imgPlaceholder').classList.remove('hidden'); };
-
-    function cropToRatio(file, w=1200, h=900){
-      return new Promise((resolve,reject)=>{
-        const img=new Image();
-        img.onload=()=>{
-          // кроп по центру с нужным соотношением
-          const targetRatio = w/h;
-          let sx=0, sy=0, sw=img.width, sh=img.height;
-          const srcRatio = img.width/img.height;
-          if(srcRatio>targetRatio){ // слишком широкий — обрежем по бокам
-            sh = img.height;
-            sw = sh*targetRatio;
-            sx = (img.width - sw)/2;
-          }else{ // слишком высокий — обрежем сверху/снизу
-            sw = img.width;
-            sh = sw/targetRatio;
-            sy = (img.height - sh)/2;
-          }
-          const c=document.createElement('canvas'); c.width=w; c.height=h;
-          const ctx=c.getContext('2d'); ctx.drawImage(img, sx,sy,sw,sh, 0,0,w,h);
-          resolve(c.toDataURL('image/jpeg',0.85));
-        };
-        img.onerror=reject;
-        const r=new FileReader(); r.onload=()=>img.src=r.result; r.onerror=reject; r.readAsDataURL(file);
-      });
-    }
-
-    /* ===== сохранение объявления ===== */
-    qs('#adForm').addEventListener('submit', (e)=>{
-      e.preventDefault();
-      if(!localStorage.getItem('userLogged')){
-        showToast('Войдите, чтобы публиковать'); 
-        qs('#modalLogin').classList.remove('hidden'); qs('#modalLogin').classList.add('flex'); mountTelegramWidget();
-        return;
-      }
-      const title = qs('#fTitle').value.trim();
-      const price = Number(qs('#fPrice').value||0);
-      const district = qs('#fDistrict').value.trim();
-      const rooms = qs('#fRooms').value||'';
-      const phone = qs('#fPhone').value.trim();
-      const daily = qs('#fDaily').checked;
-      const owner = qs('#fOwner').checked;
-      const desc  = qs('#fDesc').value.trim();
-
-      if(!title || !price || !district || !rooms || !phone){
-        showToast('Заполните обязательные поля'); return;
-      }
-
-      // забираем текущие объявления, если есть
-      let list=[]; try{ list = JSON.parse(localStorage.getItem('listings')||'[]'); }catch{}
-      const id = 'u' + Math.random().toString(36).slice(2,8);
-      const item = {
-        id, title, price, district, rooms,
-        daily, owner, img: imageDataUrl, phone,
-        desc, expiresAt: Date.now()+24*3600e3
+    // язык только для кнопок (контент формы — RU)
+    (function(){
+      const btn = qs('#langToggle');
+      const set = (lang) => {
+        btn.querySelector('.ru').classList.toggle('active', lang==='ru');
+        btn.querySelector('.ky').classList.toggle('active', lang==='ky');
       };
-      // добавляем в начало
-      list.unshift(item);
-      localStorage.setItem('listings', JSON.stringify(list));
+      let cur = localStorage.getItem('lang') || 'ru'; set(cur);
+      btn.addEventListener('click', ()=>{ cur=(cur==='ru'?'ky':'ru'); localStorage.setItem('lang',cur); set(cur); });
+    })();
 
-      showToast('Объявление опубликовано');
-      setTimeout(()=>{ location.href='index.html'; }, 600);
+    // ======= ПРЕДПРОСМОТР =======
+    const f = {
+      type: qs('#fType'), rooms: qs('#fRooms'), district: qs('#fDistrict'), price: qs('#fPrice'),
+      title: qs('#fTitle'), desc: qs('#fDesc'), daily: qs('#fDaily'), owner: qs('#fOwner'),
+      phone: qs('#fPhone'), photos: qs('#fPhotos')
+    };
+    const pv = { title:qs('#pTitle'), price:qs('#pPrice'), rooms:qs('#pRooms'), district:qs('#pDistrict'), owner:qs('#pOwner') };
+
+    function refreshPreview(firstImg){
+      const price = Number(f.price.value||0);
+      const unit = f.daily.checked ? 'сом/сут' : 'сом/мес';
+      pv.title.textContent = f.title.value.trim() || 'Заголовок';
+      pv.price.innerHTML   = (price? price.toLocaleString('ru-RU') : '0') + ` <span class="text-sm font-medium text-neutral-500">${unit}</span>`;
+      pv.rooms.textContent = f.rooms.value || '1';
+      pv.district.textContent = f.district.value.trim() || 'Район';
+      pv.owner.textContent = f.owner.checked ? 'Без посредников' : 'Источник';
+      if (firstImg){
+        const box = qs('#previewCard .aspect-\\[4\\/3\\]');
+        box.innerHTML = `<img src="${firstImg}" alt="Фото" class="w-full h-full object-cover">`;
+      }
+    }
+    ['change','input'].forEach(evt=>{
+      qsa('#postForm input, #postForm select, #postForm textarea').forEach(el=>el.addEventListener(evt, ()=>refreshPreview()));
     });
 
-    // первичная инициализация
-    updateAuthUI();
+    // ======= ФОТО: загрузка и компрессия =======
+    const photoPreview = qs('#photoPreview');
+    let photoDataUrls = []; // dataURL[]
+
+    async function fileToDataURL(file, maxSide=1600, quality=0.85){
+      return new Promise((resolve, reject)=>{
+        const img = new Image();
+        img.onload = ()=>{
+          const scale = Math.min(1, maxSide/Math.max(img.width, img.height));
+          const w = Math.round(img.width*scale), h = Math.round(img.height*scale);
+          const c = document.createElement('canvas'); c.width = w; c.height = h;
+          const ctx = c.getContext('2d'); ctx.drawImage(img, 0, 0, w, h);
+          resolve(c.toDataURL('image/jpeg', quality));
+        };
+        img.onerror = reject;
+        const r = new FileReader();
+        r.onload = ()=>{ img.src = r.result; };
+        r.onerror = reject;
+        r.readAsDataURL(file);
+      });
+    }
+
+    f.photos.addEventListener('change', async (e)=>{
+      photoPreview.innerHTML = '';
+      photoDataUrls = [];
+      const files = Array.from(e.target.files||[]).slice(0,8);
+      for (const file of files){
+        try{
+          const url = await fileToDataURL(file);
+          photoDataUrls.push(url);
+          const el = document.createElement('img');
+          el.src = url; el.className='w-full h-24 object-cover rounded-lg border border-neutral-200';
+          photoPreview.appendChild(el);
+        }catch(_){}
+      }
+      refreshPreview(photoDataUrls[0]);
+    });
+
+    // ======= ХРАНИЛИЩЕ =======
+    function getUserListings(){
+      try{ return JSON.parse(localStorage.getItem('user_listings')||'[]'); }catch{ return []; }
+    }
+    function setUserListings(arr){
+      try{ localStorage.setItem('user_listings', JSON.stringify(arr)); }catch(_){}
+    }
+
+    // ======= ВАЛИДАЦИЯ =======
+    function validate(){
+      const errs = [];
+      if (!f.title.value.trim()) errs.push('Укажите заголовок');
+      if (!f.district.value.trim()) errs.push('Укажите район/локацию');
+      const price = Number(f.price.value||0);
+      if (!(price>0)) errs.push('Укажите корректную цену');
+      if (!f.phone.value.trim()) errs.push('Укажите телефон');
+      if (photoDataUrls.length===0) errs.push('Добавьте хотя бы одно фото');
+      return errs;
+    }
+
+    // ======= SUBMIT =======
+    qs('#postForm').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const errs = validate();
+      if (errs.length){ note(errs.join(' · ')); return; }
+      note('');
+
+      const item = {
+        id: 'u'+Date.now(),
+        title: f.title.value.trim(),
+        price: Number(f.price.value||0),
+        district: f.district.value.trim(),
+        rooms: f.rooms.value,
+        daily: !!f.daily.checked,
+        owner: !!f.owner.checked,
+        phone: f.phone.value.trim(),
+        desc: f.desc.value.trim(),
+        img: photoDataUrls[0] || '',
+        photos: photoDataUrls.slice(0,8),
+        createdAt: Date.now()
+      };
+
+      const list = getUserListings();
+      list.unshift(item);
+      setUserListings(list);
+
+      // небольшой флажок для главной (если захочешь показать тост)
+      try{ localStorage.setItem('flash_msg','Объявление добавлено'); }catch(_){}
+
+      // редирект на главную
+      location.href = '/';
+    });
+
+    qs('#btnClear').addEventListener('click', ()=>{
+      qs('#postForm').reset();
+      photoPreview.innerHTML = '';
+      photoDataUrls = [];
+      const box = qs('#previewCard .aspect-\\[4\\/3\\]');
+      box.innerHTML = 'Фото';
+      refreshPreview();
+    });
+
+    // стартовый превью
+    refreshPreview();
   </script>
 </body>
-<script src="/app.js"></script>
 </html>
