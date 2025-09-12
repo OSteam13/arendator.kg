@@ -35,23 +35,24 @@
   <!-- Хедер -->
   <header class="bg-white sticky top-0 z-30 border-b border-neutral-100/80">
     <div class="container mx-auto px-4 py-2 md:py-3">
-      <!-- Первая строка: логотип + язык -->
-      <div class="flex items-center gap-4">
-        <a href="/" class="flex items-center gap-2 shrink-0">
+      <div class="flex flex-wrap items-center gap-3">
+        <!-- Логотип -->
+        <a href="/" class="order-1 flex items-center gap-2 shrink-0">
           <img src="./images/Arendatorkg.png" alt="Arendator.kg" class="w-8 h-8 rounded-full object-contain">
         </a>
-        <div class="flex-1"></div>
-        <button id="langToggle" class="lang-toggle text-sm" type="button">
+
+        <!-- Навигация: на мобиле вторая строка, на ПК между логотипом и языком -->
+        <nav class="order-3 w-full mt-2 md:order-2 md:w-auto md:mt-0 flex flex-wrap items-center gap-2 text-sm">
+          <a id="navBlog" href="blog.html" class="px-3 py-1.5 rounded-xl border border-neutral-200 hover:bg-neutral-50">Блог</a>
+          <a id="navAdd" href="post.html" class="px-3 py-1.5 rounded-xl bg-neutral-900 text-white hover:bg-neutral-800">Добавить объявление</a>
+          <a id="navFav" href="#" class="px-3 py-1.5 rounded-xl border border-neutral-200 hover:bg-neutral-50">Избранное</a>
+        </nav>
+
+        <!-- Переключатель языка: на ПК справа -->
+        <button id="langToggle" class="order-2 md:order-3 ml-auto lang-toggle text-sm" type="button">
           <span class="ru active">Рус</span> / <span class="ky">Кыр</span>
         </button>
       </div>
-
-      <!-- Вторая строка навигации: всегда видна на мобиле -->
-      <nav class="mt-2 flex flex-wrap items-center gap-2 text-sm">
-        <a id="navBlog" href="blog.html" class="px-3 py-1.5 rounded-xl border border-neutral-200 hover:bg-neutral-50">Блог</a>
-        <a id="navAdd" href="post.html" class="px-3 py-1.5 rounded-xl bg-neutral-900 text-white hover:bg-neutral-800">Добавить объявление</a>
-        <a id="navFav" href="#" class="px-3 py-1.5 rounded-xl border border-neutral-200 hover:bg-neutral-50">Избранное</a>
-      </nav>
     </div>
   </header>
 
@@ -67,7 +68,7 @@
           <a id="heroBtnPrimary" class="px-5 py-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center"
              href="https://t.me/arendatorkg" target="_blank" rel="noopener">
             <span class="tg-ico" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5л4.6 1.4L18.9 6c.7-.4 1.3-.2.8.2"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5l4.6 1.4L18.9 6c.7-.4 1.3-.2.8.2"/></svg>
             </span>
             <span id="heroBtnPrimaryLabel">Открыть в Telegram</span>
           </a>
@@ -91,9 +92,9 @@
     </div>
   </div>
 
-  <!-- Лента: на телефоне 3 в ряд -->
+  <!-- Лента: на телефоне 2 в ряд -->
   <main id="feed" class="container mx-auto px-4 pb-8">
-    <div id="listGrid" class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-4"></div>
+    <div id="listGrid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-4"></div>
     <div id="emptyState" class="hidden text-center py-16 text-neutral-600">Пока пусто. Быстрее обновляется наш Telegram-канал.</div>
   </main>
 
@@ -129,7 +130,7 @@
         <a id="monthBtn" class="px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center"
            href="https://t.me/arendatorkg" target="_blank" rel="noopener">
           <span class="tg-ico" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2 .8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5л4.6 1.4L18.9 6c.7-.4 1.3-.2 .8.2"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2 .8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8л2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5л4.6 1.4L18.9 6c.7-.4 1.3-.2 .8.2"/></svg>
           </span>
           <span id="monthBtnLabel">Получить в Telegram</span>
         </a>
@@ -369,7 +370,7 @@
               <a class="px-3 py-2 rounded-xl bg-blue-600 text-white text-sm text-center hover:bg-blue-700 inline-flex items-center justify-center"
                  href="${TELEGRAM_URL}" target="_blank" rel="noopener">
                 <span class="tg-ico" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2 .8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5л4.6 1.4L18.9 6c.7-.4 1.3-.2 .8.2"/></svg>
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2 .8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8л2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5л4.6 1.4L18.9 6c.7-.4 1.3-.2 .8.2"/></svg>
                 </span>
                 ${d.cardBtn}
               </a>
@@ -450,7 +451,7 @@
         ];
       }
 
-      // после загрузки items с бэка/демо ДО renderListings(items):
+      // подмешиваем локальные объявления пользователя (до renderListings)
       try {
         const local = JSON.parse(localStorage.getItem('user_listings') || '[]');
         if (Array.isArray(local) && local.length) items = [...local, ...items];
