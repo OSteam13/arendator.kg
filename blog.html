@@ -19,7 +19,6 @@
     .lang-toggle .active{opacity:1;font-weight:700}
     .lead{max-width:70ch}
     .note{font-size:.9rem}
-    .tgbtn svg{width:18px;height:18px}
     .toc a{color:#2563eb}
   </style>
 </head>
@@ -30,30 +29,29 @@
     Объявления живут 24 часа · Анти-агент фильтр включён · Контакты — в Telegram
   </div>
 
-  <!-- Хедер -->
+  <!-- Хедер (как на главной) -->
   <header class="bg-white sticky top-0 z-30 border-b border-neutral-100/80">
     <div class="container mx-auto px-4 py-2 md:py-3">
-      <div class="flex items-center gap-3">
-        <a href="/" class="flex items-center gap-2 shrink-0">
+      <div class="flex flex-wrap items-center gap-3">
+        <!-- Логотип -->
+        <a href="/" class="order-1 flex items-center gap-2 shrink-0">
           <img src="./images/Arendatorkg.png" alt="Arendator.kg" class="w-8 h-8 rounded-full object-contain">
           <span class="font-semibold hidden sm:inline">Arendator.kg</span>
         </a>
-        <div class="flex-1"></div>
-        <a href="https://t.me/arendatorkg" target="_blank" class="tgbtn inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#27A7E7] text-white hover:brightness-95">
-          <svg viewBox="0 0 240 240" fill="currentColor" aria-hidden="true"><path d="M120 0a120 120 0 1 0 0 240 120 120 0 0 0 0-240Zm52.5 82.6-17.7 83.4c-1.3 5.9-4.8 7.3-9.8 4.6l-27-19.9-13 12.5c-1.4 1.4-2.7 2.7-5.6 2.7l2-28.7 52.3-47c2.3-2  -0.5-3.1-3.5-1.1l-64.6 40.7-27.8-8.7c-6.1-1.9-6.2-6.1 1.3-9l108.6-41.9c5-1.9 9.4 1.2 7.8 9Z"/></svg>
-          <span>Перейти в Telegram</span>
-        </a>
-        <button id="langToggle" class="lang-toggle text-sm ml-2" type="button">
+
+        <!-- Навигация: мобайл в 3 колонки, на ПК между логотипом и языком -->
+        <nav class="order-3 w-full mt-2 grid grid-cols-3 gap-2 text-sm
+                    md:order-2 md:w-auto md:mt-0 md:grid-cols-none md:flex md:flex-1 md:justify-center md:gap-3">
+          <a href="/blog.html" class="w-full px-3 py-1.5 text-center rounded-xl border border-neutral-200 hover:bg-neutral-50">Блог</a>
+          <a href="/post.html" class="w-full px-3 py-1.5 text-center rounded-xl bg-neutral-900 text-white hover:bg-neutral-800">Добавить объявление</a>
+          <a href="/favorites.html" class="w-full px-3 py-1.5 text-center rounded-xl border border-neutral-200 hover:bg-neutral-50">Избранное</a>
+        </nav>
+
+        <!-- Переключатель языка -->
+        <button id="langToggle" class="order-2 md:order-3 ml-auto lang-toggle text-sm" type="button">
           <span class="ru active">Рус</span> / <span class="ky">Кыр</span>
         </button>
       </div>
-
-      <!-- вторая строка навигации -->
-      <nav class="mt-2 flex flex-wrap items-center gap-3 text-sm">
-        <a href="/post.html" class="px-3 py-1.5 rounded-xl bg-neutral-900 text-white hover:bg-neutral-800 whitespace-nowrap">Добавить объявление</a>
-        <a href="/blog.html" class="hover:text-blue-600 whitespace-nowrap font-medium">Блог</a>
-        <a href="/favorites.html" class="hover:text-blue-600 whitespace-nowrap">Избранное</a>
-      </nav>
     </div>
   </header>
 
@@ -78,7 +76,6 @@
   <!-- Избранные статьи (карточки с картинками) -->
   <section class="container mx-auto px-4 pb-6">
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      <!-- Карточка 1 -->
       <a href="#check" class="rounded-2xl bg-white border border-neutral-200 shadow-soft overflow-hidden hover:shadow-md transition">
         <div class="aspect-[16/9] bg-neutral-100">
           <img loading="lazy" class="w-full h-full object-cover"
@@ -91,7 +88,6 @@
           <p class="text-sm text-neutral-600 mt-1">Чек-пункты на 5 минут: собственник, доверенность, счётчики, опись, ключевые пункты договора.</p>
         </div>
       </a>
-      <!-- Карточка 2 -->
       <a href="#money" class="rounded-2xl bg-white border border-neutral-200 shadow-soft overflow-hidden hover:shadow-md transition">
         <div class="aspect-[16/9] bg-neutral-100">
           <img loading="lazy" class="w-full h-full object-cover"
@@ -104,7 +100,6 @@
           <p class="text-sm text-neutral-600 mt-1">Когда уместен депозит, какие чеки хранить и как не попасть на «залог за показ».</p>
         </div>
       </a>
-      <!-- Карточка 3 -->
       <a href="#bargain" class="rounded-2xl bg-white border border-neutral-200 shadow-soft overflow-hidden hover:shadow-md transition">
         <div class="aspect-[16/9] bg-neutral-100">
           <img loading="lazy" class="w-full h-full object-cover"
@@ -175,8 +170,7 @@
             <li>• Договор + депозит = меньше споров.</li>
           </ul>
           <a href="https://t.me/arendatorkg" target="_blank" class="mt-3 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700">
-            <svg viewBox="0 0 240 240" class="w-4 h-4" fill="currentColor"><path d="M120 0a120 120 0 1 0 0 240 120 120 0 0 0 0-240Zm52.5 82.6-17.7 83.4c-1.3 5.9-4.8 7.3-9.8 4.6l-27-19.9-13 12.5c-1.4 1.4-2.7 2.7-5.6 2.7l2-28.7 52.3-47c2.3-2  -0.5-3.1-3.5-1.1l-64.6 40.7-27.8-8.7c-6.1-1.9-6.2-6.1 1.3-9l108.6-41.9c5-1.9 9.4 1.2 7.8 9Z"/></svg>
-            Подписаться на свежие
+            Смотреть свежие в Telegram
           </a>
         </aside>
       </div>
@@ -295,7 +289,6 @@
         </ul>
       </div>
 
-      <!-- мини-галерея -->
       <div class="mt-4 grid sm:grid-cols-3 gap-3">
         <img loading="lazy" class="rounded-xl border border-neutral-200 object-cover w-full h-40"
              src="https://images.unsplash.com/photo-1501183638710-841dd1904471?w=1200&auto=format&fit=crop"
@@ -342,7 +335,6 @@
           </ul>
           <div class="mt-4">
             <a href="https://t.me/arendatorkg" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700">
-              <svg viewBox="0 0 240 240" class="w-4 h-4" fill="currentColor"><path d="M120 0a120 120 0 1 0 0 240 120 120 0 0 0 0-240Zm52.5 82.6-17.7 83.4c-1.3 5.9-4.8 7.3-9.8 4.6l-27-19.9-13 12.5c-1.4 1.4-2.7 2.7-5.6 2.7l2-28.7 52.3-47c2.3-2  -0.5-3.1-3.5-1.1l-64.6 40.7-27.8-8.7c-6.1-1.9-6.2-6.1 1.3-9л108.6-41.9c5-1.9 9.4 1.2 7.8 9Z"/></svg>
               Смотреть свежие объявления
             </a>
           </div>
@@ -387,7 +379,7 @@
   </footer>
 
   <script>
-    // простой переключатель языка (для навигации/кнопок). Контент блога — на русском.
+    // Небольшой переключатель языка для подписей в навигации.
     (function(){
       const btn = document.getElementById('langToggle');
       const set = (lang) => {
@@ -396,15 +388,13 @@
         const nav = document.querySelector('header nav');
         if (!nav) return;
         const items = {
-          ru: ['Добавить объявление','Блог','Избранное','Перейти в Telegram'],
-          ky: ['Жарна кошуу','Блог','Тандалгандар','Telegramга өтүү']
+          ru: ['Блог','Добавить объявление','Избранное'],
+          ky: ['Блог','Жарна кошуу','Тандалгандар']
         };
-        const [add,blog,fav,tg] = items[lang];
-        nav.children[0].textContent = add;
-        nav.children[1].textContent = blog;
+        const [blog,add,fav] = items[lang];
+        nav.children[0].textContent = blog;
+        nav.children[1].textContent = add;
         nav.children[2].textContent = fav;
-        const tgBtn = document.querySelector('.tgbtn span');
-        if (tgBtn) tgBtn.textContent = tg;
       };
       let cur = localStorage.getItem('lang') || 'ru';
       set(cur);
@@ -412,12 +402,12 @@
     })();
   </script>
 
-  <!-- Источники (видны пользователю внизу) -->
+  <!-- Источники -->
   <section class="container mx-auto px-4 pb-10">
     <details class="rounded-2xl border border-neutral-200 bg-white p-5 shadow-soft">
       <summary class="cursor-pointer font-semibold">Источники и методики</summary>
       <div class="mt-3 text-sm text-neutral-700 space-y-2">
-        <p>Аренда (1к) 30–59 тыс. сом в центре; вне центра 25–40 тыс. — усреднённые коридоры по данным открытых агрегаторов цен на 2025 год.</p>
+        <p>Аренда (1к) 30–59 тыс. сом в центре; вне центра 25–40 тыс. — усреднённые коридоры по данным открытых агрегаторов на 2025 год.</p>
         <p>Цена метра: сводки по рынку недвижимости 2024–весна 2025 (разброс по сериям/районам).</p>
         <p>Доходность ~7% — ориентиры по брутто-yield (без учёта простоев/ремонтов).</p>
         <p>Контекст: CPI по КР и ключевая ставка НБКР.</p>
