@@ -34,7 +34,7 @@
 
   <!-- Хедер -->
   <header class="bg-white sticky top-0 z-30 border-b border-neutral-100/80">
-    <div class="container mx-auto px-4 py-2 md:py-3">
+    <div class="container mx-auto px-4 py-2 md:py-2">
       <div class="flex flex-wrap items-center gap-3">
         <!-- Логотип -->
         <a href="/" class="order-1 flex items-center gap-2 shrink-0">
@@ -42,13 +42,22 @@
         </a>
 
         <!-- Навигация:
-             - Мобайл: 2-я строка, растягивается до правого края Рус/Кыр (grid-cols-3 + w-full)
-             - Десктоп: в одной строке между логотипом и переключателем языка -->
-        <nav class="order-3 w-full mt-2 grid grid-cols-3 gap-2 text-sm
+             - Мобайл: 2-я строка (grid из 3), каждая кнопка по центру
+             - Десктоп: в одну строку между логотипом и языком -->
+        <nav class="order-3 w-full mt-1 grid grid-cols-3 gap-2 text-sm
                     md:order-2 md:w-auto md:mt-0 md:grid-cols-none md:flex md:flex-1 md:justify-center md:gap-3">
-          <a id="navBlog" href="blog.html" class="w-full px-3 py-1.5 text-center rounded-xl border border-neutral-200 hover:bg-neutral-50">Блог</a>
-          <a id="navAdd" href="post.html" class="w-full px-3 py-1.5 text-center rounded-xl bg-neutral-900 text-white hover:bg-neutral-800">Добавить объявление</a>
-          <a id="navFav" href="#" class="w-full px-3 py-1.5 text-center rounded-xl border border-neutral-200 hover:bg-neutral-50">Избранное</a>
+          <a id="navBlog" href="blog.html"
+             class="w-full h-9 px-3 rounded-xl border border-neutral-200 hover:bg-neutral-50 flex items-center justify-center text-center">
+            Блог
+          </a>
+          <a id="navAdd" href="post.html"
+             class="w-full h-9 px-3 rounded-xl bg-neutral-900 text-white hover:bg-neutral-800 flex items-center justify-center text-center">
+            Добавить объявление
+          </a>
+          <a id="navFav" href="#"
+             class="w-full h-9 px-3 rounded-xl border border-neutral-200 hover:bg-neutral-50 flex items-center justify-center text-center">
+            Избранное
+          </a>
         </nav>
 
         <!-- Переключатель языка -->
@@ -60,59 +69,60 @@
   </header>
 
   <!-- Герой -->
-  <section class="container mx-auto px-4 pt-8 pb-6">
-    <div class="rounded-2xl bg-white border border-neutral-200 shadow-soft p-5 md:p-8 grid md:grid-cols-2 gap-6 items-center">
+  <section class="container mx-auto px-4 pt-6 pb-4">
+    <div class="rounded-2xl bg-white border border-neutral-200 shadow-soft p-4 md:p-6 grid md:grid-cols-2 gap-4 items-center">
       <div>
         <h1 id="heroH1" class="hero-title text-3xl md:text-5xl leading-tight text-blue-600">Ищете квартиру в аренду?</h1>
-        <p id="heroP" class="mt-3 text-base md:text-lg text-neutral-600">
+        <p id="heroP" class="mt-2 text-base md:text-lg text-neutral-600">
           Экономьте время и нервы: мы находим «живые» объявления, отсекаем посредников, выдаём контакты в Telegram — без спама и лишних звонков.
         </p>
-        <div class="mt-5 flex flex-col sm:flex-row flex-wrap gap-3">
-          <!-- ОДИНАКОВЫЙ РАЗМЕР КНОПОК: на мобиле w-full, на >=sm — одинаковая min-width -->
-          <a id="heroBtnPrimary" class="w-full sm:w-auto sm:min-w-[260px] px-5 py-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center justify-center"
+        <div class="mt-4 flex flex-col sm:flex-row flex-wrap gap-2">
+          <!-- ОДИНАКОВЫЙ РАЗМЕР КНОПОК -->
+          <a id="heroBtnPrimary"
+             class="w-full sm:w-auto sm:min-w-[260px] px-5 py-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center justify-center"
              href="https://t.me/arendatorkg" target="_blank" rel="noopener">
             <span class="tg-ico" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5l4.6 1.4L18.9 6c.7-.4 1.3-.2.8.2"/></svg>
             </span>
             <span id="heroBtnPrimaryLabel">Открыть в Telegram</span>
           </a>
-          <a id="heroBtnSecondary" class="w-full sm:w-auto sm:min-w-[260px] px-5 py-3 rounded-xl border border-neutral-200 hover:bg-neutral-50 text-center"
+          <a id="heroBtnSecondary"
+             class="w-full sm:w-auto sm:min-w-[260px] px-5 py-3 rounded-xl border border-neutral-200 hover:bg-neutral-50 text-center"
              href="#feed">Смотреть ленту на сайте</a>
         </div>
-        <div class="mt-4 flex items-center gap-6 text-sm text-neutral-600">
+        <div class="mt-3 flex items-center gap-4 text-sm text-neutral-600">
           <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> <span id="badge1">Анти-агент фильтр</span></div>
           <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-blue-600"></span> <span id="badge2">Ежесекундные обновления</span></div>
         </div>
       </div>
       <div class="rounded-xl overflow-hidden border border-neutral-200">
-        <!-- Убрали серую подпись «Лента свежих объявлений» -->
         <div class="aspect-[16/9] bg-neutral-100"></div>
       </div>
     </div>
   </section>
 
-  <!-- Рекламный слот -->
+  <!-- Рекламный слот (компактнее) -->
   <div class="container mx-auto px-4">
-    <div id="ad-mid" class="my-6 rounded-2xl border border-neutral-200 bg-white shadow-soft grid place-items-center min-h-[84px] sm:min-h-[100px]">
+    <div id="ad-mid" class="my-4 rounded-2xl border border-neutral-200 bg-white shadow-soft grid place-items-center min-h-[72px] sm:min-h-[90px]">
       <span class="text-sm text-neutral-500">Место для рекламы (банк · мебель · интернет)</span>
     </div>
   </div>
 
   <!-- Лента: на телефоне 2 в ряд -->
-  <main id="feed" class="container mx-auto px-4 pb-8">
-    <div id="listGrid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-4"></div>
-    <div id="emptyState" class="hidden text-center py-16 text-neutral-600">Пока пусто. Быстрее обновляется наш Telegram-канал.</div>
+  <main id="feed" class="container mx-auto px-4 pb-6">
+    <div id="listGrid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3"></div>
+    <div id="emptyState" class="hidden text-center py-10 text-neutral-600">Пока пусто. Быстрее обновляется наш Telegram-канал.</div>
   </main>
 
-  <!-- Тарифы -->
-  <section id="pricing" class="container mx-auto px-4 pb-10">
-    <h2 id="pricingH2" class="text-2xl font-bold mb-2">Доступ к контактам</h2>
-    <p id="pricingP" class="text-neutral-700 mb-6">Лучшие варианты улетают за часы. Подключите доступ — бот пришлёт контакты владельцев.</p>
+  <!-- Тарифы (компактнее) -->
+  <section id="pricing" class="container mx-auto px-4 pb-8">
+    <h2 id="pricingH2" class="text-2xl font-bold mb-1">Доступ к контактам</h2>
+    <p id="pricingP" class="text-neutral-700 mb-4">Лучшие варианты улетают за часы. Подключите доступ — бот пришлёт контакты владельцев.</p>
 
-    <div class="grid sm:grid-cols-2 gap-4">
-      <div class="rounded-2xl border border-neutral-200 bg-white p-5 shadow-soft">
+    <div class="grid sm:grid-cols-2 gap-3">
+      <div class="rounded-2xl border border-neutral-200 bg-white p-4 shadow-soft">
         <div id="weekTitle" class="text-xl font-bold mb-1">300 сом — Неделя</div>
-        <ul class="space-y-1 text-neutral-700 text-sm mb-4" id="weekList">
+        <ul class="space-y-1 text-neutral-700 text-sm mb-3" id="weekList">
           <li>• Контакты владельцев без лимита</li>
           <li>• Анти-агент фильтр</li>
           <li>• Уведомления о новых совпадениях</li>
@@ -120,15 +130,15 @@
         <a id="weekBtn" class="px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center"
            href="https://t.me/arendatorkg" target="_blank" rel="noopener">
           <span class="tg-ico" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2 .8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5l4.6 1.4L18.9 6c.7-.4 1.3-.2 .8.2"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2 .8-.4l1.9-1.8 4.1 3c.8 .4 1.4 .2 1.6 -.8l2.9 -13.5c.3 -1.3 -.5 -1.8 -1.3 -1.5L2.5 9.4c-1.3 .5 -1.3 1.2 -.2 1.5l4.6 1.4L18.9 6c.7 -.4 1.3 -.2 .8 .2"/></svg>
           </span>
           <span id="weekBtnLabel">Получить в Telegram</span>
         </a>
       </div>
 
-      <div class="rounded-2xl border border-neutral-200 bg-white p-5 shadow-soft">
+      <div class="rounded-2xl border border-neutral-200 bg-white p-4 shadow-soft">
         <div id="monthTitle" class="text-xl font-bold mb-1">600 сом — Месяц</div>
-        <ul class="space-y-1 text-neutral-700 text-sm mb-4" id="monthList">
+        <ul class="space-y-1 text-neutral-700 text-sm mb-3" id="monthList">
           <li>• Контакты владельцев без лимита</li>
           <li>• Анти-агент фильтр</li>
           <li>• Уведомления о новых совпадениях</li>
@@ -136,16 +146,16 @@
         <a id="monthBtn" class="px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center"
            href="https://t.me/arendatorkg" target="_blank" rel="noopener">
           <span class="tg-ico" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2 .8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5l4.6 1.4L18.9 6c.7-.4 1.3-.2 .8.2"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2 .8-.4l1.9-1.8 4.1 3c.8 .4 1.4 .2 1.6 -.8l2.9 -13.5c.3 -1.3 -.5 -1.8 -1.3 -1.5L2.5 9.4c-1.3 .5 -1.3 1.2 -.2 1.5l4.6 1.4L18.9 6c.7 -.4 1.3 -.2 .8 .2"/></svg>
           </span>
           <span id="monthBtnLabel">Получить в Telegram</span>
         </a>
       </div>
     </div>
 
-    <details class="mt-6 rounded-2xl border border-neutral-200 bg-white p-5 shadow-soft">
+    <details class="mt-4 rounded-2xl border border-neutral-200 bg-white p-4 shadow-soft">
       <summary id="faqSummary" class="cursor-pointer font-semibold">Частые вопросы</summary>
-      <div class="mt-3 text-sm text-neutral-700 space-y-2" id="faqList">
+      <div class="mt-2 text-sm text-neutral-700 space-y-2" id="faqList">
         <p><b>Почему платно?</b> Мы парсим источники, фильтруем агентов и держим инфраструктуру.</p>
         <p><b>Можно попробовать?</b> Если что-то не работает — поможем и продлим доступ.</p>
         <p><b>Автосписаний нет?</b> Нет, только по вашему действию.</p>
@@ -155,7 +165,7 @@
 
   <!-- Футер -->
   <footer class="border-t border-neutral-100 bg-white">
-    <div class="container mx-auto px-4 py-8 grid md:grid-cols-4 gap-6 text-sm">
+    <div class="container mx-auto px-4 py-6 grid md:grid-cols-4 gap-4 text-sm">
       <div class="md:col-span-2">
         <div class="flex items-center gap-2">
           <img src="./images/Arendatorkg.png" alt="Arendator.kg" class="w-7 h-7 rounded-full object-contain">
@@ -178,7 +188,7 @@
         </ul>
       </div>
     </div>
-    <div id="footerCopy" class="text-center text-xs text-neutral-500 pb-6">© 2025 — Arendator.kg</div>
+    <div id="footerCopy" class="text-center text-xs text-neutral-500 pb-5">© 2025 — Arendator.kg</div>
   </footer>
 
   <!-- Toast -->
@@ -222,8 +232,6 @@
         footerDelete: 'Удаление данных',
         footerPolicy: 'Политика конфиденциальности',
         footerCopy: '© 2025 — Arendator.kg',
-        cardOwner: 'Без посредников',
-        cardSource: 'Источник',
         cardRooms: 'Комнат',
         cardBtn: 'Получить номер в Telegram',
         cardFavAdd: 'В избранное',
@@ -264,8 +272,6 @@
         footerDelete: 'Маалыматты өчүрүү',
         footerPolicy: 'Купуялык саясаты',
         footerCopy: '© 2025 — Arendator.kg',
-        cardOwner: 'Ээлерден',
-        cardSource: 'Булак',
         cardRooms: 'Бөлмө',
         cardBtn: 'Номерди Telegramдан алуу',
         cardFavAdd: 'Тандалмаларга',
@@ -345,7 +351,7 @@
     }
     qs('#navFav').addEventListener('click', (e)=>{ e.preventDefault(); toggleFavoritesMode(); });
 
-    // Карточки
+    // Карточки (без бейджа; фиксированная структура: заголовок → цена → район → кнопки)
     function cardHTML(x){
       const d = I18N[LANG];
       const photos = Array.isArray(x.photos) ? x.photos : [];
@@ -360,23 +366,15 @@
             ${img ? `<img src="${img}" alt="${escapeHtml(x.title || 'Объявление')}" class="w-full h-full object-cover" loading="lazy">`
                    : `<div class="text-neutral-500 text-sm">${LANG==='ru'?'Нет фото':'Сүрөт жок'}</div>`}
           </div>
-          <div class="p-3 sm:p-4 flex-1 flex flex-col gap-3">
-            <div class="flex items-start gap-2">
-              <h3 class="font-semibold leading-snug text-sm sm:text-base">${escapeHtml(x.title || (LANG==='ru'?'Объявление':'Жарнама'))}</h3>
-              <span class="ml-auto inline-flex items-center text-[11px] sm:text-xs px-2 py-1 rounded-full whitespace-nowrap ${x.owner?'bg-emerald-100 text-emerald-700':'bg-neutral-100 text-neutral-700'}">${x.owner?d.cardOwner:d.cardSource}</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <div class="text-lg sm:text-2xl font-bold">${pricePart}</div>
-            </div>
-            <div class="flex items-center gap-2 text-[12px] sm:text-sm text-neutral-600">
-              <div>${escapeHtml(x.district || '')}</div>
-              ${x.rooms ? `<div>·</div><div>${d.cardRooms}: ${escapeHtml(x.rooms)}</div>` : ''}
-            </div>
-            <div class="mt-auto grid grid-cols-1 gap-2">
+          <div class="p-3 sm:p-4 flex-1 flex flex-col">
+            <h3 class="font-semibold leading-snug text-sm sm:text-base min-h-[38px] sm:min-h-[44px]">${escapeHtml(x.title || (LANG==='ru'?'Объявление':'Жарнама'))}</h3>
+            <div class="mt-1 text-lg sm:text-2xl font-bold">${pricePart}</div>
+            <div class="mt-1 text-[12px] sm:text-sm text-neutral-600 min-h-[18px]">${escapeHtml(x.district || '')}</div>
+            <div class="mt-auto grid grid-cols-1 gap-2 pt-2">
               <a class="px-3 py-2 rounded-xl bg-blue-600 text-white text-sm text-center hover:bg-blue-700 inline-flex items-center justify-center"
                  href="${TELEGRAM_URL}" target="_blank" rel="noopener">
                 <span class="tg-ico" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2 .8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5л4.6 1.4L18.9 6c.7-.4 1.3-.2 .8.2"/></svg>
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2 .8-.4l1.9-1.8 4.1 3c.8 .4 1.4 .2 1.6 -.8l2.9 -13.5c.3 -1.3 -.5 -1.8 -1.3 -1.5L2.5 9.4c-1.3 .5 -1.3 1.2 -.2 1.5l4.6 1.4L18.9 6c.7 -.4 1.3 -.2 .8 .2"/></svg>
                 </span>
                 ${d.cardBtn}
               </a>
@@ -425,15 +423,15 @@
     async function loadListings(){
       const grid = qs('#listGrid');
       grid.innerHTML = '';
-      // Скелетоны
+      // Скелетоны (компактнее)
       for (let i=0;i<12;i++){
         grid.insertAdjacentHTML('beforeend', `
           <div class="animate-pulse rounded-2xl border border-neutral-200 bg-white overflow-hidden">
             <div class="aspect-[4/3] bg-neutral-100"></div>
-            <div class="p-3 space-y-3">
+            <div class="p-3 space-y-2">
               <div class="h-4 bg-neutral-100 rounded"></div>
               <div class="h-4 bg-neutral-100 rounded w-1/2"></div>
-              <div class="h-8 bg-neutral-100 rounded"></div>
+              <div class="h-7 bg-neutral-100 rounded"></div>
             </div>
           </div>`);
       }
