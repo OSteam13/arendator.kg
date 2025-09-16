@@ -41,14 +41,17 @@
           <img src="./images/Arendatorkg.png" alt="Arendator.kg" class="w-8 h-8 rounded-full object-contain">
         </a>
 
-        <!-- Навигация: на мобиле вторая строка, на ПК между логотипом и языком -->
-        <nav class="order-3 w-full mt-2 md:order-2 md:w-auto md:mt-0 flex flex-wrap items-center gap-2 text-sm">
-          <a id="navBlog" href="blog.html" class="px-3 py-1.5 rounded-xl border border-neutral-200 hover:bg-neutral-50">Блог</a>
-          <a id="navAdd" href="post.html" class="px-3 py-1.5 rounded-xl bg-neutral-900 text-white hover:bg-neutral-800">Добавить объявление</a>
-          <a id="navFav" href="#" class="px-3 py-1.5 rounded-xl border border-neutral-200 hover:bg-neutral-50">Избранное</a>
+        <!-- Навигация:
+             - Мобайл: 2-я строка, растягивается до правого края Рус/Кыр (grid-cols-3 + w-full)
+             - Десктоп: в одной строке между логотипом и переключателем языка -->
+        <nav class="order-3 w-full mt-2 grid grid-cols-3 gap-2 text-sm
+                    md:order-2 md:w-auto md:mt-0 md:grid-cols-none md:flex md:flex-1 md:justify-center md:gap-3">
+          <a id="navBlog" href="blog.html" class="w-full px-3 py-1.5 text-center rounded-xl border border-neutral-200 hover:bg-neutral-50">Блог</a>
+          <a id="navAdd" href="post.html" class="w-full px-3 py-1.5 text-center rounded-xl bg-neutral-900 text-white hover:bg-neutral-800">Добавить объявление</a>
+          <a id="navFav" href="#" class="w-full px-3 py-1.5 text-center rounded-xl border border-neutral-200 hover:bg-neutral-50">Избранное</a>
         </nav>
 
-        <!-- Переключатель языка: на ПК справа -->
+        <!-- Переключатель языка -->
         <button id="langToggle" class="order-2 md:order-3 ml-auto lang-toggle text-sm" type="button">
           <span class="ru active">Рус</span> / <span class="ky">Кыр</span>
         </button>
@@ -64,15 +67,17 @@
         <p id="heroP" class="mt-3 text-base md:text-lg text-neutral-600">
           Экономьте время и нервы: мы находим «живые» объявления, отсекаем посредников, выдаём контакты в Telegram — без спама и лишних звонков.
         </p>
-        <div class="mt-5 flex flex-wrap gap-3">
-          <a id="heroBtnPrimary" class="px-5 py-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center"
+        <div class="mt-5 flex flex-col sm:flex-row flex-wrap gap-3">
+          <!-- ОДИНАКОВЫЙ РАЗМЕР КНОПОК: на мобиле w-full, на >=sm — одинаковая min-width -->
+          <a id="heroBtnPrimary" class="w-full sm:w-auto sm:min-w-[260px] px-5 py-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center justify-center"
              href="https://t.me/arendatorkg" target="_blank" rel="noopener">
             <span class="tg-ico" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5l4.6 1.4L18.9 6c.7-.4 1.3-.2.8.2"/></svg>
             </span>
             <span id="heroBtnPrimaryLabel">Открыть в Telegram</span>
           </a>
-          <a id="heroBtnSecondary" class="px-5 py-3 rounded-xl border border-neutral-200 hover:bg-neutral-50" href="#feed">Смотреть ленту на сайте</a>
+          <a id="heroBtnSecondary" class="w-full sm:w-auto sm:min-w-[260px] px-5 py-3 rounded-xl border border-neutral-200 hover:bg-neutral-50 text-center"
+             href="#feed">Смотреть ленту на сайте</a>
         </div>
         <div class="mt-4 flex items-center gap-6 text-sm text-neutral-600">
           <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> <span id="badge1">Анти-агент фильтр</span></div>
@@ -80,7 +85,8 @@
         </div>
       </div>
       <div class="rounded-xl overflow-hidden border border-neutral-200">
-        <div class="aspect-[16/9] bg-neutral-100 grid place-items-center text-neutral-500" id="heroMock">Лента свежих объявлений</div>
+        <!-- Убрали серую подпись «Лента свежих объявлений» -->
+        <div class="aspect-[16/9] bg-neutral-100"></div>
       </div>
     </div>
   </section>
@@ -114,7 +120,7 @@
         <a id="weekBtn" class="px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center"
            href="https://t.me/arendatorkg" target="_blank" rel="noopener">
           <span class="tg-ico" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2 .8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5л4.6 1.4L18.9 6c.7-.4 1.3-.2 .8.2"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2 .8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5l4.6 1.4L18.9 6c.7-.4 1.3-.2 .8.2"/></svg>
           </span>
           <span id="weekBtnLabel">Получить в Telegram</span>
         </a>
@@ -130,7 +136,7 @@
         <a id="monthBtn" class="px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center"
            href="https://t.me/arendatorkg" target="_blank" rel="noopener">
           <span class="tg-ico" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2 .8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8л2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5л4.6 1.4L18.9 6c.7-.4 1.3-.2 .8.2"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2 .8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5l4.6 1.4L18.9 6c.7-.4 1.3-.2 .8.2"/></svg>
           </span>
           <span id="monthBtnLabel">Получить в Telegram</span>
         </a>
@@ -370,7 +376,7 @@
               <a class="px-3 py-2 rounded-xl bg-blue-600 text-white text-sm text-center hover:bg-blue-700 inline-flex items-center justify-center"
                  href="${TELEGRAM_URL}" target="_blank" rel="noopener">
                 <span class="tg-ico" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2 .8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8л2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5л4.6 1.4L18.9 6c.7-.4 1.3-.2 .8.2"/></svg>
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2 .8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5л4.6 1.4L18.9 6c.7-.4 1.3-.2 .8.2"/></svg>
                 </span>
                 ${d.cardBtn}
               </a>
