@@ -30,7 +30,7 @@
     Объявления живут 24 часа · Анти-агент фильтр включён · Контакты — в Telegram
   </div>
 
-  <!-- Хедер (две строки, моб — без меню) -->
+  <!-- Хедер -->
   <header class="bg-white sticky top-0 z-30 border-b border-neutral-100/80">
     <div class="container mx-auto px-4 py-2 md:py-3">
       <div class="flex items-center gap-3">
@@ -75,70 +75,142 @@
     </div>
   </section>
 
+  <!-- Избранные статьи (карточки с картинками) -->
+  <section class="container mx-auto px-4 pb-6">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <!-- Карточка 1 -->
+      <a href="#check" class="rounded-2xl bg-white border border-neutral-200 shadow-soft overflow-hidden hover:shadow-md transition">
+        <div class="aspect-[16/9] bg-neutral-100">
+          <img loading="lazy" class="w-full h-full object-cover"
+               src="https://images.unsplash.com/photo-1521791055366-0d553872125f?w=1600&auto=format&fit=crop"
+               alt="Проверка документов и договора">
+        </div>
+        <div class="p-4">
+          <div class="text-xs text-neutral-500">Гайд</div>
+          <h3 class="font-semibold text-lg mt-1">Как быстро проверить квартиру и договор</h3>
+          <p class="text-sm text-neutral-600 mt-1">Чек-пункты на 5 минут: собственник, доверенность, счётчики, опись, ключевые пункты договора.</p>
+        </div>
+      </a>
+      <!-- Карточка 2 -->
+      <a href="#money" class="rounded-2xl bg-white border border-neutral-200 shadow-soft overflow-hidden hover:shadow-md transition">
+        <div class="aspect-[16/9] bg-neutral-100">
+          <img loading="lazy" class="w-full h-full object-cover"
+               src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=1600&auto=format&fit=crop"
+               alt="Оплата и залог">
+        </div>
+        <div class="p-4">
+          <div class="text-xs text-neutral-500">Финансы</div>
+          <h3 class="font-semibold text-lg mt-1">Оплата и залог: как сделать безопасно</h3>
+          <p class="text-sm text-neutral-600 mt-1">Когда уместен депозит, какие чеки хранить и как не попасть на «залог за показ».</p>
+        </div>
+      </a>
+      <!-- Карточка 3 -->
+      <a href="#bargain" class="rounded-2xl bg-white border border-neutral-200 shadow-soft overflow-hidden hover:shadow-md transition">
+        <div class="aspect-[16/9] bg-neutral-100">
+          <img loading="lazy" class="w-full h-full object-cover"
+               src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1600&auto=format&fit=crop"
+               alt="Этичный торг">
+        </div>
+        <div class="p-4">
+          <div class="text-xs text-neutral-500">Практика</div>
+          <h3 class="font-semibold text-lg mt-1">Этичный торг, который реально работает</h3>
+          <p class="text-sm text-neutral-600 mt-1">Как просить скидку корректно и что предложить взамен, чтобы всем было выгодно.</p>
+        </div>
+      </a>
+    </div>
+  </section>
+
   <!-- Срез рынка -->
   <section id="snapshot" class="container mx-auto px-4 pb-6">
-    <div class="grid md:grid-cols-3 gap-4">
-      <article class="rounded-2xl border border-neutral-200 bg-white p-5 shadow-soft">
-        <div class="text-sm text-neutral-500">Аренда (1к)</div>
-        <div class="text-2xl font-extrabold mt-1">30–59 тыс. сом в центре</div>
-        <p class="note mt-2 text-neutral-600">Оценка по данным агрегаторов: вне центра — ~25–40 тыс. сом/мес. Диапазон зависит от серии дома, состояния и локации.</p>
-      </article>
-      <article class="rounded-2xl border border-neutral-200 bg-white p-5 shadow-soft">
-        <div class="text-sm text-neutral-500">Цена метра (кв-ры)</div>
-        <div class="text-2xl font-extrabold mt-1">~95–130 тыс. сом/м²</div>
-        <p class="note mt-2 text-neutral-600">За 2024–весну 2025 фиксировался рост, в отдельных месяцах до ~130 тыс. сом/м² по данным госагентства/обзоров.</p>
-      </article>
-      <article class="rounded-2xl border border-neutral-200 bg-white p-5 shadow-soft">
-        <div class="text-sm text-neutral-500">Доходность аренды</div>
-        <div class="text-2xl font-extrabold mt-1">~7% брутто</div>
-        <p class="note mt-2 text-neutral-600">Оценка валовой доходности по центру/периферии. Реальная — ниже с учётом простоев и расходов.</p>
-      </article>
-    </div>
+    <div class="rounded-2xl border border-neutral-200 bg-white p-5 shadow-soft">
+      <div class="grid md:grid-cols-3 gap-4">
+        <article class="rounded-xl border border-neutral-200 p-4">
+          <div class="aspect-[16/9] rounded-lg overflow-hidden bg-neutral-100">
+            <img loading="lazy" class="w-full h-full object-cover"
+                 src="https://images.unsplash.com/photo-1505691723518-36a5ac3b2dba?w=1600&auto=format&fit=crop"
+                 alt="Типичная квартира-студия">
+          </div>
+          <div class="text-sm text-neutral-500 mt-3">Аренда (1к)</div>
+          <div class="text-2xl font-extrabold mt-1">30–59 тыс. сом в центре</div>
+          <p class="note mt-2 text-neutral-600">Вне центра — ~25–40 тыс. сом/мес. Сильно зависит от серии дома, состояния и локации.</p>
+        </article>
+        <article class="rounded-xl border border-neutral-200 p-4">
+          <div class="aspect-[16/9] rounded-lg overflow-hidden bg-neutral-100">
+            <img loading="lazy" class="w-full h-full object-cover"
+                 src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1600&auto=format&fit=crop"
+                 alt="Новый дом">
+          </div>
+          <div class="text-sm text-neutral-500 mt-3">Цена метра (кв-ры)</div>
+          <div class="text-2xl font-extrabold mt-1">~95–130 тыс. сом/м²</div>
+          <p class="note mt-2 text-neutral-600">Рост в 2024–весной 2025. Диапазон по сериям/районам — широкий.</p>
+        </article>
+        <article class="rounded-xl border border-neutral-200 p-4">
+          <div class="aspect-[16/9] rounded-lg overflow-hidden bg-neutral-100">
+            <img loading="lazy" class="w-full h-full object-cover"
+                 src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1600&auto=format&fit=crop"
+                 alt="Калькуляция доходности">
+          </div>
+          <div class="text-sm text-neutral-500 mt-3">Доходность аренды</div>
+          <div class="text-2xl font-extrabold mt-1">~7% брутто</div>
+          <p class="note mt-2 text-neutral-600">Реальная ниже с учётом простоев, налога и расходов на содержание.</p>
+        </article>
+      </div>
 
-    <div class="mt-4 grid md:grid-cols-2 gap-4">
-      <article class="rounded-2xl border border-neutral-200 bg-white p-5 shadow-soft">
-        <h3 class="font-bold text-lg">Что влияет на цены</h3>
-        <ul class="mt-2 space-y-1 text-neutral-700">
-          <li>• Общая инфляция держалась в коридоре цели НБКР (5–7%) в 2024 г.</li>
-          <li>• Ключевая ставка НБКР — около 9.25% в 2025 г. (влияет на ипотеки/стоимость денег).</li>
-          <li>• Сезонность: пик заселений — май/сентябрь; спокойнее — зима.</li>
-        </ul>
-        <p class="note text-neutral-500 mt-2">Цифры — усреднения. Важнее конкретная серия дома, адрес, состояние и спрос «здесь и сейчас».</p>
-      </article>
+      <div class="mt-4 grid md:grid-cols-2 gap-4">
+        <article class="rounded-xl border border-neutral-200 p-4">
+          <h3 class="font-bold text-lg">Что влияет на цены</h3>
+          <ul class="mt-2 space-y-1 text-neutral-700">
+            <li>• Инфляция и ключевая ставка НБКР влияют на ипотеки и спрос.</li>
+            <li>• Сезонность: пик заселений — май/сентябрь; спокойнее — зима.</li>
+            <li>• Серия дома, состояние, этаж, парковка и инфраструктура.</li>
+          </ul>
+          <p class="note text-neutral-500 mt-2">Цифры — усреднения; смотрите конкретную улицу и дом.</p>
+        </article>
 
-      <aside class="rounded-2xl border border-neutral-200 bg-white p-5 shadow-soft">
-        <h3 class="font-bold text-lg">Быстрые выводы</h3>
-        <ul class="mt-2 space-y-1 text-neutral-700">
-          <li>• Проверяйте 5–7 вариантов подряд: разброс цен объясняется состоянием и этажом.</li>
-          <li>• Следите за новым фидом — лучшие варианты уходят за часы.</li>
-          <li>• Договор + депозит = меньше рисков и споров.</li>
-        </ul>
-        <a href="https://t.me/arendatorkg" target="_blank" class="mt-3 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700">
-          <svg viewBox="0 0 240 240" class="w-4 h-4" fill="currentColor"><path d="M120 0a120 120 0 1 0 0 240 120 120 0 0 0 0-240Zm52.5 82.6-17.7 83.4c-1.3 5.9-4.8 7.3-9.8 4.6l-27-19.9-13 12.5c-1.4 1.4-2.7 2.7-5.6 2.7l2-28.7 52.3-47c2.3-2  -0.5-3.1-3.5-1.1l-64.6 40.7-27.8-8.7c-6.1-1.9-6.2-6.1 1.3-9l108.6-41.9c5-1.9 9.4 1.2 7.8 9Z"/></svg>
-          Подписаться на свежие
-        </a>
-      </aside>
+        <aside class="rounded-xl border border-neutral-200 p-4">
+          <h3 class="font-bold text-lg">Быстрые выводы</h3>
+          <ul class="mt-2 space-y-1 text-neutral-700">
+            <li>• Осматривайте минимум 5–7 вариантов подряд.</li>
+            <li>• Лента обновлений — ключ к «свежим» вариантам.</li>
+            <li>• Договор + депозит = меньше споров.</li>
+          </ul>
+          <a href="https://t.me/arendatorkg" target="_blank" class="mt-3 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700">
+            <svg viewBox="0 0 240 240" class="w-4 h-4" fill="currentColor"><path d="M120 0a120 120 0 1 0 0 240 120 120 0 0 0 0-240Zm52.5 82.6-17.7 83.4c-1.3 5.9-4.8 7.3-9.8 4.6l-27-19.9-13 12.5c-1.4 1.4-2.7 2.7-5.6 2.7l2-28.7 52.3-47c2.3-2  -0.5-3.1-3.5-1.1l-64.6 40.7-27.8-8.7c-6.1-1.9-6.2-6.1 1.3-9l108.6-41.9c5-1.9 9.4 1.2 7.8 9Z"/></svg>
+            Подписаться на свежие
+          </a>
+        </aside>
+      </div>
+      <p class="note text-neutral-500 mt-3">Примечание: источники и ссылки на методики — внизу страницы.</p>
     </div>
-    <p class="note text-neutral-500 mt-3">Примечание: источники и ссылки на методики — внизу страницы.</p>
   </section>
 
   <!-- Проверка квартиры и договора -->
   <section id="check" class="container mx-auto px-4 pb-6">
     <div class="rounded-2xl border border-neutral-200 bg-white p-5 shadow-soft">
-      <h2 class="text-xl md:text-2xl font-bold">Проверка квартиры и договора — быстро</h2>
-      <div class="grid md:grid-cols-2 gap-4 mt-3">
-        <ul class="space-y-2 text-neutral-800">
-          <li>• Сверьте паспорт владельца с данными в договоре. Если действует представитель — пусть покажет доверенность.</li>
-          <li>• Посмотрите документ на право собственности (свидетельство/выписка). Сфотографируйте номер и ФИО.</li>
-          <li>• Зафиксируйте показания счётчиков, составьте опись мебели/техники с фото.</li>
-          <li>• В договоре пропишите: срок, сумму, депозит, коммунальные, штрафы, порядок расторжения и возврата залога.</li>
-        </ul>
-        <ul class="space-y-2 text-neutral-800">
-          <li>• Платите безналом с пометкой в назначении или берите расписку. Скрин/квитанцию сохраняйте.</li>
-          <li>• Не отправляйте предоплату «за просмотр». Депозит — только после осмотра и подписания.</li>
-          <li>• Проверяйте дом и подъезд вечером: шум, парковка, освещение — половина комфорта.</li>
-          <li>• Не торопитесь: поспать «с этим решением» одну ночь — дешевле, чем спешить в плохой вариант.</li>
-        </ul>
+      <div class="grid md:grid-cols-2 gap-4 items-start">
+        <figure class="rounded-xl overflow-hidden border border-neutral-200">
+          <img loading="lazy" class="w-full h-full object-cover aspect-[16/10]"
+               src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=1600&auto=format&fit=crop"
+               alt="Проверка договора аренды">
+          <figcaption class="text-xs text-neutral-500 p-2">Проверяйте реквизиты и приложите опись имущества.</figcaption>
+        </figure>
+        <div>
+          <h2 class="text-xl md:text-2xl font-bold">Проверка квартиры и договора — быстро</h2>
+          <div class="grid md:grid-cols-2 gap-4 mt-3">
+            <ul class="space-y-2 text-neutral-800">
+              <li>• Паспорт/собственник, доверенность представителя.</li>
+              <li>• Документ на право собственности — фото номера и ФИО.</li>
+              <li>• Показания счётчиков, опись мебели/техники с фото.</li>
+              <li>• В договоре: срок, сумма, депозит, коммунальные, расторжение.</li>
+            </ul>
+            <ul class="space-y-2 text-neutral-800">
+              <li>• Платите безналом или берите расписку.</li>
+              <li>• Никаких «предоплат за просмотр».</li>
+              <li>• Осмотрите подъезд и двор вечером.</li>
+              <li>• Не торопитесь: ночь на размышление спасает.</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -146,24 +218,34 @@
   <!-- Оплата и залог -->
   <section id="money" class="container mx-auto px-4 pb-6">
     <div class="rounded-2xl border border-neutral-200 bg-white p-5 shadow-soft">
-      <h2 class="text-xl md:text-2xl font-bold">Оплата и залог: как безопасно</h2>
-      <div class="grid md:grid-cols-2 gap-4 mt-3">
+      <div class="grid md:grid-cols-2 gap-4 items-start">
         <div>
-          <h3 class="font-semibold">Минимум риска</h3>
-          <ul class="mt-2 space-y-2 text-neutral-800">
-            <li>• Депозит = 0.5–1 месяц. В договоре чётко указать, когда и как возвращается.</li>
-            <li>• Переводы на карту/счёт владельца; если наличные — расписка с паспортными данными.</li>
-            <li>• Коммуналка: приложите фото чеков к переписке раз в месяц.</li>
-          </ul>
+          <h2 class="text-xl md:text-2xl font-bold">Оплата и залог: как безопасно</h2>
+          <div class="grid md:grid-cols-2 gap-4 mt-3">
+            <div>
+              <h3 class="font-semibold">Минимум риска</h3>
+              <ul class="mt-2 space-y-2 text-neutral-800">
+                <li>• Депозит = 0.5–1 месяц, условия возврата в договоре.</li>
+                <li>• Переводы на карту владельца; наличные — по расписке.</li>
+                <li>• Коммуналка: храните чеки/фото в переписке.</li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="font-semibold">Красные флаги</h3>
+              <ul class="mt-2 space-y-2 text-neutral-800">
+                <li>• Цена «ниже рынка только сегодня» + предоплата.</li>
+                <li>• «Владелец в разъездах, переведите залог заранее».</li>
+                <li>• Отказ дать копию договора/паспортные данные.</li>
+              </ul>
+            </div>
+          </div>
         </div>
-        <div>
-          <h3 class="font-semibold">Красные флаги</h3>
-          <ul class="mt-2 space-y-2 text-neutral-800">
-            <li>• Сильно ниже рынка «только сегодня» + предоплата за просмотр.</li>
-            <li>• «Владелец в разъездах, ключ у знакомого» — просит задаток заранее.</li>
-            <li>• Отказ выдать копию договора/паспортные данные.</li>
-          </ul>
-        </div>
+        <figure class="rounded-xl overflow-hidden border border-neutral-200">
+          <img loading="lazy" class="w-full h-full object-cover aspect-[16/10]"
+               src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1600&auto=format&fit=crop"
+               alt="Передача денег по расписке">
+          <figcaption class="text-xs text-neutral-500 p-2">Всегда сохраняйте подтверждение оплаты и переписку.</figcaption>
+        </figure>
       </div>
     </div>
   </section>
@@ -171,13 +253,23 @@
   <!-- Торг -->
   <section id="bargain" class="container mx-auto px-4 pb-6">
     <div class="rounded-2xl border border-neutral-200 bg-white p-5 shadow-soft">
-      <h2 class="text-xl md:text-2xl font-bold">Этичный торг, который работает</h2>
-      <ul class="mt-2 space-y-2 text-neutral-800">
-        <li>• Предлагайте «пакетом»: аванс за 2–3 месяца → просьба о -5–8% к ставке.</li>
-        <li>• Аргументируйте: «мы не курим, без животных, платим в первый день» — это снижает риски для владельца.</li>
-        <li>• Непопулярные этажи/без лифта — хороший повод для мягкой скидки.</li>
-        <li>• Просите заменить одну «дорогую проблему» (холодильник/стиралку) или дисконт на это.</li>
-      </ul>
+      <div class="grid md:grid-cols-2 gap-4 items-center">
+        <figure class="rounded-xl overflow-hidden border border-neutral-200">
+          <img loading="lazy" class="w-full h-full object-cover aspect-[16/10]"
+               src="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=1600&auto=format&fit=crop"
+               alt="Рукопожатие при согласовании условий">
+          <figcaption class="text-xs text-neutral-500 p-2">Предлагайте то, что снижает риск для владельца — это аргумент.</figcaption>
+        </figure>
+        <div>
+          <h2 class="text-xl md:text-2xl font-bold">Этичный торг, который работает</h2>
+          <ul class="mt-2 space-y-2 text-neutral-800">
+            <li>• Предложите аванс за 2–3 месяца → просьба о -5–8%.</li>
+            <li>• «Не курим, без животных, платим в первый день» — снижает риски.</li>
+            <li>• Непопулярный этаж/без лифта — повод для мягкой скидки.</li>
+            <li>• Попросите заменить одну «дорогую проблему» или дисконт.</li>
+          </ul>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -202,32 +294,65 @@
           <li>• Подъезд и двор: парковка, освещение, соседи.</li>
         </ul>
       </div>
+
+      <!-- мини-галерея -->
+      <div class="mt-4 grid sm:grid-cols-3 gap-3">
+        <img loading="lazy" class="rounded-xl border border-neutral-200 object-cover w-full h-40"
+             src="https://images.unsplash.com/photo-1501183638710-841dd1904471?w=1200&auto=format&fit=crop"
+             alt="Проверка окон и фурнитуры">
+        <img loading="lazy" class="rounded-xl border border-neutral-200 object-cover w-full h-40"
+             src="https://images.unsplash.com/photo-1519710164239-da123dc03ef4?w=1200&auto=format&fit=crop"
+             alt="Сантехника и бойлер">
+        <img loading="lazy" class="rounded-xl border border-neutral-200 object-cover w-full h-40"
+             src="https://images.unsplash.com/photo-1507089947368-19c1da9775ae?w=1200&auto=format&fit=crop"
+             alt="Розетки и электрика">
+      </div>
     </div>
   </section>
 
   <!-- Сезонность -->
   <section id="season" class="container mx-auto px-4 pb-6">
     <div class="rounded-2xl border border-neutral-200 bg-white p-5 shadow-soft">
-      <h2 class="text-xl md:text-2xl font-bold">Когда искать выгоднее</h2>
-      <p class="mt-2 text-neutral-800">Зимой конкуренция ниже, выбор спокойнее. Конец августа–сентябрь — пик спроса (студенты, ротации), цены и скорость сделок выше. Если сроки плавающие — цельте в «окна» между праздниками и в будние дни до обеда.</p>
+      <div class="grid md:grid-cols-2 gap-4 items-center">
+        <div>
+          <h2 class="text-xl md:text-2xl font-bold">Когда искать выгоднее</h2>
+          <p class="mt-2 text-neutral-800">Зимой конкуренция ниже, выбор спокойнее. Конец августа–сентябрь — пик спроса (студенты, ротации), цены и скорость сделок выше. Если сроки плавающие — цельте в «окна» между праздниками и в будние дни до обеда.</p>
+        </div>
+        <figure class="rounded-xl overflow-hidden border border-neutral-200">
+          <img loading="lazy" class="w-full h-full object-cover aspect-[16/10]"
+               src="https://images.unsplash.com/photo-1528909514045-2fa4ac7a08ba?w=1600&auto=format&fit=crop"
+               alt="Сезонность спроса">
+          <figcaption class="text-xs text-neutral-500 p-2">Сезонное колебание спроса: май/сентябрь — пики.</figcaption>
+        </figure>
+      </div>
     </div>
   </section>
 
   <!-- Мошенники -->
   <section id="fraud" class="container mx-auto px-4 pb-10">
     <div class="rounded-2xl border border-neutral-200 bg-white p-5 shadow-soft">
-      <h2 class="text-xl md:text-2xl font-bold">Частые схемы мошенников</h2>
-      <ul class="mt-2 space-y-2 text-neutral-800">
-        <li>• «Залог за показ» или «бронь до вечера» — без договора и документов.</li>
-        <li>• Клон-объявление с украденными фото; просьба уйти в мессенджер и прислать предоплату.</li>
-        <li>• Подмена условий: «коммуналка включена» → «по счётчикам» после заселения — фиксируйте в договоре.</li>
-        <li>• Неформальные «агенты», берущие плату «за базу контактов» — это бесполезно и часто незаконно.</li>
-      </ul>
-      <div class="mt-4">
-        <a href="https://t.me/arendatorkg" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700">
-          <svg viewBox="0 0 240 240" class="w-4 h-4" fill="currentColor"><path d="M120 0a120 120 0 1 0 0 240 120 120 0 0 0 0-240Zm52.5 82.6-17.7 83.4c-1.3 5.9-4.8 7.3-9.8 4.6l-27-19.9-13 12.5c-1.4 1.4-2.7 2.7-5.6 2.7l2-28.7 52.3-47c2.3-2  -0.5-3.1-3.5-1.1l-64.6 40.7-27.8-8.7c-6.1-1.9-6.2-6.1 1.3-9l108.6-41.9c5-1.9 9.4 1.2 7.8 9Z"/></svg>
-          Смотреть свежие объявления
-        </a>
+      <div class="grid md:grid-cols-2 gap-4 items-start">
+        <div>
+          <h2 class="text-xl md:text-2xl font-bold">Частые схемы мошенников</h2>
+          <ul class="mt-2 space-y-2 text-neutral-800">
+            <li>• «Залог за показ» или «бронь до вечера» — без договора и документов.</li>
+            <li>• Клон-объявление с украденными фото; перевод в мессенджер и просьба о предоплате.</li>
+            <li>• Подмена условий: «коммуналка включена» → «по счётчикам» — фиксируйте всё письменно.</li>
+            <li>• Плата «за базу контактов» от псевдо-агентов — бесполезно и часто незаконно.</li>
+          </ul>
+          <div class="mt-4">
+            <a href="https://t.me/arendatorkg" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700">
+              <svg viewBox="0 0 240 240" class="w-4 h-4" fill="currentColor"><path d="M120 0a120 120 0 1 0 0 240 120 120 0 0 0 0-240Zm52.5 82.6-17.7 83.4c-1.3 5.9-4.8 7.3-9.8 4.6l-27-19.9-13 12.5c-1.4 1.4-2.7 2.7-5.6 2.7l2-28.7 52.3-47c2.3-2  -0.5-3.1-3.5-1.1l-64.6 40.7-27.8-8.7c-6.1-1.9-6.2-6.1 1.3-9л108.6-41.9c5-1.9 9.4 1.2 7.8 9Z"/></svg>
+              Смотреть свежие объявления
+            </a>
+          </div>
+        </div>
+        <figure class="rounded-xl overflow-hidden border border-neutral-200">
+          <img loading="lazy" class="w-full h-full object-cover aspect-[16/10]"
+               src="https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?w=1600&auto=format&fit=crop"
+               alt="Предупреждение о мошенничестве">
+          <figcaption class="text-xs text-neutral-500 p-2">Не переводите деньги до подписания договора и осмотра.</figcaption>
+        </figure>
       </div>
     </div>
   </section>
@@ -268,7 +393,6 @@
       const set = (lang) => {
         btn.querySelector('.ru').classList.toggle('active', lang==='ru');
         btn.querySelector('.ky').classList.toggle('active', lang==='ky');
-        // подписи навигации
         const nav = document.querySelector('header nav');
         if (!nav) return;
         const items = {
@@ -293,10 +417,10 @@
     <details class="rounded-2xl border border-neutral-200 bg-white p-5 shadow-soft">
       <summary class="cursor-pointer font-semibold">Источники и методики</summary>
       <div class="mt-3 text-sm text-neutral-700 space-y-2">
-        <p>Аренда (1к) 30–59 тыс. сом в центре; вне центра 25–40 тыс. — усреднённые коридоры по данным открытых агрегаторов цен на 2025 год. См. диапазоны у Wise/Numbeo. (См. ссылки ниже.)</p>
-        <p>Цена метра: сообщения госагентств и сводки СМИ о динамике в 2024–весной 2025 (рост и значения по месяцам).</p>
-        <p>Доходность ~7% — ориентиры по брутто-yield из открытых калькуляторов/сборников (без учёта простоев/ремонтов).</p>
-        <p>Контекст: CPI по KR и ставка НБКР (влияние на стоимость денег и ипотеку).</p>
+        <p>Аренда (1к) 30–59 тыс. сом в центре; вне центра 25–40 тыс. — усреднённые коридоры по данным открытых агрегаторов цен на 2025 год.</p>
+        <p>Цена метра: сводки по рынку недвижимости 2024–весна 2025 (разброс по сериям/районам).</p>
+        <p>Доходность ~7% — ориентиры по брутто-yield (без учёта простоев/ремонтов).</p>
+        <p>Контекст: CPI по КР и ключевая ставка НБКР.</p>
       </div>
     </details>
   </section>
