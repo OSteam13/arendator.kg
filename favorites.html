@@ -3,6 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <title>Избранное — Arendator.kg</title>
   <link rel="icon" href="./images/Arendatorkg.png">
   <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;800&display=swap" rel="stylesheet">
@@ -41,7 +44,7 @@
                     md:order-2 md:w-auto md:mt-0 md:grid-cols-none md:flex md:flex-1 md:justify-center md:gap-3">
           <a href="blog.html" class="w-full px-3 py-1.5 text-center rounded-xl border border-neutral-200 hover:bg-neutral-50">Блог</a>
           <a href="post.html" class="w-full px-3 py-1.5 text-center rounded-xl bg-neutral-900 text-white hover:bg-neutral-800">Добавить объявление</a>
-          <a href="favorites.html" class="w-full px-3 py-1.5 text-center rounded-xl border border-neutral-200 hover:bg-neutral-50">Избранное</a>
+          <a href="favorites.html?v=3" class="w-full px-3 py-1.5 text-center rounded-xl border border-neutral-200 hover:bg-neutral-50">Избранное</a>
         </nav>
 
         <!-- Язык -->
@@ -67,7 +70,7 @@
     <div id="grid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-4"></div>
   </main>
 
-  <!-- Контакты (оставил) -->
+  <!-- Контакты -->
   <section id="contact" class="container mx-auto px-4 pb-10">
     <h2 class="text-2xl font-bold mb-3">Связаться с нами</h2>
     <p class="text-neutral-700 mb-4 text-sm">Задайте вопрос — ответим на почту в течение дня.</p>
@@ -100,7 +103,7 @@
         <ul class="mt-2 space-y-1 text-neutral-600">
           <li><a href="post.html" class="hover:text-blue-600">Добавить объявление</a></li>
           <li><a href="blog.html" class="hover:text-blue-600">Блог</a></li>
-          <li><a href="favorites.html" class="hover:text-blue-600">Избранное</a></li>
+          <li><a href="favorites.html?v=3" class="hover:text-blue-600">Избранное</a></li>
         </ul>
       </div>
       <div>
@@ -119,9 +122,9 @@
   <script>
     const TELEGRAM_URL = 'https://t.me/arendatorkg';
 
-    /* демо-список для сборки карточек по id */
+    /* Демо-список для сборки карточек по id */
     const listings = [
-      { id:'l1', title:'2к, Центр, свежий ремонт', price:35000, district:'Центр', rooms:'2', daily:false, img:'',                                                     },
+      { id:'l1', title:'2к, Центр, свежий ремонт', price:35000, district:'Центр', rooms:'2', daily:false, img:'' },
       { id:'l2', title:'1к, Майевка, уютная',      price:18000, district:'Майевка', rooms:'1', daily:false, img:'https://images.unsplash.com/photo-1502005229762-cf1b2da7cda7?w=1200&auto=format&fit=crop' },
       { id:'l3', title:'3к, Асанбай, вид на горы', price:55000, district:'Асанбай', rooms:'3', daily:false, img:'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1200&auto=format&fit=crop' },
       { id:'l4', title:'Студия, Московский',       price:22000, district:'Московский', rooms:'1', daily:false, img:'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1200&auto=format&fit=crop' },
@@ -129,12 +132,11 @@
       { id:'l6', title:'3к, Свердловский, новая мебель', price:45000, district:'Свердловский', rooms:'3', daily:false, img:'https://images.unsplash.com/photo-1494526585095-c41746248156?w=1200&auto=format&fit=crop' },
     ];
 
-    const qs  = (s,el=document)=>el.querySelector(s);
+    const qs = (s,el=document)=>el.querySelector(s);
     const showToast=(m)=>{const t=qs('#toast'); t.textContent=m; t.classList.remove('hidden'); clearTimeout(showToast.t); showToast.t=setTimeout(()=>t.classList.add('hidden'),2000);};
+    const priceUnit = (daily)=> daily ? 'сом/сут' : 'сом/мес';
 
-    function priceUnit(daily){ return daily ? 'сом/сут' : 'сом/мес'; }
-
-    // карточка (без «Без посредников/Источник», только заголовок, цена, район, кнопки — одинаковые отступы)
+    /* Карточка: без бейджей, одинаковые зоны текста/кнопок */
     function cardHTML(it){
       const price = `${Number(it.price).toLocaleString('ru-RU')} <span class="text-sm font-medium text-neutral-500">${priceUnit(it.daily)}</span>`;
       return `
@@ -151,7 +153,7 @@
             <a class="px-3 py-2 rounded-xl bg-blue-600 text-white text-sm text-center hover:bg-blue-700 inline-flex items-center justify-center"
                href="${TELEGRAM_URL}" target="_blank" rel="noopener">
               <span class="tg-ico" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5l4.6 1.4L18.9 6c.7-.4 1.3-.2.8.2"/></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5l4.6 1.4L18.9 6c.7-.4 1.3-.2 .8.2"/></svg>
               </span>
               Получить номер в Telegram
             </a>
@@ -190,7 +192,7 @@
       });
     }
 
-    // мини-переключатель языка (только шапка)
+    /* Мини-переключатель языка (только шапка) */
     (function(){
       const btn = document.getElementById('langToggle');
       const set = (lang) => {
@@ -208,7 +210,16 @@
       btn.addEventListener('click', ()=>{ cur = (cur==='ru'?'ky':'ru'); localStorage.setItem('lang',cur); set(cur); });
     })();
 
-    // контактная форма
+    /* Удалим старый секшен «Тарифы доступа», если он вдруг попал из кэша */
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('section').forEach(sec=>{
+        const h2 = sec.querySelector('h2');
+        if (h2 && /тарифы доступа/i.test(h2.textContent)) sec.remove();
+      });
+      render();
+    });
+
+    /* Контактная форма */
     (function initContact(){
       const ts = document.getElementById('tsField'); if (ts) ts.value = Date.now();
       const form = document.getElementById('contactForm');
@@ -228,8 +239,6 @@
         }catch{ if (note) note.textContent='Ошибка сети. Попробуйте ещё раз.'; }
       });
     })();
-
-    document.addEventListener('DOMContentLoaded', render);
   </script>
 </body>
 </html>
