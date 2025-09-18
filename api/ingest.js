@@ -1,48 +1,91 @@
 // /api/ingest.js
 import { createClient } from '@supabase/supabase-js';
 
-const getServiceKey = () =>
-  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE; // поддержим оба имени
+export const config = { runtime: 'edge' };
 
-export default async function handler(req, res) {
-  if (req.method !== 'POST') return res.status(405).json({ ok: false, error: 'Method Not Allowed' });
+const SUPABASE_URL =
+  process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+const SUPABASE_SERVICE_ROLE =
+  process.env.SUPABASE_SERVICE_ROLE ||
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  process.env.SUPABASE_SERVICE_KEY; // на всякий случай все варианты
+const PIPE_SECRET = process.env.PIPE_SECRET;
 
-  // защита вебхука
-  if (req.headers['x-pipe-secret'] !== process.env.PIPE_SECRET) {
-    return res.status(401).json({ ok: false, error: 'Unauthorized' });
-  }
+function bad(status, msg) {
+  return new Response(JSON.stringify({ ok: false, error: msg }), {
+    status,
+    headers: { 'content-type': 'application/json' },
+  });
+}
 
-  const supabase = createClient(process.env.SUPABASE_URL, getServiceKey());
-
+export default async function handler(req) {
   try {
-    const p = req.body || {};
+    if (req.method !== 'POST') return bad(405, 'method_not_allowed');
 
-    // минимальная валидация
-    if (!p.title) return res.status(400).json({ ok: false, error: 'title is required' });
+    // 1) секрет
+    const got = req.headers.get('x-pipe-secret') || '';
+    if (!PIPE_SECRET || got !== PIPE_SECRET) return bad(401, 'unauthorized');
 
-    const { data, error } = await supabase
-      .from('listings')
-      .insert({
-        source: p.source || 'telegram',
-        source_post_id: p.source_post_id || null,
-        title: p.title,
-        price: p.price ?? null,               // int4 в БД
-        district: p.district || null,
-        phone_full: p.phone_full || null,     // для VIP/модерации
-        phone_masked: p.phone_masked || null, // для публичного фронта
-        photos: Array.isArray(p.photos) ? p.photos : [], // jsonb
-        is_active: p.is_active ?? true
-      })
-      .select()
-      .single();
+    // 2) JSON
+    let body;
+    try {
+      body = await req.json(); // НЕ парсим второй раз!
+    } catch {
+      return bad(400, 'bad_json');
+    }
+
+    // 3) нормализуем поля (чтобы PostgREST не ругался)
+    const {
+      title = '',
+      price = null,
+      photos = [],
+      source = 'pipe',
+      source_post_id = null,
+      phone_full = null,
+      district = null,
+    } = body || {};
+
+    // типы
+    const priceNum =
+      price === null || price === '' ? null : Number.parseInt(String(price).replace(/\D+/g, ''), 10);
+    const photosArr = Array.isArray(photos) ? photos.filter(Boolean) : [];
+
+    // быстрая валидация
+    if (!title || typeof title !== 'string') return bad(400, 'title_required');
+
+    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE)
+      return bad(500, 'supabase_env_missing');
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE, {
+      auth: { persistSession: false },
+    });
+
+    const row = {
+      source,
+      source_post_id,
+      title,
+      price: Number.isFinite(priceNum) ? priceNum : null,
+      photos: photosArr,          // jsonb
+      phone_full,                 // text (может быть null)
+      district,                   // text (может быть null)
+      is_active: true,            // bool
+      created_at: new Date().toISOString(), // timestamp
+    };
+
+    const { error } = await supabase.from('listings').insert(row);
 
     if (error) {
-      console.error('Supabase insert error:', error);
-      return res.status(500).json({ ok: false, error: error.message });
+      // подробность в логах, но не в ответе
+      console.error('ingest error (supabase):', error);
+      return bad(500, 'db_error');
     }
-    return res.status(200).json({ ok: true, listing: data });
+
+    return new Response(JSON.stringify({ ok: true }), {
+      status: 200,
+      headers: { 'content-type': 'application/json' },
+    });
   } catch (e) {
     console.error('ingest error:', e);
-    return res.status(500).json({ ok: false, error: 'Internal Error' });
+    return bad(500, 'internal');
   }
 }
