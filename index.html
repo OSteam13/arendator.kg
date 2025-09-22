@@ -19,7 +19,8 @@
     .lang-toggle .active{opacity:1;font-weight:700}
     .tg-ico{display:inline-flex;align-items:center;margin-right:.5rem}
     .tg-ico svg{width:18px;height:18px}
-    /* === карточки объявлений (минимальные стили) === */
+
+    /* === карточки объявлений === */
     .ads-wrap { margin: 24px auto; max-width: var(--container); padding: 0 16px; }
     .ads-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
     .ad-card { border: 1px solid #eee; border-radius: 14px; overflow: hidden; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,.03); display: flex; flex-direction: column; }
@@ -29,8 +30,22 @@
     .ad-title { font: 600 16px/1.3 system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 0; }
     .ad-price { color: #0d6efd; font-weight: 700; }
     .ad-meta { color: #666; font-size: 13px; }
-    .ad-cta { margin-top: 6px; display: inline-block; text-decoration: none; background: #0d6efd; color: #fff; padding: 8px 10px; border-radius: 10px; }
+    .ad-cta { margin-top: auto; display: inline-block; text-decoration: none; background: #0d6efd; color: #fff; padding: 10px 12px; border-radius: 10px; text-align:center }
     .ads-empty { text-align: center; color: #666; padding: 24px 0; }
+
+    /* Плашка героя для свежего объявления */
+    #heroSpot { display:flex; flex-direction:column; height:100%; background:#f5f6f7 }
+    #heroSpot .spot-img{ flex:1 1 auto; min-height:0; display:flex; align-items:center; justify-content:center; overflow:hidden }
+    #heroSpot .spot-img img{ width:100%; height:100%; object-fit:cover }
+    #heroSpot .spot-body{ padding:10px 12px; border-top:1px solid #e5e7eb; background:#fff }
+    #heroSpot .spot-title{ font-weight:600; line-height:1.25 }
+    #heroSpot .spot-price{ color:#0d6efd; font-weight:800; margin-top:2px }
+    #heroSpot .spot-cta{ margin-top:8px; display:inline-block; background:#0d6efd; color:#fff; padding:10px 12px; border-radius:10px }
+
+    /* Плейсхолдер-иконка (SVG) */
+    .ph-wrap{display:flex;align-items:center;justify-content:center; width:100%; height:100%; color:#9aa1ab}
+    .ph-wrap svg{width:64px;height:64px;opacity:.7}
+    .ph-text{font-size:12px;color:#818b98;margin-top:6px}
   </style>
 </head>
 <body class="bg-neutral-50 text-neutral-900">
@@ -44,12 +59,10 @@
   <header class="bg-white sticky top-0 z-30 border-b border-neutral-100/80">
     <div class="container mx-auto px-4 py-2 md:py-2">
       <div class="flex flex-wrap items-center gap-3">
-        <!-- Логотип -->
         <a href="/" class="order-1 flex items-center gap-2 shrink-0">
           <img src="./images/Arendatorkg.png" alt="Arendator.kg" class="w-8 h-8 rounded-full object-contain">
         </a>
 
-        <!-- Навигация -->
         <nav class="order-3 w-full mt-1 grid grid-cols-3 gap-2 text-sm
                     md:order-2 md:w-auto md:mt-0 md:grid-cols-none md:flex md:flex-1 md:justify-center md:gap-3">
           <a id="navBlog"
@@ -76,7 +89,7 @@
 
   <!-- Герой -->
   <section class="container mx-auto px-4 pt-6 pb-4">
-    <div class="rounded-2xl bg-white border border-neutral-200 shadow-soft p-4 md:p-6 grid md:grid-cols-2 gap-4 items-center">
+    <div class="rounded-2xl bg-white border border-neutral-200 shadow-soft p-4 md:p-6 grid md:grid-cols-2 gap-4 items-stretch">
       <div>
         <h1 id="heroTitle" class="hero-title text-3xl md:text-5xl leading-tight text-blue-600" data-i18n="hero_title">
           Ищете квартиру в аренду?
@@ -89,7 +102,7 @@
              class="w-full sm:w-auto sm:min-w-[260px] px-5 py-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center justify-center"
              href="https://t.me/ArendatorKg_VIP_bot" target="_blank" rel="noopener" data-i18n="btn_open_tg">
             <span class="tg-ico" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5л4.6 1.4L18.9 6c.7-.4 1.3-.2.8.2"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5l4.6 1.4L18.9 6c.7-.4 1.3-.2.8.2"/></svg>
             </span>
             Открыть в Telegram
           </a>
@@ -106,8 +119,15 @@
           </div>
         </div>
       </div>
-      <div class="rounded-xl overflow-hidden border border-neutral-200">
-        <div class="aspect-[16/9] bg-neutral-100"></div>
+      <!-- Плашка со свежим объявлением -->
+      <div id="heroSpot" class="rounded-xl overflow-hidden border border-neutral-200">
+        <!-- наполняется скриптом -->
+        <div class="spot-img bg-neutral-100"></div>
+        <div class="spot-body">
+          <div class="spot-title text-sm"></div>
+          <div class="spot-price"></div>
+          <a class="spot-cta" href="https://t.me/ArendatorKg_VIP_bot" target="_blank" rel="noopener" data-i18n="card_btn">🔑 Получить контакты</a>
+        </div>
       </div>
     </div>
   </section>
@@ -125,6 +145,11 @@
       <h2 id="feedTitle" class="text-2xl font-bold mb-2" data-i18n="feed_title">Свежие объявления</h2>
       <div id="ads" class="ads-grid"></div>
       <div id="ads-empty" class="ads-empty" hidden data-i18n="feed_empty">Объявлений пока нет</div>
+      <div class="flex justify-center mt-2">
+        <button id="loadMore" class="px-4 py-2 rounded-xl border border-neutral-300 hover:bg-neutral-50">
+          Показать ещё
+        </button>
+      </div>
     </section>
   </main>
 
@@ -146,7 +171,7 @@
         <a class="px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center"
            href="https://t.me/ArendatorKg_VIP_bot" target="_blank" rel="noopener" data-i18n="btn_get_tg">
           <span class="tg-ico" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5л4.6 1.4L18.9 6c.7-.4 1.3-.2.8.2"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5l4.6 1.4L18.9 6c.7-.4 1.3-.2 .8.2"/></svg>
           </span>
           Получить в Telegram
         </a>
@@ -234,7 +259,9 @@
         card_btn: '🔑 Получить контакты',
         card_no_district: 'Район не указан',
         price_contract: 'Договорная',
-        currency: ' сом'
+        currency: ' сом',
+        no_photo: 'Фото не предоставлено',
+        show_more: 'Показать ещё'
       },
       ky: {
         topline: 'Жарыялар 24 саат жарактуу · Агенттерге каршы фильтр күйгүзүлгөн · Байланыш — Telegram\'да',
@@ -266,7 +293,9 @@
         card_btn: '🔑 Байланышты алуу',
         card_no_district: 'Району көрсөтүлгөн эмес',
         price_contract: 'Макулдашылат',
-        currency: ' сом'
+        currency: ' сом',
+        no_photo: 'Сүрөт берилген эмес',
+        show_more: 'Дагы көрсөтүү'
       }
     };
 
@@ -276,22 +305,19 @@
     function setLang(l) {
       localStorage.setItem('lang', l);
       document.documentElement.lang = l;
-      // обновить кнопку
       document.getElementById('langRU').classList.toggle('active', l === 'ru');
       document.getElementById('langKY').classList.toggle('active', l === 'ky');
-      // применить ко всем data-i18n
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
         const val = (I18N[l] && I18N[l][key]) || (I18N.ru[key] || '');
         if (val) el.textContent = val;
       });
-      // перерисовать карточки с нужными подписями
-      if (window.__lastItems) renderAds(window.__lastItems);
+      // подписи на кнопках в карточках
+      if (window.__lastItems) { renderAds(window.__lastItems, true); }
+      document.getElementById('loadMore').textContent = I18N[l].show_more;
     }
-
     document.getElementById('langBtn').addEventListener('click', () => {
-      const next = getLang() === 'ru' ? 'ky' : 'ru';
-      setLang(next);
+      setLang(getLang() === 'ru' ? 'ky' : 'ru');
     });
 
     // ===== Объявления =====
@@ -299,6 +325,9 @@
     const API_URL = (from=0, limit=API_LIMIT) => `/api/listings?from=${from}&limit=${limit}`;
     const POLL_MS = 60_000;
     const BOT_LINK = 'https://t.me/ArendatorKg_VIP_bot';
+
+    let listFrom = 0;
+    let allItems = [];
 
     const escapeHtml = (s='') =>
       String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -312,21 +341,55 @@
         : escapeHtml(String(value));
     }
     const firstPhoto = photos => (Array.isArray(photos) && photos.length ? photos[0] : null);
+    const isDefaultPic = (url) => url && /default-?ad-?pic\.jpg/i.test(url);
 
-    function renderAds(items) {
-      window.__lastItems = items; // чтобы i18n мог перерисовать кнопки
+    function placeholderHtml() {
+      const lang = getLang();
+      return `
+        <div class="ph-wrap" role="img" aria-label="${I18N[lang].no_photo}">
+          <div class="flex flex-col items-center">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M21 19V7a2 2 0 0 0-2-2h-3.2l-.6-1.2A2 2 0 0 0 13.4 2h-2.8a2 2 0 0 0-1.8 1.2L8.2 5H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2ZM7 11l3 4 2-3 3 5H7Z"/>
+            </svg>
+            <div class="ph-text">${I18N[lang].no_photo}</div>
+          </div>
+        </div>`;
+    }
+
+    function renderSpot(item){
+      const lang = getLang();
+      const spot = document.getElementById('heroSpot');
+      const imgWrap = spot.querySelector('.spot-img');
+      const body = spot.querySelector('.spot-body');
+      const img = firstPhoto(item.photos);
+      imgWrap.innerHTML = '';
+      if (img && !isDefaultPic(img)) {
+        const im = new Image();
+        im.alt = (item.title||'');
+        im.src = img;
+        imgWrap.appendChild(im);
+      } else {
+        imgWrap.innerHTML = placeholderHtml();
+      }
+      body.querySelector('.spot-title').textContent = item.title || '';
+      body.querySelector('.spot-price').textContent = fmtPrice(item.price);
+      body.querySelector('.spot-cta').textContent = I18N[lang].card_btn;
+    }
+
+    function renderAds(items, replace=false) {
+      window.__lastItems = items;
       const wrap = document.getElementById('ads');
       const empty = document.getElementById('ads-empty');
       const lang = getLang();
 
-      wrap.innerHTML = '';
+      if (replace) wrap.innerHTML = '';
       if (!Array.isArray(items) || !items.length) {
-        empty.hidden = false;
+        if (!wrap.children.length) empty.hidden = false;
         return;
       }
       empty.hidden = true;
 
-      for (const ad of items) {
+      items.forEach(ad => {
         const title = escapeHtml(ad.title || '—');
         const price = fmtPrice(ad.price);
         const district = escapeHtml(ad.district || I18N[lang].card_no_district);
@@ -336,7 +399,7 @@
         el.className = 'ad-card';
         el.innerHTML = `
           <div class="ad-thumb">
-            ${img ? `<img src="${img}" alt="${title}">` : `<span>📷</span>`}
+            ${img && !isDefaultPic(img) ? `<img src="${img}" alt="${title}">` : placeholderHtml()}
           </div>
           <div class="ad-body">
             <h3 class="ad-title">${title}</h3>
@@ -346,26 +409,61 @@
           </div>
         `;
         wrap.appendChild(el);
-      }
+      });
     }
 
-    async function loadAdsOnce() {
+    async function fetchPage(from) {
+      const res = await fetch(API_URL(from, API_LIMIT), { cache: 'no-store' });
+      if (!res.ok) throw new Error(res.status + ' ' + res.statusText);
+      const data = await res.json(); // { items: [...] }
+      return data.items || [];
+    }
+
+    async function initialLoad() {
       try {
-        const res = await fetch(API_URL(0, API_LIMIT), { cache: 'no-store' });
-        if (!res.ok) throw new Error(res.status + ' ' + res.statusText);
-        const data = await res.json(); // { items: [...] }
-        renderAds(data.items || []);
+        const items = await fetchPage(0);
+        allItems = items.slice();
+        listFrom = items.length;
+
+        // Спот — самое свежее (первый элемент)
+        if (items.length) renderSpot(items[0]);
+
+        // Сетка (все элементы; можно пропускать первый, если не хочешь дублировать)
+        renderAds(items, true);
       } catch (e) {
         console.warn('Не удалось загрузить объявления:', e);
       }
     }
 
+    async function loadMore() {
+      try {
+        const more = await fetchPage(listFrom);
+        if (!more.length) return;
+        allItems = allItems.concat(more);
+        listFrom += more.length;
+        renderAds(more, false);
+      } catch(e) {
+        console.warn('Не удалось подгрузить ещё:', e);
+      }
+    }
+
+    document.getElementById('loadMore').addEventListener('click', loadMore);
+
     document.addEventListener('DOMContentLoaded', () => {
-      // инициализация языка
       setLang(getLang());
-      // загрузка ленты
-      loadAdsOnce();
-      setInterval(loadAdsOnce, POLL_MS);
+      initialLoad();
+      setInterval(async () => {
+        // периодически обновляем список (только если появился новый id в начале)
+        try {
+          const fresh = await fetchPage(0);
+          if (fresh.length && (!allItems.length || fresh[0].id !== allItems[0].id)) {
+            allItems = fresh.slice();
+            listFrom = fresh.length;
+            renderSpot(fresh[0]);
+            renderAds(fresh, true);
+          }
+        } catch(_) {}
+      }, POLL_MS);
     });
   </script>
 </body>
