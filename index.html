@@ -36,7 +36,7 @@
 <body class="bg-neutral-50 text-neutral-900">
 
   <!-- Верхняя полоса -->
-  <div class="bg-emerald-600 text-white text-center text-xs sm:text-sm py-2">
+  <div id="topline" class="bg-emerald-600 text-white text-center text-xs sm:text-sm py-2" data-i18n="topline">
     Объявления живут 24 часа · Анти-агент фильтр включён · Контакты — в Telegram
   </div>
 
@@ -52,23 +52,23 @@
         <!-- Навигация -->
         <nav class="order-3 w-full mt-1 grid grid-cols-3 gap-2 text-sm
                     md:order-2 md:w-auto md:mt-0 md:grid-cols-none md:flex md:flex-1 md:justify-center md:gap-3">
-          <a href="blog.html"
-             class="w-full h-9 px-3 rounded-xl border border-neutral-200 hover:bg-neutral-50 flex items-center justify-center text-center">
-            Блог
-          </a>
-          <a href="post.html"
-             class="w-full h-9 px-3 rounded-xl bg-neutral-900 text-white hover:bg-neutral-800 flex items-center justify-center text-center">
-            Добавить объявление
-          </a>
-          <a href="favorites.html"
-             class="w-full h-9 px-3 rounded-xl border border-neutral-200 hover:bg-neutral-50 flex items-center justify-center text-center">
-            Избранное
-          </a>
+          <a id="navBlog"
+             href="blog.html"
+             class="w-full h-9 px-3 rounded-xl border border-neutral-200 hover:bg-neutral-50 flex items-center justify-center text-center"
+             data-i18n="nav_blog">Блог</a>
+          <a id="navPost"
+             href="post.html"
+             class="w-full h-9 px-3 rounded-xl bg-neutral-900 text-white hover:bg-neutral-800 flex items-center justify-center text-center"
+             data-i18n="nav_add">Добавить объявление</a>
+          <a id="navFav"
+             href="favorites.html"
+             class="w-full h-9 px-3 rounded-xl border border-neutral-200 hover:bg-neutral-50 flex items-center justify-center text-center"
+             data-i18n="nav_fav">Избранное</a>
         </nav>
 
-        <!-- Переключатель языка (без логики, просто заглушка) -->
-        <button class="order-2 md:order-3 ml-auto lang-toggle text-sm" type="button" disabled>
-          <span class="active">Рус</span> / <span>Кыр</span>
+        <!-- Переключатель языка -->
+        <button id="langBtn" class="order-2 md:order-3 ml-auto lang-toggle text-sm" type="button">
+          <span id="langRU" class="active">Рус</span> / <span id="langKY">Кыр</span>
         </button>
       </div>
     </div>
@@ -78,24 +78,32 @@
   <section class="container mx-auto px-4 pt-6 pb-4">
     <div class="rounded-2xl bg-white border border-neutral-200 shadow-soft p-4 md:p-6 grid md:grid-cols-2 gap-4 items-center">
       <div>
-        <h1 class="hero-title text-3xl md:text-5xl leading-tight text-blue-600">Ищете квартиру в аренду?</h1>
-        <p class="mt-2 text-base md:text-lg text-neutral-600">
+        <h1 id="heroTitle" class="hero-title text-3xl md:text-5xl leading-tight text-blue-600" data-i18n="hero_title">
+          Ищете квартиру в аренду?
+        </h1>
+        <p id="heroLead" class="mt-2 text-base md:text-lg text-neutral-600" data-i18n="hero_lead">
           Экономьте время и нервы: мы находим «живые» объявления, отсекаем посредников, выдаём контакты в Telegram — без спама и лишних звонков.
         </p>
         <div class="mt-4 flex flex-col sm:flex-row flex-wrap gap-1">
-          <a class="w-full sm:w-auto sm:min-w-[260px] px-5 py-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center justify-center"
-             href="https://t.me/ArendatorKg_VIP_bot" target="_blank" rel="noopener">
+          <a id="btnTelegram"
+             class="w-full sm:w-auto sm:min-w-[260px] px-5 py-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center justify-center"
+             href="https://t.me/ArendatorKg_VIP_bot" target="_blank" rel="noopener" data-i18n="btn_open_tg">
             <span class="tg-ico" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5l4.6 1.4L18.9 6c.7-.4 1.3-.2.8.2"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5л4.6 1.4L18.9 6c.7-.4 1.3-.2.8.2"/></svg>
             </span>
             Открыть в Telegram
           </a>
-          <a class="w-full sm:w-auto sm:min-w-[260px] px-5 py-3 rounded-xl border border-neutral-200 hover:bg-neutral-50 text-center"
-             href="#feed">Смотреть ленту на сайте</a>
+          <a id="btnSeeOnSite"
+             class="w-full sm:w-auto sm:min-w-[260px] px-5 py-3 rounded-xl border border-neutral-200 hover:bg-neutral-50 text-center"
+             href="#feed" data-i18n="btn_see_site">Смотреть ленту на сайте</a>
         </div>
         <div class="mt-3 flex items-center gap-2 text-sm text-neutral-600">
-          <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Анти-агент фильтр</div>
-          <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-blue-600"></span> Ежесекундные обновления</div>
+          <div id="badgeAnti" class="flex items-center gap-2" data-i18n="badge_anti">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Анти-агент фильтр
+          </div>
+          <div id="badgeLive" class="flex items-center gap-2" data-i18n="badge_live">
+            <span class="w-2 h-2 rounded-full bg-blue-600"></span> Ежесекундные обновления
+          </div>
         </div>
       </div>
       <div class="rounded-xl overflow-hidden border border-neutral-200">
@@ -107,52 +115,54 @@
   <!-- Рекламный слот -->
   <div class="container mx-auto px-4">
     <div class="my-3 rounded-2xl border border-neutral-200 bg-white shadow-soft grid place-items-center min-h-[72px] sm:min-h-[90px]">
-      <span class="text-sm text-neutral-500">Место для рекламы (банк · мебель · интернет)</span>
+      <span class="text-sm text-neutral-500" data-i18n="ad_slot">Место для рекламы (банк · мебель · интернет)</span>
     </div>
   </div>
 
   <!-- Лента -->
   <main id="feed" class="container mx-auto px-4 pb-6">
     <section class="ads-wrap">
-      <h2 class="text-2xl font-bold mb-2">Свежие объявления</h2>
+      <h2 id="feedTitle" class="text-2xl font-bold mb-2" data-i18n="feed_title">Свежие объявления</h2>
       <div id="ads" class="ads-grid"></div>
-      <div id="ads-empty" class="ads-empty" hidden>Объявлений пока нет</div>
+      <div id="ads-empty" class="ads-empty" hidden data-i18n="feed_empty">Объявлений пока нет</div>
     </section>
   </main>
 
   <!-- Тарифы -->
   <section class="container mx-auto px-4 pb-8">
-    <h2 class="text-2xl font-bold mb-1">Доступ к контактам</h2>
-    <p class="text-neutral-700 mb-4">Лучшие варианты улетают за часы. Подключите доступ — бот пришлёт контакты владельцев.</p>
+    <h2 id="plansTitle" class="text-2xl font-bold mb-1" data-i18n="plans_title">Доступ к контактам</h2>
+    <p id="plansLead" class="text-neutral-700 mb-4" data-i18n="plans_lead">
+      Лучшие варианты улетают за часы. Подключите доступ — бот пришлёт контакты владельцев.
+    </p>
 
     <div class="grid sm:grid-cols-2 gap-3">
       <div class="rounded-2xl border border-neutral-200 bg-white p-4 shadow-soft">
-        <div class="text-xl font-bold mb-1">300 сом — Неделя</div>
+        <div id="planW" class="text-xl font-bold mb-1" data-i18n="plan_week">300 сом — Неделя</div>
         <ul class="space-y-1 text-neutral-700 text-sm mb-3">
-          <li>• Контакты владельцев без лимита</li>
-          <li>• Анти-агент фильтр</li>
-          <li>• Уведомления о новых совпадениях</li>
+          <li data-i18n="p1">• Контакты владельцев без лимита</li>
+          <li data-i18n="p2">• Анти-агент фильтр</li>
+          <li data-i18n="p3">• Уведомления о новых совпадениях</li>
         </ul>
         <a class="px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center"
-           href="https://t.me/ArendatorKg_VIP_bot" target="_blank" rel="noopener">
+           href="https://t.me/ArendatorKg_VIP_bot" target="_blank" rel="noopener" data-i18n="btn_get_tg">
           <span class="tg-ico" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5l4.6 1.4L18.9 6c.7-.4 1.3-.2.8.2"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5л4.6 1.4L18.9 6c.7-.4 1.3-.2.8.2"/></svg>
           </span>
           Получить в Telegram
         </a>
       </div>
 
       <div class="rounded-2xl border border-neutral-200 bg-white p-4 shadow-soft">
-        <div class="text-xl font-bold mb-1">600 сом — Месяц</div>
+        <div id="planM" class="text-xl font-bold mb-1" data-i18n="plan_month">600 сом — Месяц</div>
         <ul class="space-y-1 text-neutral-700 text-sm mb-3">
-          <li>• Контакты владельцев без лимита</li>
-          <li>• Анти-агент фильтр</li>
-          <li>• Уведомления о новых совпадениях</li>
+          <li data-i18n="p1">• Контакты владельцев без лимита</li>
+          <li data-i18n="p2">• Анти-агент фильтр</li>
+          <li data-i18n="p3">• Уведомления о новых совпадениях</li>
         </ul>
         <a class="px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center"
-           href="https://t.me/ArendatorKg_VIP_bot" target="_blank" rel="noopener">
+           href="https://t.me/ArendatorKg_VIP_bot" target="_blank" rel="noopener" data-i18n="btn_get_tg">
           <span class="tg-ico" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5l4.6 1.4L18.9 6c.7-.4 1.3-.2.8.2"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4л1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8л2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5л4.6 1.4L18.9 6c.7-.4 1.3-.2 .8.2"/></svg>
           </span>
           Получить в Telegram
         </a>
@@ -168,74 +178,171 @@
           <img src="./images/Arendatorkg.png" alt="Arendator.kg" class="w-7 h-7 rounded-full object-contain">
           <span class="font-semibold">Arendator.kg</span>
         </div>
-        <p class="text-neutral-600 mt-2 max-w-[60ch]">Автоматически мониторим свежие объявления от владельцев и проверенных источников, чтобы вы нашли жильё быстрее и без посредников.</p>
+        <p id="footerLead" class="text-neutral-600 mt-2 max-w-[60ch]" data-i18n="footer_lead">
+          Автоматически мониторим свежие объявления от владельцев и проверенных источников, чтобы вы нашли жильё быстрее и без посредников.
+        </p>
       </div>
       <div>
-        <div class="font-semibold">Навигация</div>
+        <div class="font-semibold" data-i18n="footer_nav">Навигация</div>
         <ul class="mt-2 space-y-1 text-neutral-600">
-          <li><a href="post.html" class="hover:text-blue-600">Добавить объявление</a></li>
-          <li><a href="blog.html" class="hover:text-blue-600">Блог</a></li>
+          <li><a href="post.html" class="hover:text-blue-600" data-i18n="nav_add">Добавить объявление</a></li>
+          <li><a href="blog.html" class="hover:text-blue-600" data-i18n="nav_blog">Блог</a></li>
         </ul>
       </div>
       <div>
-        <div class="font-semibold">Правовое</div>
+        <div class="font-semibold" data-i18n="footer_legal">Правовое</div>
         <ul class="mt-2 space-y-1 text-neutral-600">
-          <li><a class="hover:text-blue-600" href="data-deletion.html">Удаление данных</a></li>
-          <li><a class="hover:text-blue-600" href="#">Политика конфиденциальности</a></li>
+          <li><a class="hover:text-blue-600" href="data-deletion.html" data-i18n="footer_delete">Удаление данных</a></li>
+          <li><a class="hover:text-blue-600" href="#" data-i18n="footer_privacy">Политика конфиденциальности</a></li>
         </ul>
       </div>
     </div>
     <div class="text-center text-xs text-neutral-500 pb-5">© 2025 — Arendator.kg</div>
   </footer>
 
-  <!-- === Скрипт загрузки объявлений === -->
+  <!-- === Скрипт: язык + загрузка объявлений === -->
   <script>
-    // Настройки
-    const API_URL = '/api/ads?limit=50';           // эндпоинт бэкенда
-    const POLL_MS = 60_000;                        // частота обновления
+    // ===== I18N =====
+    const I18N = {
+      ru: {
+        topline: 'Объявления живут 24 часа · Анти-агент фильтр включён · Контакты — в Telegram',
+        nav_blog: 'Блог',
+        nav_add: 'Добавить объявление',
+        nav_fav: 'Избранное',
+        hero_title: 'Ищете квартиру в аренду?',
+        hero_lead: 'Экономьте время и нервы: мы находим «живые» объявления, отсекаем посредников, выдаём контакты в Telegram — без спама и лишних звонков.',
+        btn_open_tg: 'Открыть в Telegram',
+        btn_see_site: 'Смотреть ленту на сайте',
+        badge_anti: 'Анти-агент фильтр',
+        badge_live: 'Ежесекундные обновления',
+        ad_slot: 'Место для рекламы (банк · мебель · интернет)',
+        feed_title: 'Свежие объявления',
+        feed_empty: 'Объявлений пока нет',
+        plans_title: 'Доступ к контактам',
+        plans_lead: 'Лучшие варианты улетают за часы. Подключите доступ — бот пришлёт контакты владельцев.',
+        plan_week: '300 сом — Неделя',
+        plan_month: '600 сом — Месяц',
+        p1: '• Контакты владельцев без лимита',
+        p2: '• Анти-агент фильтр',
+        p3: '• Уведомления о новых совпадениях',
+        btn_get_tg: 'Получить в Telegram',
+        footer_lead: 'Автоматически мониторим свежие объявления от владельцев и проверенных источников, чтобы вы нашли жильё быстрее и без посредников.',
+        footer_nav: 'Навигация',
+        footer_legal: 'Правовое',
+        footer_delete: 'Удаление данных',
+        footer_privacy: 'Политика конфиденциальности',
+        card_btn: '🔑 Получить контакты',
+        card_no_district: 'Район не указан',
+        price_contract: 'Договорная',
+        currency: ' сом'
+      },
+      ky: {
+        topline: 'Жарыялар 24 саат жарактуу · Агенттерге каршы фильтр күйгүзүлгөн · Байланыш — Telegram\'да',
+        nav_blog: 'Блог',
+        nav_add: 'Жарнама кошуу',
+        nav_fav: 'Тандалгандар',
+        hero_title: 'Батир издеп жатасыңбы?',
+        hero_lead: 'Биз «жандуу» жарыяларды таап, ортомчуларды бөлүп чыгарабыз, байланыштарды Telegram аркылуу беребиз — спамсыз жана ашыкча чалуусуз.',
+        btn_open_tg: 'Telegram\'да ачуу',
+        btn_see_site: 'Лентаны сайттан көрүү',
+        badge_anti: 'Агент фильтри',
+        badge_live: 'Секунд сайын жаңыланат',
+        ad_slot: 'Жарнама үчүн орун (банк · эмерек · интернет)',
+        feed_title: 'Жаңы жарыялар',
+        feed_empty: 'Азырынча жарыялар жок',
+        plans_title: 'Байланыштарга жетүү',
+        plans_lead: 'Эң мыкты варианттар бир нече саатта эле кетет. Жеткиликтүү кыл — бот ээнин контакттарын жөнөтөт.',
+        plan_week: '300 сом — Жума',
+        plan_month: '600 сом — Ай',
+        p1: '• Ээлердин байланыштары чексиз',
+        p2: '• Агент фильтри',
+        p3: '• Жаңы дал келиштер тууралуу билдирүүлөр',
+        btn_get_tg: 'Telegram аркылуу алуу',
+        footer_lead: 'Биз текшерилген булактардан жана ээлерден жаңы жарыяларды көзөмөлдөп турабыз — батирди ортомчусуз тез тап.',
+        footer_nav: 'Навигация',
+        footer_legal: 'Юридикалык',
+        footer_delete: 'Маалыматтарды өчүрүү',
+        footer_privacy: 'Купуялык саясаты',
+        card_btn: '🔑 Байланышты алуу',
+        card_no_district: 'Району көрсөтүлгөн эмес',
+        price_contract: 'Макулдашылат',
+        currency: ' сом'
+      }
+    };
+
+    function getLang() {
+      return localStorage.getItem('lang') || (document.documentElement.lang || 'ru');
+    }
+    function setLang(l) {
+      localStorage.setItem('lang', l);
+      document.documentElement.lang = l;
+      // обновить кнопку
+      document.getElementById('langRU').classList.toggle('active', l === 'ru');
+      document.getElementById('langKY').classList.toggle('active', l === 'ky');
+      // применить ко всем data-i18n
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        const val = (I18N[l] && I18N[l][key]) || (I18N.ru[key] || '');
+        if (val) el.textContent = val;
+      });
+      // перерисовать карточки с нужными подписями
+      if (window.__lastItems) renderAds(window.__lastItems);
+    }
+
+    document.getElementById('langBtn').addEventListener('click', () => {
+      const next = getLang() === 'ru' ? 'ky' : 'ru';
+      setLang(next);
+    });
+
+    // ===== Объявления =====
+    const API_LIMIT = 24;
+    const API_URL = (from=0, limit=API_LIMIT) => `/api/listings?from=${from}&limit=${limit}`;
+    const POLL_MS = 60_000;
     const BOT_LINK = 'https://t.me/ArendatorKg_VIP_bot';
 
-    // Утилиты
-    function escapeHtml(s='') {
-      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-    }
-    function fmtPrice(v) {
-      if (v === null || v === undefined || v === '') return 'Договорная';
-      const n = Number(v);
-      return isFinite(n) ? n.toLocaleString('ru-RU') + ' сом' : escapeHtml(String(v));
-    }
-    function firstPhoto(photos) {
-      return (Array.isArray(photos) && photos.length) ? photos[0] : null;
-    }
+    const escapeHtml = (s='') =>
+      String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-    // Рендер
-    function renderAds(list) {
+    function fmtPrice(value) {
+      const lang = getLang();
+      if (value === null || value === undefined || value === '') return I18N[lang].price_contract;
+      const n = Number(value);
+      return isFinite(n)
+        ? n.toLocaleString(lang === 'ru' ? 'ru-RU' : 'ky-KG') + I18N[lang].currency
+        : escapeHtml(String(value));
+    }
+    const firstPhoto = photos => (Array.isArray(photos) && photos.length ? photos[0] : null);
+
+    function renderAds(items) {
+      window.__lastItems = items; // чтобы i18n мог перерисовать кнопки
       const wrap = document.getElementById('ads');
       const empty = document.getElementById('ads-empty');
+      const lang = getLang();
+
       wrap.innerHTML = '';
-      if (!Array.isArray(list) || list.length === 0) {
+      if (!Array.isArray(items) || !items.length) {
         empty.hidden = false;
         return;
       }
       empty.hidden = true;
 
-      for (const ad of list) {
-        const title = escapeHtml(ad.title || 'Без названия');
-        const price = fmtPrice(ad.price_text || ad.price);
-        const district = escapeHtml(ad.district || 'Район не указан');
+      for (const ad of items) {
+        const title = escapeHtml(ad.title || '—');
+        const price = fmtPrice(ad.price);
+        const district = escapeHtml(ad.district || I18N[lang].card_no_district);
         const img = firstPhoto(ad.photos);
 
         const el = document.createElement('article');
         el.className = 'ad-card';
         el.innerHTML = `
           <div class="ad-thumb">
-            ${img ? `<img src="${img}" alt="${title}">` : `<span>📷 фото нет</span>`}
+            ${img ? `<img src="${img}" alt="${title}">` : `<span>📷</span>`}
           </div>
           <div class="ad-body">
             <h3 class="ad-title">${title}</h3>
             <div class="ad-price">${price}</div>
             <div class="ad-meta">📍 ${district}</div>
-            <a class="ad-cta" href="${BOT_LINK}" target="_blank" rel="noopener">🔑 Получить контакты</a>
+            <a class="ad-cta" href="${BOT_LINK}" target="_blank" rel="noopener">${I18N[lang].card_btn}</a>
           </div>
         `;
         wrap.appendChild(el);
@@ -244,33 +351,22 @@
 
     async function loadAdsOnce() {
       try {
-        const res = await fetch(API_URL, { cache: 'no-store' });
+        const res = await fetch(API_URL(0, API_LIMIT), { cache: 'no-store' });
         if (!res.ok) throw new Error(res.status + ' ' + res.statusText);
-        const data = await res.json();      // ожидается массив объектов
-        renderAds(data);
+        const data = await res.json(); // { items: [...] }
+        renderAds(data.items || []);
       } catch (e) {
         console.warn('Не удалось загрузить объявления:', e);
       }
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      // инициализация языка
+      setLang(getLang());
+      // загрузка ленты
       loadAdsOnce();
       setInterval(loadAdsOnce, POLL_MS);
     });
-
-    /*
-      Ожидаемый формат элемента объявления от бэкенда /api/ads:
-      [
-        {
-          "id": "123",                        // строка или число
-          "title": "2к, Центр, свежий ремонт",
-          "price": 35000,                     // число или строка; можно price_text
-          "district": "Центр",
-          "photos": ["https://.../1.jpg", "..."], // массив URL (первая — обложка)
-          "created_at": "2025-01-10T12:34:56Z"    // опционально
-        }, ...
-      ]
-    */
   </script>
 </body>
 </html>
