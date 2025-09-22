@@ -12,10 +12,10 @@ module.exports = async (req, res) => {
 
     // без фильтра is_active, чтобы не отфильтровать всё из-за NULL
     const { data, error } = await sb
-      .from('listings')
-      .select('id,title,price,district,phone_masked,text,photos,created_at')
-      .order('id', { ascending: false })
-      .range(from, from + limit - 1);
+  .from('listings')
+  .select('id,title,price,district,phone_masked,photos,created_at,source,source_post_id') // без text
+  .order('id', { ascending: false })
+  .range(from, from + limit - 1);
 
     if (error) {
       console.error('supabase select error:', error);
