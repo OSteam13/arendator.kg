@@ -245,36 +245,50 @@
     }
 
     // --- placeholder detection (бережная) ---
-    const PLACEHOLDER_RXES = [
-      /no[-_ ]?photo/i,
-      /no[-_ ]?image/i,
-      /nophoto/i,
-      /noimage/i,
-      /placeholder/i,
-      /stub/i,
-      /empty/i,
-      /default(\.(png|jpg|jpeg|webp|gif))?$/i
-    ];
-    function isPlaceholderGeneric(url){
-      return PLACEHOLDER_RXES.some(rx => rx.test(url));
-    }
-    function isLalafoPromo(url){
-      try{
-        const u = new URL(url);
-        if(!/lalafo\./i.test(u.hostname)) return false;
-        const p = u.pathname.toLowerCase();
-        // промо/статические ассеты приложения – НЕ реальные фото объявлений
-        const looksPromo = /(app|promo|marketing|landing|static)/.test(p);
-        const looksReal  = /(poster|posters|photo|photos|img|image|images|files)/.test(p);
-        return looksPromo && !looksReal;
-      }catch{ return false; }
-    }
-    function isPlaceholderPhoto(url){
-      if(!url) return true;
-      const s = String(url);
-      return isPlaceholderGeneric(s) || isLalafoPromo(s);
-    }
+    // --- placeholder detection (аккуратно) ---
+const PLACEHOLDER_RXES = [
+  /no[-_ ]?photo/i,
+  /no[-_ ]?image/i,
+  /nophoto/i,
+  /noimage/i,
+  /placeholder/i,
+  /stub/i,
+  /empty/i,
+  /default(\.(png|jpg|jpeg|webp|gif))?$/i
+];
 
+function isPlaceholderGeneric(url){
+  return PLACEHOLDER_RXES.some(rx => rx.test(url));
+}
+
+// именно дефолтная заглушка Lalafo: https://lalafo.kg/images/default-ad-pic.jpg (+ возможные вариации)
+function isLalafoDefault(url){
+  try{
+    const u = new URL(url);
+    if (!/lalafo\./i.test(u.hostname)) return false;
+    const p = u.pathname.toLowerCase();
+    // ловим /images/default-ad-pic.jpg и любые варианты с query/версией
+    return p.includes('/images/default-ad-pic');
+  }catch{ return false; }
+}
+
+// промо/маркетинговые ассеты Lalafo (НЕ фото объявлений)
+function isLalafoPromo(url){
+  try{
+    const u = new URL(url);
+    if(!/lalafo\./i.test(u.hostname)) return false;
+    const p = u.pathname.toLowerCase();
+    const looksPromo = /(app|promo|marketing|landing|static)/.test(p);
+    const looksReal  = /(poster|posters|photo|photos|img|image|images|files)/.test(p);
+    return looksPromo && !looksReal;
+  }catch{ return false; }
+}
+
+function isPlaceholderPhoto(url){
+  if (!url) return true;
+  const s = String(url);
+  return isPlaceholderGeneric(s) || isLalafoDefault(s) || isLalafoPromo(s);
+}
     // ===== storage =====
     function readFavIds(){
       const a = new Set(JSON.parse(localStorage.getItem(FAV_KEY)||'[]'));
@@ -429,3 +443,4 @@
   </script>
 </body>
 </html>
+
