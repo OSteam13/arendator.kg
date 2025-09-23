@@ -173,7 +173,7 @@
              class="box-border px-5 py-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center justify-center"
              href="https://t.me/ArendatorKg_VIP_bot" target="_blank" rel="noopener" data-i18n="btn_open_tg">
             <span class="tg-ico" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5l4.6 1.4L18.9 6c.7-.4 1.3-.2.8.2"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5l4.6 1.4L18.9 6c.7-.4 1.3-.2 .8.2"/></svg>
             </span>
             Открыть в Telegram
           </a>
@@ -321,7 +321,7 @@
         <a class="box-border w-full sm:w-auto px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center"
            href="https://t.me/ArendatorKg_VIP_bot" target="_blank" rel="noopener">
           <span class="tg-ico" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4л1.9-1.8 4.1 3c.8 .4 1.4 .2 1.6 -.8л2.9 -13.5c.3 -1.3 -.5 -1.8 -1.3 -1.5L2.5 9.4c-1.3 .5-1.3 1.2 -.2 1.5л4.6 1.4L18.9 6c.7 -.4 1.3 -.2 .8 .2"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4л1.9-1.8 4.1 3c.8 .4 1.4 .2 1.6 -.8л2.9 -13.5c.3 -1.3 -.5 -1.8 -1.3 -1.5L2.5 9.4c-1.3 .5 -1.3 1.2 -.2 1.5л4.6 1.4L18.9 6c.7 -.4 1.3 -.2 .8 .2"/></svg>
           </span>
           Получить в Telegram
         </a>
@@ -596,12 +596,26 @@
       return normalizeListings(raw);
     }
 
+    /* ====== ДОБАВЛЕНО: чтение локальных объявлений из post.html ====== */
+    function getUserListings(){
+      try{ return JSON.parse(localStorage.getItem('user_listings')||'[]'); }
+      catch{ return []; }
+    }
+    /* ================================================================ */
+
     async function initialLoad(){
       try{
         const items=await fetchPage(0);
         allItems=items.slice(); listFrom=items.length;
+
+        // --- показываем карточку-герой: серверную, а если её нет — локальную
+        const local = getUserListings();
         if(items.length) renderSpot(items[0]);
-        renderAds(items,true);
+        else if(local.length) renderSpot(local[0]);
+
+        // --- В ленте сначала локальные объявления пользователя, затем серверные
+        if(local.length) renderAds(local, true);
+        renderAds(items, !local.length);
       }catch(e){ console.warn('Не удалось загрузить объявления:',e); }
     }
 
@@ -625,7 +639,14 @@
           const fresh=await fetchPage(0);
           if(fresh.length && (!allItems.length || fresh[0].id!==allItems[0].id)){
             allItems=fresh.slice(); listFrom=fresh.length;
-            renderSpot(fresh[0]); renderAds(fresh,true);
+
+            // обновить спот и ленту, сохраняя локальные объявления сверху
+            const local = getUserListings();
+            if(fresh.length) renderSpot(fresh[0]);
+            else if(local.length) renderSpot(local[0]);
+
+            if(local.length) renderAds(local, true);
+            renderAds(fresh, !local.length);
           }
         }catch(_){}
       }, POLL_MS);
