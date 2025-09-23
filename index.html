@@ -40,14 +40,12 @@
     .ad-card {
       position:relative; border: 1px solid #eee; border-radius: 14px; overflow: hidden; background: #fff;
       box-shadow: 0 2px 10px rgba(0,0,0,.03); display: flex; flex-direction: column;
-      height:480px; /* фикс-высота: кнопка всегда на одном уровне */
+      height:480px;
     }
 
-    /* Фото без пустых зон */
     .ad-thumb { aspect-ratio: 4 / 3; background: #f6f7f8; overflow: hidden; }
     .ad-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-    /* Контент + резерв под кнопку/избранное */
     .ad-body {
       position:relative; padding: 12px 14px 70px; display: flex; flex-direction: column; gap: 8px; flex:1;
     }
@@ -55,11 +53,9 @@
     .ad-price { color: #0d6efd; font-weight: 700; }
     .ad-meta { color: #666; font-size: 13px; display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden }
 
-    /* Кнопка — фиксированно у низа карточки */
     .ad-cta { position:absolute; left:14px; right:14px; bottom:56px; height:44px; border-radius:8px;
       display:grid; place-items:center; text-decoration:none; background:#0d6efd; color:#fff; font-weight:700 }
 
-    /* Избранное — под кнопкой, прижато к низу */
     .ad-fav { position:absolute; right:18px; bottom:10px; background:none; border:none; padding:0; cursor:pointer;
       font-size:13px; color:#3f3f46; }
     .ad-fav .heart{color:#e11d48;margin-left:6px}
@@ -81,12 +77,10 @@
     #heroSpot .spot-fav .heart{color:#e11d48;margin-left:6px}
     #heroSpot .spot-fav.active{color:#e11d48;font-weight:600}
 
-    /* плейсхолдер */
     .ph-wrap{display:flex;align-items:center;justify-content:center; width:100%; height:100%; color:#9aa1ab}
     .ph-wrap svg{width:64px;height:64px;opacity:.7}
     .ph-text{font-size:12px;color:#818b98;margin-top:6px}
 
-    /* Адаптив героя */
     .hero-card{overflow:visible}
     .hero-card *{min-width:0}
     .hero-card{word-wrap:break-word;overflow-wrap:anywhere}
@@ -253,7 +247,8 @@
         <a class="box-border w-full sm:w-auto px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center"
            href="https://t.me/ArendatorKg_VIP_bot" target="_blank" rel="noopener">
           <span class="tg-ico" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8 .4 1.4 .2 1.6 -.8l2.9 -13.5c.3 -1.3 -.5 -1.8 -1.3 -1.5L2.5 9.4c-1.3 .5 -1.3 1.2 -.2 1.5l4.6 1.4L18.9 6c.7 -.4 1.3 -.2 .8 .2"/></svg>
+            <!-- тот же валидный путь, что сверху -->
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5l4.6 1.4L18.9 6c.7-.4 1.3-.2 .8.2"/></svg>
           </span>
           Получить в Telegram
         </a>
@@ -266,10 +261,10 @@
           <li>• Анти-агент фильтр</li>
           <li>• Уведомления о новых совпадениях</li>
         </ul>
-        <a class="box-border w-full sm:w-auto px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center"
+        <a class="box-border w_full sm:w-auto px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center"
            href="https://t.me/ArendatorKg_VIP_bot" target="_blank" rel="noopener">
           <span class="tg-ico" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8 .4 1.4 .2 1.6 -.8l2.9 -13.5c.3 -1.3 -.5 -1.8 -1.3 -1.5L2.5 9.4c-1.3 .5 -1.3 1.2 -.2 1.5l4.6 1.4L18.9 6c.7 -.4 1.3 -.2 .8 .2"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5l4.6 1.4L18.9 6c.7-.4 1.3-.2 .8.2"/></svg>
           </span>
           Получить в Telegram
         </a>
@@ -285,7 +280,7 @@
         <a class="box-border w-full sm:w-auto px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center"
            href="https://t.me/ArendatorKg_VIP_bot" target="_blank" rel="noopener">
           <span class="tg-ico" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8 .4 1.4 .2 1.6 -.8l2.9 -13.5c.3 -1.3 -.5 -1.8 -1.3 -1.5L2.5 9.4c-1.3 .5 -1.3 1.2 -.2 1.5l4.6 1.4L18.9 6c.7 -.4 1.3 -.2 .8 .2"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5l4.6 1.4L18.9 6c.7-.4 1.3-.2 .8.2"/></svg>
           </span>
           Получить в Telegram
         </a>
@@ -302,7 +297,7 @@
           <svg width="36" height="36" viewBox="0 0 24 24" fill="#229ED9"><path d="M9.9 15.2 9.7 19c.4 0 .6-.2.8-.4l2-1.9 4.2 3c.8.4 1.5.2 1.7-.8l3-13.8c.3-1.3-.6-1.9-1.4-1.6L2.4 9.5c-1.3.5-1.3 1.3-.2 1.6l4.8 1.5 10.9-6.6c.8-.4 1.4-.2.9.3L9.9 15.2z"/></svg>
         </a>
         <a href="https://www.instagram.com/arendatorkg/" target="_blank" rel="noopener" aria-label="Instagram" class="hover:opacity-80">
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="#E1306C"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 7.5zm0 2A3.5 3.5 0 1 0 15.5 13 3.5 3.5 0 0 0 12 9.5zM18 6.5a1.1 1.1 0 1 1-1.1-1.1A1.1 1.1 0 0 1 18 6.5z"/></svg>
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="#E1306C"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 5.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 7.5zm0 2A3.5 3.5 0 1 0 15.5 13 3.5 3.5 0 0 0 12 9.5zM18 6.5a1.1 1.1 0 1 1-1.1-1.1A1.1 1.1 0 0 1 18 6.5z"/></svg>
         </a>
         <a href="https://www.threads.com/@arendatorkg" target="_blank" rel="noopener" aria-label="Threads" class="hover:opacity-80">
           <svg width="36" height="36" viewBox="0 0 24 24" fill="#000"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm4.9 11.2c-.3 1.5-1.8 3.7-4.9 3.7-2.6 0-4.5-1.7-4.5-4.1 0-2.5 2-4.1 4.6-4.1 1.9 0 3.2.8 4 2.1.3.5.5 1 .6 1.6l-1.9.2c-.1-.3-.2-.7-.5-1-.5-.6-1.2-1-2.2-1-1.6 0-2.6 1-2.6 2.2s.9 2.1 2.5 2.1c1.2 0 2-.5 2.4-1.3H12v-1.8h4.8c.1.5.1 1 .1 1.4 0 .3 0 .6-.1 1z"/></svg>
@@ -402,26 +397,39 @@
     }
     document.getElementById('langBtn').addEventListener('click',()=>setLang(getLang()==='ru'?'ky':'ru'));
 
-    /* ======================= API ======================= */
-    const API_LIMIT=24;
-    const API_URL=(from=0,limit=API_LIMIT)=>`/api/listings?from=${from}&limit=${limit}`;
-    const POLL_MS=60_000;
-    const BOT_LINK='https://t.me/ArendatorKg_VIP_bot';
+    /* ======================= API (Supabase REST) ======================= */
+    const API_LIMIT = 24;
+    const POLL_MS = 60_000;
+    const BOT_LINK = 'https://t.me/ArendatorKg_VIP_bot';
 
-    function normalizeListings(payload){
-      if(Array.isArray(payload)) return payload;
-      if(payload && Array.isArray(payload.items)) return payload.items;
-      if(payload && Array.isArray(payload.data))  return payload.data;
-      if(payload && payload.items && Array.isArray(payload.items.items)) return payload.items.items;
-      return [];
-    }
-    function getPhotos(raw){
-      if(!raw) return [];
-      if(Array.isArray(raw)) return raw;
-      if(typeof raw==='string'){
-        try{ const v=JSON.parse(raw); return Array.isArray(v)?v:[]; }catch{return [];}
-      }
-      return [];
+    // ⬇⬇⬇ ВСТАВЬ СВОИ ЗНАЧЕНИЯ из Supabase → Project Settings → API
+    const SUPABASE_URL  = 'https://YOUR-PROJECT-REF.supabase.co';
+    const SUPABASE_ANON = 'YOUR-ANON-PUBLIC-KEY';
+    // ⬆⬆⬆
+
+    const API_URL = (from=0, limit=API_LIMIT) =>
+      `${SUPABASE_URL}/rest/v1/listings`
+      + `?select=id,title,price,price_text,district,photos,created_at`
+      + `&approved=eq.true`
+      + `&order=created_at.desc`
+      + `&offset=${from}&limit=${limit}`;
+
+    async function fetchPage(from){
+      const res = await fetch(API_URL(from, API_LIMIT), {
+        headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${SUPABASE_ANON}` },
+        cache: 'no-store'
+      });
+      if(!res.ok) throw new Error(res.status+' '+res.statusText);
+      const rows = await res.json();
+      return rows.map(r => ({
+        id: r.id,
+        title: r.title,
+        price: r.price,
+        price_text: r.price_text,
+        district: r.district,
+        photos: r.photos,        // jsonb[]
+        createdAt: r.created_at
+      }));
     }
 
     /* ======================= Избранное ======================= */
@@ -442,6 +450,14 @@
       if(v===null||v===undefined||v==='') return I18N[lang].price_contract;
       const n=Number(v);
       return isFinite(n)? n.toLocaleString(lang==='ru'?'ru-RU':'ky-KG')+I18N[lang].currency : escapeHtml(String(v));
+    }
+    function getPhotos(raw){
+      if(!raw) return [];
+      if(Array.isArray(raw)) return raw;
+      if(typeof raw==='string'){
+        try{ const v=JSON.parse(raw); return Array.isArray(v)?v:[]; }catch{return [];}
+      }
+      return [];
     }
     function placeholderHtml(){
       const lang=getLang();
@@ -537,14 +553,7 @@
       refreshFavButtons();
     }
 
-    async function fetchPage(from){
-      const res=await fetch(API_URL(from,API_LIMIT),{cache:'no-store'});
-      if(!res.ok) throw new Error(res.status+' '+res.statusText);
-      const raw=await res.json();
-      return normalizeListings(raw);
-    }
-
-    /* ====== Локальные объявления из post.html ====== */
+    /* ====== Локальные объявления из post.html (на случай офлайна) ====== */
     function getUserListings(){
       try{ return JSON.parse(localStorage.getItem('user_listings')||'[]'); }
       catch{ return []; }
@@ -552,8 +561,9 @@
 
     async function initialLoad(){
       try{
-        const items=await fetchPage(0);
-        allItems=items.slice(); listFrom=items.length;
+        const items = await fetchPage(0);
+        allItems = items.slice();
+        listFrom = items.length;
 
         const local = getUserListings();
         if(items.length) renderSpot(items[0]);
@@ -562,13 +572,12 @@
         if(local.length) renderAds(local, true);
         renderAds(items, !local.length);
       }catch(e){
-        // Если API недоступно — покажем локальные
         const local = getUserListings();
         if(local.length){
           renderSpot(local[0]);
           renderAds(local, true);
         }else{
-          console.warn('Не удалось загрузить объявления:',e);
+          console.warn('Не удалось загрузить объявления:', e);
         }
       }
     }
