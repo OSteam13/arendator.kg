@@ -10,6 +10,14 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     :root{--container:1180px}
+
+    /* ===== Reset, чтобы на мобиле ничего не выползало ===== */
+    *,*::before,*::after{box-sizing:border-box}
+    html{-webkit-text-size-adjust:100%}
+    img,svg,video{max-width:100%;height:auto;display:block}
+    a,button{min-width:0}
+    /* ========================================= */
+
     .container{max-width:var(--container)}
     .shadow-soft{box-shadow:0 8px 30px rgba(0,0,0,.08)}
     html,body{overflow-x:hidden;font-family:'Onest',system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-weight:400}
@@ -118,7 +126,7 @@
 
   <!-- Герой -->
   <section class="container mx-auto px-4 pt-6 pb-4">
-    <div class="rounded-2xl bg-white border border-neutral-200 shadow-soft p-4 md:p-6 grid md:grid-cols-2 gap-4 items-start">
+    <div class="hero-card rounded-2xl bg-white border border-neutral-200 shadow-soft p-4 md:p-6 grid md:grid-cols-2 gap-4 items-start overflow-hidden">
       <div>
         <h1 id="heroTitle" class="hero-title text-3xl md:text-5xl leading-tight text-blue-600" data-i18n="hero_title">
           Ищете квартиру в аренду?
@@ -126,9 +134,9 @@
         <p id="heroLead" class="mt-2 text-base md:text-lg text-neutral-600" data-i18n="hero_lead">
           Экономьте время и нервы: мы находим «живые» объявления, отсекаем посредников, выдаём контакты в Telegram — без спама и лишних звонков.
         </p>
-        <div class="mt-4 flex flex-col sm:flex-row flex-wrap gap-1">
+        <div class="mt-4 flex flex-col sm:flex-row flex-wrap gap-2">
           <a id="btnTelegram"
-             class="w-full sm:w-auto sm:min-w-[260px] px-5 py-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center justify-center"
+             class="box-border w-full sm:w-auto sm:min-w-[260px] px-5 py-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center justify-center"
              href="https://t.me/ArendatorKg_VIP_bot" target="_blank" rel="noopener" data-i18n="btn_open_tg">
             <span class="tg-ico" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5l4.6 1.4L18.9 6c.7-.4 1.3-.2.8.2"/></svg>
@@ -136,7 +144,7 @@
             Открыть в Telegram
           </a>
           <a id="btnSeeOnSite"
-             class="w-full sm:w-auto sm:min-w-[260px] px-5 py-3 rounded-xl border border-neutral-200 hover:bg-neutral-50 text-center"
+             class="box-border w-full sm:w-auto sm:min-w-[260px] px-5 py-3 rounded-xl border border-neutral-200 hover:bg-neutral-50 text-center"
              href="#feed" data-i18n="btn_see_site">Смотреть ленту на сайте</a>
         </div>
         <div class="mt-3 flex items-center gap-4 text-sm text-neutral-600">
@@ -167,21 +175,21 @@
           </div>
 
           <div class="mt-3 flex gap-2 overflow-x-auto pb-1">
-            <div class="min-w[220px] rounded-xl border border-neutral-200 p-3 bg-white">
+            <div class="min-w-[220px] rounded-xl border border-neutral-200 p-3 bg-white">
               <div class="flex items-center gap-2 mb-2">
                 <div class="w-8 h-8 rounded-full bg-blue-600/10 grid place-items-center font-bold text-blue-700">А</div>
                 <div class="text-sm font-semibold">Айгуль</div>
               </div>
               <div class="text-sm text-neutral-700">Нашла студию за день, контакты сразу владельца — без звонков от агентов.</div>
             </div>
-            <div class="min-w[220px] rounded-xl border border-neutral-200 p-3 bg-white">
+            <div class="min-w-[220px] rounded-xl border border-neutral-200 p-3 bg-white">
               <div class="flex items-center gap-2 mb-2">
                 <div class="w-8 h-8 rounded-full bg-emerald-600/10 grid place-items-center font-bold text-emerald-700">М</div>
                 <div class="text-sm font-semibold">Марат</div>
               </div>
               <div class="text-sm text-neutral-700">Уведомления в телеге — очень удобно. Успел первым посмотреть.</div>
             </div>
-            <div class="min-w[220px] rounded-xl border border-neutral-200 p-3 bg-white">
+            <div class="min-w-[220px] rounded-xl border border-neutral-200 p-3 bg-white">
               <div class="flex items-center gap-2 mb-2">
                 <div class="w-8 h-8 rounded-full bg-fuchsia-600/10 grid place-items-center font-bold text-fuchsia-700">Н</div>
                 <div class="text-sm font-semibold">Нурзат</div>
@@ -257,10 +265,10 @@
           <li>• Анти-агент фильтр</li>
           <li>• Уведомления о новых совпадениях</li>
         </ul>
-        <a class="px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center"
+        <a class="box-border w-full sm:w-auto px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center"
            href="https://t.me/ArendatorKg_VIP_bot" target="_blank" rel="noopener">
           <span class="tg-ico" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4л1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8л2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5л4.6 1.4L18.9 6c.7-.4 1.3-.2 .8.2"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5л4.6 1.4L18.9 6c.7-.4 1.3-.2 .8.2"/></svg>
           </span>
           Получить в Telegram
         </a>
@@ -273,7 +281,7 @@
           <li>• Анти-агент фильтр</li>
           <li>• Уведомления о новых совпадениях</li>
         </ul>
-        <a class="px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center"
+        <a class="box-border w-full sm:w-auto px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center"
            href="https://t.me/ArendatorKg_VIP_bot" target="_blank" rel="noopener">
           <span class="tg-ico" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4л1.9-1.8 4.1 3c.8 .4 1.4 .2 1.6 -.8л2.9 -13.5c.3 -1.3 -.5 -1.8 -1.3 -1.5L2.5 9.4c-1.3 .5-1.3 1.2 -.2 1.5л4.6 1.4L18.9 6c.7 -.4 1.3 -.2 .8 .2"/></svg>
@@ -289,7 +297,7 @@
           <li>• Анти-агент фильтр</li>
           <li>• Уведомления о новых совпадениях</li>
         </ul>
-        <a class="px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center"
+        <a class="box-border w-full sm:w-auto px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center"
            href="https://t.me/ArendatorKg_VIP_bot" target="_blank" rel="noopener">
           <span class="tg-ico" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4л1.9-1.8 4.1 3c.8 .4 1.4 .2 1.6 -.8л2.9 -13.5c.3 -1.3 -.5 -1.8 -1.3 -1.5L2.5 9.4c-1.3 .5 -1.3 1.2 -.2 1.5л4.6 1.4L18.9 6c.7 -.4 1.3 -.2 .8 .2"/></svg>
