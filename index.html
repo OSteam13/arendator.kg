@@ -30,21 +30,27 @@
     .ads-wrap { margin: 24px auto; max-width: var(--container); padding: 0 16px; }
     .ads-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
 
-    .ad-card { position:relative; border: 1px solid #eee; border-radius: 14px; overflow: hidden; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,.03); display: flex; flex-direction: column; }
+    .ad-card {
+      position:relative; border: 1px solid #eee; border-radius: 14px; overflow: hidden; background: #fff;
+      box-shadow: 0 2px 10px rgba(0,0,0,.03); display: flex; flex-direction: column;
+      height:480px; /* фикс-высота для синхронной кнопки */
+    }
 
     /* Фото без пустых зон */
     .ad-thumb { aspect-ratio: 4 / 3; background: #f6f7f8; overflow: hidden; }
     .ad-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-    /* Контент карточки + фиксированная зона под кнопку/избранное */
-    .ad-body { position:relative; padding: 12px 14px 70px; display: flex; flex-direction: column; gap: 8px; }
-    .ad-title { font: 600 16px/1.3 system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 0; }
+    /* Контент + резерв под кнопку/избранное */
+    .ad-body {
+      position:relative; padding: 12px 14px 70px; display: flex; flex-direction: column; gap: 8px; flex:1;
+    }
+    .ad-title { font: 600 16px/1.3 system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 0; display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden }
     .ad-price { color: #0d6efd; font-weight: 700; }
-    .ad-meta { color: #666; font-size: 13px; }
+    .ad-meta { color: #666; font-size: 13px; display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden }
 
-    /* Кнопка — фиксированно на одной линии у низа карточки */
+    /* Кнопка — фиксированно у низа карточки */
     .ad-cta { position:absolute; left:14px; right:14px; bottom:56px; height:44px; border-radius:8px;
-      display:grid; place-items:center; text-decoration:none; background:#0d6efd; color:#fff; }
+      display:grid; place-items:center; text-decoration:none; background:#0d6efd; color:#fff; font-weight:700 }
 
     /* Избранное — под кнопкой, прижато к низу */
     .ad-fav { position:absolute; right:18px; bottom:10px; background:none; border:none; padding:0; cursor:pointer;
@@ -54,16 +60,16 @@
 
     .ads-empty { text-align: center; color: #666; padding: 24px 0; }
 
-    /* Плашка героя */
+    /* Плашка героя (правая колонка) — без «ямы» */
     #heroSpot { display:flex; flex-direction:column; height:100%; background:#f5f6f7 }
     #heroSpot .spot-img{ height:260px; display:flex; align-items:center; justify-content:center; overflow:hidden; background:#f1f5f9 }
     @media (min-width:1024px){ #heroSpot .spot-img{ height:300px } }
     #heroSpot .spot-img img{ width:100%; height:100%; object-fit:cover }
     #heroSpot .spot-body{ position:relative; padding:12px 12px 72px; border-top:1px solid #e5e7eb; background:#fff; display:flex; flex-direction:column; gap:6px }
-    #heroSpot .spot-title{ font-weight:600; line-height:1.25 }
+    #heroSpot .spot-title{ font-weight:600; line-height:1.25; display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden }
     #heroSpot .spot-price{ color:#0d6efd; font-weight:800 }
     #heroSpot .spot-cta{ position:absolute; left:12px; right:12px; bottom:12px; height:44px; border-radius:8px;
-      display:grid; place-items:center; background:#0d6efd; color:#fff; text-decoration:none }
+      display:grid; place-items:center; background:#0d6efd; color:#fff; text-decoration:none; font-weight:700 }
     #heroSpot .spot-fav{ position:absolute; right:16px; bottom:62px; background:none; border:none; padding:0; cursor:pointer; font-size:13px; color:#3f3f46 }
     #heroSpot .spot-fav .heart{color:#e11d48;margin-left:6px}
     #heroSpot .spot-fav.active{color:#e11d48;font-weight:600}
@@ -112,7 +118,7 @@
 
   <!-- Герой -->
   <section class="container mx-auto px-4 pt-6 pb-4">
-    <div class="rounded-2xl bg-white border border-neutral-200 shadow-soft p-4 md:p-6 grid md:grid-cols-2 gap-4 items-stretch">
+    <div class="rounded-2xl bg-white border border-neutral-200 shadow-soft p-4 md:p-6 grid md:grid-cols-2 gap-4 items-start">
       <div>
         <h1 id="heroTitle" class="hero-title text-3л md:text-5xl leading-tight text-blue-600" data-i18n="hero_title">
           Ищете квартиру в аренду?
@@ -125,7 +131,7 @@
              class="w-full sm:w-auto sm:min-w-[260px] px-5 py-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center justify-center"
              href="https://t.me/ArendatorKg_VIP_bot" target="_blank" rel="noopener" data-i18n="btn_open_tg">
             <span class="tg-ico" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8л2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5л4.6 1.4L18.9 6c.7-.4 1.3-.2.8.2"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5l4.6 1.4L18.9 6c.7-.4 1.3-.2.8.2"/></svg>
             </span>
             Открыть в Telegram
           </a>
@@ -145,7 +151,7 @@
           </div>
         </div>
 
-        <!-- Соцдоказательство под бейджами -->
+        <!-- Соцдоказательство -->
         <div id="heroTrust" class="mt-4">
           <div class="grid grid-cols-2 gap-2">
             <div class="rounded-xl border border-neutral-200 p-3">
@@ -186,7 +192,7 @@
 
           <div class="mt-3 flex items-center gap-4 text-sm">
             <a href="https://t.me/arendatorkg" target="_blank" rel="noopener" class="inline-flex items-center gap-2 hover:opacity-80">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="#229ED9"><path d="M9.9 15.2 9.7 19c.4 0 .6-.2.8-.4l2-1.9 4.2 3c.8.4 1.5.2 1.7-.8л3-13.8c.3-1.3-.6-1.9-1.4-1.6L2.4 9.5c-1.3.5-1.3 1.3-.2 1.6л4.8 1.5 10.9-6.6c.8-.4 1.4-.2.9.3L9.9 15.2z"/></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#229ED9"><path d="M9.9 15.2 9.7 19c.4 0 .6-.2.8-.4l2-1.9 4.2 3c.8.4 1.5.2 1.7-.8l3-13.8c.3-1.3-.6-1.9-1.4-1.6L2.4 9.5c-1.3.5-1.3 1.3-.2 1.6l4.8 1.5 10.9-6.6c.8-.4 1.4-.2.9.3L9.9 15.2z"/></svg>
               <span>Telegram</span>
             </a>
             <a href="https://www.instagram.com/arendatorkg/" target="_blank" rel="noopener" class="inline-flex items-center gap-2 hover:opacity-80">
@@ -194,7 +200,7 @@
               <span>Instagram</span>
             </a>
             <a href="https://www.threads.com/@arendatorkg" target="_blank" rel="noopener" class="inline-flex items-center gap-2 hover:opacity-80">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="#000"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm4.9 11.2c-.3 1.5-1.8 3.7-4.9 3.7-2.6 0-4.5-1.7-4.5-4.1 0-2.5 2-4.1 4.6-4.1 1.9 0 3.2.8 4 2.1.3.5.5 1 .6 1.6л-1.9.2c-.1-.3-.2-.7-.5-1-.5-.6-1.2-1-2.2-1-1.6 0-2.6 1-2.6 2.2s.9 2.1 2.5 2.1c1.2 0 2-.5 2.4-1.3H12в-1.8h4.8c.1.5.1 1 .1 1.4 0 .3 0 .6-.1 1z"/></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#000"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm4.9 11.2c-.3 1.5-1.8 3.7-4.9 3.7-2.6 0-4.5-1.7-4.5-4.1 0-2.5 2-4.1 4.6-4.1 1.9 0 3.2.8 4 2.1.3.5.5 1 .6 1.6l-1.9.2c-.1-.3-.2-.7-.5-1-.5-.6-1.2-1-2.2-1-1.6 0-2.6 1-2.6 2.2s.9 2.1 2.5 2.1c1.2 0 2-.5 2.4-1.3H12в-1.8h4.8c.1.5.1 1 .1 1.4 0 .3 0 .6-.1 1z"/></svg>
               <span>Threads</span>
             </a>
           </div>
@@ -243,7 +249,6 @@
       Лучшие варианты улетают за часы. Подключите доступ — бот пришлёт контакты владельцев.
     </p>
 
-    <!-- 3 плана в один ряд -->
     <div class="grid md:grid-cols-3 gap-3">
       <div class="rounded-2xl border border-neutral-200 bg-white p-4 shadow-soft">
         <div class="text-xl font-bold mb-1">150 сом — 1 день</div>
@@ -255,7 +260,7 @@
         <a class="px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center"
            href="https://t.me/ArendatorKg_VIP_bot" target="_blank" rel="noopener">
           <span class="tg-ico" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4л1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8л2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5л4.6 1.4L18.9 6c.7-.4 1.3-.2 .8.2"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5l4.6 1.4L18.9 6c.7-.4 1.3-.2 .8.2"/></svg>
           </span>
           Получить в Telegram
         </a>
@@ -271,7 +276,7 @@
         <a class="px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center"
            href="https://t.me/ArendatorKg_VIP_bot" target="_blank" rel="noopener">
           <span class="tg-ico" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4л1.9-1.8 4.1 3c.8 .4 1.4 .2 1.6 -.8л2.9 -13.5c.3 -1.3 -.5 -1.8 -1.3 -1.5L2.5 9.4c-1.3 .5-1.3 1.2 -.2 1.5л4.6 1.4L18.9 6c.7 -.4 1.3 -.2 .8 .2"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8 .4 1.4 .2 1.6 -.8л2.9 -13.5c.3 -1.3 -.5 -1.8 -1.3 -1.5L2.5 9.4c-1.3 .5-1.3 1.2 -.2 1.5л4.6 1.4L18.9 6c.7 -.4 1.3 -.2 .8 .2"/></svg>
           </span>
           Получить в Telegram
         </a>
@@ -287,7 +292,7 @@
         <a class="px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center"
            href="https://t.me/ArendatorKg_VIP_bot" target="_blank" rel="noopener">
           <span class="tg-ico" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4л1.9-1.8 4.1 3c.8 .4 1.4 .2 1.6 -.8л2.9 -13.5c.3 -1.3 -.5 -1.8 -1.3 -1.5L2.5 9.4c-1.3 .5 -1.3 1.2 -.2 1.5л4.6 1.4L18.9 6c.7 -.4 1.3 -.2 .8 .2"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8 .4 1.4 .2 1.6 -.8л2.9 -13.5c.3 -1.3 -.5 -1.8 -1.3 -1.5L2.5 9.4c-1.3 .5 -1.3 1.2 -.2 1.5л4.6 1.4L18.9 6c.7 -.4 1.3 -.2 .8 .2"/></svg>
           </span>
           Получить в Telegram
         </a>
@@ -301,13 +306,13 @@
       <div class="text-xl font-bold mb-4">МЫ ЕСТЬ В СОЦ СЕТЯХ</div>
       <div class="flex items-center justify-center gap-6">
         <a href="https://t.me/arendatorkg" target="_blank" rel="noopener" aria-label="Telegram" class="hover:opacity-80">
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="#229ED9"><path d="M9.9 15.2 9.7 19c.4 0 .6-.2.8-.4l2-1.9 4.2 3c.8.4 1.5.2 1.7-.8л3-13.8c.3-1.3-.6-1.9-1.4-1.6L2.4 9.5c-1.3.5-1.3 1.3-.2 1.6л4.8 1.5 10.9-6.6c.8-.4 1.4-.2.9.3L9.9 15.2z"/></svg>
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="#229ED9"><path d="M9.9 15.2 9.7 19c.4 0 .6-.2.8-.4l2-1.9 4.2 3c.8.4 1.5.2 1.7-.8l3-13.8c.3-1.3-.6-1.9-1.4-1.6L2.4 9.5c-1.3.5-1.3 1.3-.2 1.6l4.8 1.5 10.9-6.6c.8-.4 1.4-.2.9.3L9.9 15.2z"/></svg>
         </a>
         <a href="https://www.instagram.com/arendatorkg/" target="_blank" rel="noopener" aria-label="Instagram" class="hover:opacity-80">
           <svg width="36" height="36" viewBox="0 0 24 24" fill="#E1306C"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 7.5zm0 2A3.5 3.5 0 1 0 15.5 13 3.5 3.5 0 0 0 12 9.5zM18 6.5a1.1 1.1 0 1 1-1.1-1.1A1.1 1.1 0 0 1 18 6.5z"/></svg>
         </a>
         <a href="https://www.threads.com/@arendatorkg" target="_blank" rel="noopener" aria-label="Threads" class="hover:opacity-80">
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="#000"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm4.9 11.2c-.3 1.5-1.8 3.7-4.9 3.7-2.6 0-4.5-1.7-4.5-4.1 0-2.5 2-4.1 4.6-4.1 1.9 0 3.2.8 4 2.1.3.5.5 1 .6 1.6л-1.9 .2c-.1 -.3 -.2 -.7 -.5 -1 -.5 -.6 -1.2 -1 -2.2 -1 -1.6 0 -2.6 1 -2.6 2.2s.9 2.1 2.5 2.1c1.2 0 2 -.5 2.4 -1.3H12в-1.8h4.8c.1 .5 .1 1 .1 1.4 0 .3 0 .6 -.1 1z"/></svg>
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="#000"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm4.9 11.2c-.3 1.5-1.8 3.7-4.9 3.7-2.6 0-4.5-1.7-4.5-4.1 0-2.5 2-4.1 4.6-4.1 1.9 0 3.2.8 4 2.1.3.5.5 1 .6 1.6l-1.9.2c-.1-.3-.2-.7-.5-1-.5-.6-1.2-1-2.2-1-1.6 0-2.6 1-2.6 2.2s.9 2.1 2.5 2.1c1.2 0 2-.5 2.4-1.3H12в-1.8h4.8c.1.5.1 1 .1 1.4 0 .3 0 .6-.1 1z"/></svg>
         </a>
       </div>
     </div>
@@ -450,7 +455,7 @@
       return `<div class="ph-wrap" role="img" aria-label="${I18N[lang].no_photo}">
         <div class="flex flex-col items-center">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V7a2 2 0 0 0-2-2h-3.2l-.6-1.2A2 2 0 0 0 13.4 2h-2.8a2 2 0 0 0-1.8 1.2L8.2 5H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2ZM7 11л3 4 2-3 3 5H7Z"/></svg>
-          <div class="ph-text">${I18N[lang].no_photo}</div>
+          <div class="ph-text">Фото не предоставлено</div>
         </div></div>`;
     }
 
@@ -539,13 +544,15 @@
       refreshFavButtons();
     }
 
+    const API_LIMIT=24;
     async function fetchPage(from){
-      const res=await fetch(API_URL(from,API_LIMIT),{cache:'no-store'});
+      const res=await fetch(`/api/listings?from=${from}&limit=${API_LIMIT}`,{cache:'no-store'});
       if(!res.ok) throw new Error(res.status+' '+res.statusText);
       const raw=await res.json();
       return normalizeListings(raw);
     }
 
+    let listFrom=0, allItems=[];
     async function initialLoad(){
       try{
         const items=await fetchPage(0);
@@ -578,9 +585,8 @@
             renderSpot(fresh[0]); renderAds(fresh,true);
           }
         }catch(_){}
-      }, POLL_MS);
+      }, 60_000);
     });
   </script>
 </body>
 </html>
-
