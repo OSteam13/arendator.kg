@@ -20,6 +20,9 @@
     .lang-toggle .active{opacity:1;font-weight:700}
     .tg-ico{display:inline-flex;align-items:center;margin-right:.5rem}
     .tg-ico svg{width:18px;height:18px}
+    /* плейсхолдер фото */
+    .ph-wrap{display:flex;align-items:center;justify-content:center;width:100%;height:100%;color:#9aa1ab}
+    .ph-text{font-size:12px;color:#818b98;margin-top:6px}
   </style>
 </head>
 <body class="bg-neutral-50 text-neutral-900">
@@ -143,7 +146,8 @@
         footer_about: 'Автоматически мониторим свежие объявления от владельцев и проверенных источников — быстрее и без посредников.',
         footer_nav: 'Навигация', footer_legal: 'Правовое',
         footer_del: 'Удаление данных', footer_priv: 'Политика конфиденциальности',
-        price_unit_m: 'сом/мес', price_unit_d: 'сом/сут'
+        currency: ' сом',
+        price_contract: 'Договорная'
       },
       ky: {
         title: 'Тандалгандар — Arendator.kg',
@@ -165,7 +169,8 @@
         footer_about: 'Биз ээлерден жана текшерилген булактардан жаңы жарыяларды көзөмөлдөп турабыз — ортомчусуз жана тез.',
         footer_nav: 'Навигация', footer_legal: 'Юридикалык',
         footer_del: 'Маалыматты өчүрүү', footer_priv: 'Купуялык саясаты',
-        price_unit_m: 'сом/ай', price_unit_d: 'сом/күн'
+        currency: ' сом',
+        price_contract: 'Макулдашылат'
       }
     };
 
@@ -212,7 +217,7 @@
       btn.querySelector('.ru').classList.toggle('active', l==='ru');
       btn.querySelector('.ky').classList.toggle('active', l==='ky');
 
-      // перерисовать карточки (подписи/кнопки/единицы)
+      // перерисовать карточки (подписи/кнопки)
       render();
     }
 
@@ -222,39 +227,103 @@
       applyLang(next);
     });
 
-    // ===== демо-данные (только для верстки избранного) =====
-    const TELEGRAM_URL = 'https://t.me/arendatorkg';
-    const listings = [
-      { id:'l1', title:'2к, Центр, свежий ремонт', price:35000, district:'Центр', rooms:'2', daily:false, img:'' },
-      { id:'l2', title:'1к, Майевка, уютная',      price:18000, district:'Майевка', rooms:'1', daily:false, img:'https://images.unsplash.com/photo-1502005229762-cf1b2da7cda7?w=1200&auto=format&fit=crop' },
-      { id:'l3', title:'3к, Асанбай, вид на горы', price:55000, district:'Асанбай', rooms:'3', daily:false, img:'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1200&auto=format&fit=crop' },
-      { id:'l4', title:'Студия, Московский',       price:22000, district:'Московский', rooms:'1', daily:false, img:'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1200&auto=format&fit=crop' },
-      { id:'l5', title:'Посуточно 2к, Центр',      price:3000,  district:'Центр', rooms:'2', daily:true,  img:'https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=1200&auto=format&fit=crop' },
-      { id:'l6', title:'3к, Свердловский, новая мебель', price:45000, district:'Свердловский', rooms:'3', daily:false, img:'https://images.unsplash.com/photo-1494526585095-c41746248156?w=1200&auto=format&fit=crop' },
-    ];
+    // ===== общие утилиты =====
+    const TELEGRAM_URL = 'https://t.me/ArendatorKg_VIP_bot';
+    const FAV_KEY = 'arendator:favs';
+    const FAV_CACHE_KEY = 'arendator:favcache';
+
+    const API_LIMIT = 200;
+    const API_URL = (from=0,limit=API_LIMIT)=>`/api/listings?from=${from}&limit=${limit}`;
 
     const qs = (s,el=document)=>el.querySelector(s);
     const showToast=(m)=>{const t=qs('#toast'); t.textContent=m; t.classList.remove('hidden'); clearTimeout(showToast.t); showToast.t=setTimeout(()=>t.classList.add('hidden'),1800);};
 
-    function priceUnit(daily){
+    function normalizeListings(payload){
+      if(Array.isArray(payload)) return payload;
+      if(payload && Array.isArray(payload.items)) return payload.items;
+      if(payload && Array.isArray(payload.data))  return payload.data;
+      if(payload && payload.items && Array.isArray(payload.items.items)) return payload.items.items;
+      return [];
+    }
+    function getPhotos(raw){
+      if(!raw) return [];
+      if(Array.isArray(raw)) return raw;
+      if(typeof raw==='string'){
+        try{ const v=JSON.parse(raw); return Array.isArray(v)?v:[]; }catch{return [];}
+      }
+      return [];
+    }
+    function escapeHtml(s){return String(s||'').replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+    function fmtPrice(value, price_text){
       const t = I18N[getLang()];
-      return daily ? t.price_unit_d : t.price_unit_m;
+      const v = (value ?? price_text);
+      if(v===null||v===undefined||v==='') return t.price_contract;
+      const n = Number(v);
+      return isFinite(n) ? n.toLocaleString(getLang()==='ru'?'ru-RU':'ky-KG') + t.currency : escapeHtml(String(v));
     }
 
-    // Карточка
+    // ==== localStorage helpers ====
+    function readFavIds(){
+      const a = new Set(JSON.parse(localStorage.getItem(FAV_KEY)||'[]'));
+      const b = new Set(JSON.parse(localStorage.getItem('favs')||'[]')); // совместимость со старым ключом
+      return [...new Set([...a, ...b])].map(String);
+    }
+    function writeFavIds(ids){
+      localStorage.setItem(FAV_KEY, JSON.stringify(ids));
+      localStorage.setItem('favs', JSON.stringify(ids)); // для совместимости
+    }
+    function readFavCache(){ try{ return JSON.parse(localStorage.getItem(FAV_CACHE_KEY)||'{}'); }catch{ return {}; } }
+    function writeFavCache(obj){ localStorage.setItem(FAV_CACHE_KEY, JSON.stringify(obj)); }
+
+    // ==== догрузка недостающих карточек по API ====
+    async function fetchByIdsIfMissing(idsMissing){
+      if(!idsMissing.length) return {};
+      const found = {};
+      let from = 0, guard = 0;
+      while(guard++ < 6){ // до 6 страниц по 200 = 1200 объявлений максимум
+        try{
+          const res = await fetch(API_URL(from, API_LIMIT), {cache:'no-store'});
+          if(!res.ok) break;
+          const page = normalizeListings(await res.json());
+          if(!page.length) break;
+          for(const item of page){
+            const sid = String(item.id);
+            if(idsMissing.includes(sid) && !found[sid]){
+              found[sid] = {
+                id: sid,
+                title: item.title || '—',
+                price: item.price ?? null,
+                price_text: item.price_text ?? null,
+                district: item.district || '',
+                photos: getPhotos(item.photos).slice(0,2),
+              };
+            }
+          }
+          if(Object.keys(found).length === idsMissing.length) break;
+          from += page.length;
+        }catch(_){ break; }
+      }
+      return found;
+    }
+
+    // ==== карточка ====
     function cardHTML(it){
       const t = I18N[getLang()];
-      const price = `${Number(it.price).toLocaleString(getLang()==='ru'?'ru-RU':'ky-KG')} <span class="text-sm font-medium text-neutral-500">${priceUnit(it.daily)}</span>`;
+      const photos = getPhotos(it.photos);
+      const img = photos[0] || '';
+      const title = escapeHtml(it.title||'—');
+      const price = fmtPrice(it.price, it.price_text);
+      const district = escapeHtml(it.district || '');
       return `
       <article class="rounded-2xl border border-neutral-200 bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
         <div class="aspect-[4/3] overflow-hidden grid place-items-center bg-neutral-100">
-          ${it.img ? `<img src="${it.img}" alt="${it.title}" class="w-full h-full object-cover" loading="lazy">`
-                    : `<div class="text-neutral-500 text-sm">${t.no_photo}</div>`}
+          ${img ? `<img src="${img}" alt="${title}" class="w-full h-full object-cover" loading="lazy">`
+                 : `<div class="ph-wrap"><div class="ph-text">${t.no_photo}</div></div>`}
         </div>
         <div class="p-3 sm:p-4 flex-1 flex flex-col gap-3">
-          <h3 class="font-semibold leading-snug text-sm sm:text-base">${it.title}</h3>
+          <h3 class="font-semibold leading-snug text-sm sm:text-base">${title}</h3>
           <div class="text-lg sm:text-2xl font-bold">${price}</div>
-          <div class="text-[12px] sm:text-sm text-neutral-600">${it.district || ''}</div>
+          <div class="text-[12px] sm:text-sm text-neutral-600">${district}</div>
           <div class="mt-auto grid grid-cols-1 gap-2">
             <a class="px-3 py-2 rounded-xl bg-blue-600 text-white text-sm text-center hover:bg-blue-700 inline-flex items-center justify-center"
                href="${TELEGRAM_URL}" target="_blank" rel="noopener">
@@ -271,18 +340,8 @@
       </article>`;
     }
 
-    // читаем избранное (поддерживаем оба ключа)
-    function readFavIds(){
-      const a = new Set(JSON.parse(localStorage.getItem('arendator:favs')||'[]'));
-      const b = new Set(JSON.parse(localStorage.getItem('favs')||'[]'));
-      return [...new Set([...a, ...b])];
-    }
-    function writeFavIds(ids){
-      localStorage.setItem('arendator:favs', JSON.stringify(ids));
-      localStorage.setItem('favs', JSON.stringify(ids)); // для совместимости
-    }
-
-    function render(){
+    // ==== рендер избранного ====
+    async function render(){
       const t = I18N[getLang()];
       const favIds = readFavIds();
       const grid = qs('#grid');
@@ -295,17 +354,34 @@
       }
       empty.classList.add('hidden');
 
-      const items = favIds.map(id => listings.find(x=>x.id===id)).filter(Boolean);
+      // достаём локальный кэш
+      const cache = readFavCache();
+
+      // если каких-то карточек нет в кэше — пробуем дотянуть из API и сохранить
+      const missing = favIds.filter(id => !cache[id]);
+      if(missing.length){
+        const fetched = await fetchByIdsIfMissing(missing);
+        if(Object.keys(fetched).length){
+          Object.assign(cache, fetched);
+          writeFavCache(cache);
+        }
+      }
+
+      const items = favIds.map(id=>cache[id]).filter(Boolean);
       grid.innerHTML = items.map(cardHTML).join('');
 
+      // обработчик "удалить из избранного"
       grid.querySelectorAll('.unfav-btn').forEach(b=>{
         b.addEventListener('click', ()=>{
-          const id = b.dataset.id;
+          const id = String(b.dataset.id);
           const set = new Set(readFavIds());
+          const cacheNow = readFavCache();
           set.delete(id);
+          delete cacheNow[id];
           writeFavIds([...set]);
+          writeFavCache(cacheNow);
           showToast(t.toast_removed);
-          render();
+          render(); // перерисовать
         });
       });
     }
@@ -337,11 +413,6 @@
       const lang = getLang();
       localStorage.setItem('lang', lang); // нормализуем
       applyLang(lang);
-      // на всякий — удалим случайный кэш секций «тарифы», если попал
-      document.querySelectorAll('section').forEach(sec=>{
-        const h2 = sec.querySelector('h2');
-        if (h2 && /тарифы доступа/i.test(h2.textContent)) sec.remove();
-      });
     });
   </script>
 </body>
