@@ -29,32 +29,36 @@
     /* карточки объявлений */
     .ads-wrap { margin: 24px auto; max-width: var(--container); padding: 0 16px; }
     .ads-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
-    .ad-card { border: 1px solid #eee; border-radius: 14px; overflow: hidden; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,.03); display: flex; flex-direction: column; }
+    .ad-card { position:relative; border: 1px solid #eee; border-radius: 14px; overflow: hidden; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,.03); display: flex; flex-direction: column; }
     .ad-thumb { aspect-ratio: 4 / 3; background: #f6f7f8; display: flex; align-items: center; justify-content: center; overflow: hidden; }
     .ad-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .ad-body { padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+    .ad-body { position:relative; padding: 12px 14px 72px; display: flex; flex-direction: column; gap: 8px; }
     .ad-title { font: 600 16px/1.3 system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 0; }
     .ad-price { color: #0d6efd; font-weight: 700; }
     .ad-meta { color: #666; font-size: 13px; }
-    .ad-actions { display:flex; align-items:center; justify-content:space-between; margin-top:auto; }
-    .ad-cta { display:inline-block; text-decoration:none; background:#0d6efd; color:#fff; padding:10px 12px; border-radius:10px; text-align:center }
-    .fav-btn { display:inline-flex; align-items:center; gap:6px; border:1px solid #e5e7eb; border-radius:10px; padding:8px 10px; background:#fff }
-    .fav-btn svg{width:18px;height:18px}
-    .fav-btn.active{border-color:#fb7185;background:#fff1f3}
-    .fav-btn.active svg{fill:#e11d48}
+    /* CTA — фиксировано внизу, прямоугольная */
+    .ad-cta { position:absolute; left:14px; right:14px; bottom:14px; height:44px; border-radius:8px;
+      display:grid; place-items:center; text-decoration:none; background:#0d6efd; color:#fff; }
+    /* Избранное — правый нижний угол, над кнопкой */
+    .ad-fav { position:absolute; right:18px; bottom:64px; background:none; border:none; padding:0; cursor:pointer;
+      font-size:13px; color:#3f3f46; }
+    .ad-fav .heart{color:#e11d48;margin-left:6px}
+    .ad-fav.active{color:#e11d48;font-weight:600}
     .ads-empty { text-align: center; color: #666; padding: 24px 0; }
 
-    /* Плашка героя (фото уменьшено) */
+    /* Плашка героя (уменьшенное фото) */
     #heroSpot { display:flex; flex-direction:column; height:100%; background:#f5f6f7 }
     #heroSpot .spot-img{ height:260px; display:flex; align-items:center; justify-content:center; overflow:hidden; background:#f1f5f9 }
     @media (min-width:1024px){ #heroSpot .spot-img{ height:300px } }
     #heroSpot .spot-img img{ width:100%; height:100%; object-fit:cover }
-    #heroSpot .spot-body{ padding:12px 12px 14px; border-top:1px solid #e5e7eb; background:#fff; display:flex; flex-direction:column; gap:6px }
+    #heroSpot .spot-body{ position:relative; padding:12px 12px 72px; border-top:1px solid #e5e7eb; background:#fff; display:flex; flex-direction:column; gap:6px }
     #heroSpot .spot-title{ font-weight:600; line-height:1.25 }
     #heroSpot .spot-price{ color:#0d6efd; font-weight:800 }
-    #heroSpot .actions{ margin-top:auto; display:flex; align-items:center; justify-content:space-between }
-    #heroSpot .spot-cta{ display:inline-block; background:#0d6efd; color:#fff; padding:10px 12px; border-radius:10px }
-    #heroSpot .fav-btn{ padding:8px 10px }
+    #heroSpot .spot-cta{ position:absolute; left:12px; right:12px; bottom:12px; height:44px; border-radius:8px;
+      display:grid; place-items:center; background:#0d6efd; color:#fff; text-decoration:none }
+    #heroSpot .spot-fav{ position:absolute; right:16px; bottom:62px; background:none; border:none; padding:0; cursor:pointer; font-size:13px; color:#3f3f46 }
+    #heroSpot .spot-fav .heart{color:#e11d48;margin-left:6px}
+    #heroSpot .spot-fav.active{color:#e11d48;font-weight:600}
 
     /* плейсхолдер */
     .ph-wrap{display:flex;align-items:center;justify-content:center; width:100%; height:100%; color:#9aa1ab}
@@ -113,7 +117,7 @@
              class="w-full sm:w-auto sm:min-w-[260px] px-5 py-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center justify-center"
              href="https://t.me/ArendatorKg_VIP_bot" target="_blank" rel="noopener" data-i18n="btn_open_tg">
             <span class="tg-ico" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5l4.6 1.4L18.9 6c.7-.4 1.3-.2.8.2"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5л4.6 1.4L18.9 6c.7-.4 1.3-.2.8.2"/></svg>
             </span>
             Открыть в Telegram
           </a>
@@ -140,13 +144,10 @@
         <div class="spot-body">
           <div class="spot-title text-sm"></div>
           <div class="spot-price"></div>
-          <div class="actions">
-            <button class="fav-btn" type="button" data-spot-fav>
-              <svg viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="1.6"><path d="M12 21s-7.2-4.7-9.3-8.1C1.7 9.8 3.2 6.4 6.6 6.1c1.8-.2 3.1.6 4 1.8.9-1.2 2.2-2 4-1.8 3.4.3 4.9 3.7 3.9 6.8C19.2 16.3 12 21 12 21z"/></svg>
-              <span data-i18n="fav_add">В избранное</span>
-            </button>
-            <a class="spot-cta" href="https://t.me/ArendatorKg_VIP_bot" target="_blank" rel="noopener" data-i18n="card_btn">🔑 Получить контакты</a>
-          </div>
+          <button class="spot-fav" type="button" data-spot-fav>
+            В избранное <span class="heart">❤</span>
+          </button>
+          <a class="spot-cta" href="https://t.me/ArendatorKg_VIP_bot" target="_blank" rel="noopener" data-i18n="card_btn">🔑 Получить контакты</a>
         </div>
       </div>
     </div>
@@ -166,7 +167,7 @@
       <div id="ads" class="ads-grid"></div>
       <div id="ads-empty" class="ads-empty" hidden data-i18n="feed_empty">Объявлений пока нет</div>
       <div class="flex justify-center mt-2">
-        <button id="loadMore" class="px-4 py-2 rounded-xl border border-neutral-300 hover:bg-neutral-50">
+        <button id="loadMore" class="px-4 py-2 rounded-xl border border-neutral-300 hover:bg-neutral-50" data-i18n="show_more">
           Показать ещё
         </button>
       </div>
@@ -215,6 +216,24 @@
     </div>
   </section>
 
+  <!-- Соцсети -->
+  <section class="container mx-auto px-4 pb-10">
+    <div class="rounded-2xl border border-neutral-200 bg-white shadow-soft p-6 text-center">
+      <div class="text-xl font-bold mb-4">МЫ ЕСТЬ В СОЦ СЕТЯХ</div>
+      <div class="flex items-center justify-center gap-6">
+        <a href="https://t.me/arendatorkg" target="_blank" rel="noopener" aria-label="Telegram" class="hover:opacity-80">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="#229ED9"><path d="M9.9 15.2 9.7 19c.4 0 .6-.2.8-.4l2-1.9 4.2 3c.8.4 1.5.2 1.7-.8l3-13.8c.3-1.3-.6-1.9-1.4-1.6L2.4 9.5c-1.3.5-1.3 1.3-.2 1.6l4.8 1.5 10.9-6.6c.8-.4 1.4-.2.9.3L9.9 15.2z"/></svg>
+        </a>
+        <a href="https://www.instagram.com/arendatorkg/" target="_blank" rel="noopener" aria-label="Instagram" class="hover:opacity-80">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="#E1306C"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 7.5zm0 2A3.5 3.5 0 1 0 15.5 13 3.5 3.5 0 0 0 12 9.5zM18 6.5a1.1 1.1 0 1 1-1.1-1.1A1.1 1.1 0 0 1 18 6.5z"/></svg>
+        </a>
+        <a href="https://www.threads.com/@arendatorkg" target="_blank" rel="noopener" aria-label="Threads" class="hover:opacity-80">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="#000"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm4.9 11.2c-.3 1.5-1.8 3.7-4.9 3.7-2.6 0-4.5-1.7-4.5-4.1 0-2.5 2-4.1 4.6-4.1 1.9 0 3.2.8 4 2.1.3.5.5 1 .6 1.6l-1.9.2c-.1-.3-.2-.7-.5-1- .5-.6-1.2-1-2.2-1-1.6 0-2.6 1-2.6 2.2s.9 2.1 2.5 2.1c1.2 0 2-.5 2.4-1.3H12v-1.8h4.8c.1.5.1 1 .1 1.4 0 .3 0 .6-.1 1z"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <!-- Футер -->
   <footer class="border-t border-neutral-100 bg-white">
     <div class="container mx-auto px-4 py-6 grid md:grid-cols-4 gap-4 text-sm">
@@ -249,8 +268,7 @@
   <script>
     /* ======================= I18N ======================= */
     const I18N = {
-      ru: {
-        topline:'Объявления живут 24 часа · Анти-агент фильтр включён · Контакты — в Telegram',
+      ru: { topline:'Объявления живут 24 часа · Анти-агент фильтр включён · Контакты — в Telegram',
         nav_blog:'Блог', nav_add:'Добавить объявление', nav_fav:'Избранное',
         hero_title:'Ищете квартиру в аренду?',
         hero_lead:'Экономьте время и нервы: мы находим «живые» объявления, отсекаем посредников, выдаём контакты в Telegram — без спама и лишних звонков.',
@@ -270,8 +288,7 @@
         no_photo:'Фото не предоставлено', show_more:'Показать ещё',
         fav_add:'В избранное', fav_remove:'В избранном'
       },
-      ky: {
-        topline:'Жарыялар 24 саат жарактуу · Агенттерге каршы фильтр күйгүзүлгөн · Байланыш — Telegram\'да',
+      ky: { topline:'Жарыялар 24 саат жарактуу · Агенттерге каршы фильтр күйгүзүлгөн · Байланыш — Telegram\'да',
         nav_blog:'Блог', nav_add:'Жарнама кошуу', nav_fav:'Тандалгандар',
         hero_title:'Батир издеп жатасыңбы?',
         hero_lead:'Биз «жандуу» жарыяларды таап, ортомчуларды бөлүп чыгарабыз, байланыштарды Telegram аркылуу беребиз — спамсыз жана ашыкча чалуусуз.',
@@ -315,7 +332,6 @@
     const POLL_MS=60_000;
     const BOT_LINK='https://t.me/ArendatorKg_VIP_bot';
 
-    // Нормализация формата ответа
     function normalizeListings(payload){
       if(Array.isArray(payload)) return payload;
       if(payload && Array.isArray(payload.items)) return payload.items;
@@ -323,7 +339,6 @@
       if(payload && payload.items && Array.isArray(payload.items.items)) return payload.items.items;
       return [];
     }
-    // Безопасный парсинг массива фото
     function getPhotos(raw){
       if(!raw) return [];
       if(Array.isArray(raw)) return raw;
@@ -362,13 +377,9 @@
     }
 
     function favButtonHtml(id){
-      const lang=getLang();
       const active=isFav(id);
-      return `<button class="fav-btn ${active?'active':''}" type="button" data-fav="${id}">
-        <svg viewBox="0 0 24 24" ${active?'fill="#e11d48"':'fill="none"'} stroke="#e11d48" stroke-width="1.6">
-          <path d="M12 21s-7.2-4.7-9.3-8.1C1.7 9.8 3.2 6.4 6.6 6.1c1.8-.2 3.1.6 4 1.8.9-1.2 2.2-2 4-1.8 3.4.3 4.9 3.7 3.9 6.8C19.2 16.3 12 21 12 21z"/>
-        </svg>
-        <span data-fav-label="${id}">${active?I18N[lang].fav_remove:I18N[lang].fav_add}</span>
+      return `<button class="ad-fav ${active?'active':''}" type="button" data-fav="${id}">
+        В избранное <span class="heart">❤</span>
       </button>`;
     }
     function refreshFavButtons(){
@@ -376,30 +387,16 @@
         const id=btn.getAttribute('data-fav');
         const active=isFav(id);
         btn.classList.toggle('active',active);
-        const svg=btn.querySelector('svg');
-        if(active){ svg.setAttribute('fill','#e11d48'); } else { svg.setAttribute('fill','none'); }
-        const lab=document.querySelector(`[data-fav-label="${id}"]`);
-        if(lab){ lab.textContent = I18N[getLang()][active?'fav_remove':'fav_add']; }
       });
       const spotBtn=document.querySelector('[data-spot-fav]');
       if(spotBtn && spotBtn.dataset.id){
         const active=isFav(spotBtn.dataset.id);
         spotBtn.classList.toggle('active',active);
-        const svg=spotBtn.querySelector('svg');
-        if(active){ svg.setAttribute('fill','#e11d48'); } else { svg.setAttribute('fill','none'); }
-        spotBtn.querySelector('span').textContent = I18N[getLang()][active?'fav_remove':'fav_add'];
       }
       window.__allRendered = true;
     }
     function refreshFavLabels(){
-      document.querySelectorAll('[data-fav-label]').forEach(el=>{
-        const id=el.getAttribute('data-fav-label');
-        el.textContent = I18N[getLang()][isFav(id)?'fav_remove':'fav_add'];
-      });
-      const spotBtn=document.querySelector('[data-spot-fav]');
-      if(spotBtn){
-        spotBtn.querySelector('span').textContent = I18N[getLang()][isFav(spotBtn.dataset.id)?'fav_remove':'fav_add'];
-      }
+      /* подписи меняются только в герое (карточки — статичное "В избранное") */
     }
 
     function renderSpot(item){
@@ -415,11 +412,18 @@
       body.querySelector('.spot-title').textContent=item.title||'';
       body.querySelector('.spot-price').textContent=fmtPrice(item.price, item.price_text);
 
-      const favBtn=spot.querySelector('[data-spot-fav]');
+      let favBtn=spot.querySelector('[data-spot-fav]');
+      if(!favBtn){
+        favBtn=document.createElement('button');
+        favBtn.className='spot-fav'; favBtn.setAttribute('data-spot-fav','');
+        favBtn.innerHTML='В избранное <span class="heart">❤</span>';
+        body.appendChild(favBtn);
+      }
       favBtn.dataset.id = String(item.id);
       favBtn.onclick = () => toggleFav(String(item.id));
-      refreshFavButtons();
+
       body.querySelector('.spot-cta').textContent = I18N[getLang()].card_btn;
+      refreshFavButtons();
     }
 
     function renderAds(items, replace=false){
@@ -447,10 +451,8 @@
             <h3 class="ad-title">${title}</h3>
             <div class="ad-price">${price}</div>
             <div class="ad-meta">📍 ${district}</div>
-            <div class="ad-actions">
-              ${favButtonHtml(id)}
-              <a class="ad-cta" href="${BOT_LINK}" target="_blank" rel="noopener">${I18N[getLang()].card_btn}</a>
-            </div>
+            ${favButtonHtml(id)}
+            <a class="ad-cta" href="${BOT_LINK}" target="_blank" rel="noopener">${I18N[getLang()].card_btn}</a>
           </div>`;
         wrap.appendChild(el);
       });
