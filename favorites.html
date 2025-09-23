@@ -20,28 +20,24 @@
     .lang-toggle .active{opacity:1;font-weight:700}
     .tg-ico{display:inline-flex;align-items:center;margin-right:.5rem}
     .tg-ico svg{width:18px;height:18px}
-    /* плейсхолдер фото */
+    /* placeholder */
     .ph-wrap{display:flex;align-items:center;justify-content:center;width:100%;height:100%;color:#9aa1ab}
     .ph-text{font-size:12px;color:#818b98;margin-top:6px}
   </style>
 </head>
 <body class="bg-neutral-50 text-neutral-900">
 
-  <!-- верхняя полоса -->
   <div id="topline" class="bg-emerald-600 text-white text-center text-xs sm:text-sm py-2">
     Объявления живут 24 часа · Анти-агент фильтр включён · Контакты — в Telegram
   </div>
 
-  <!-- Шапка -->
   <header class="bg-white sticky top-0 z-30 border-b border-neutral-100/80">
     <div class="container mx-auto px-4 py-2 md:py-3">
       <div class="flex flex-wrap items-center gap-3">
-        <!-- Лого -->
         <a href="index.html" class="order-1 flex items-center gap-2 shrink-0">
           <img src="./images/Arendatorkg.png" alt="Arendator.kg" class="w-8 h-8 rounded-full object-contain">
         </a>
 
-        <!-- Навигация -->
         <nav id="nav" class="order-3 w-full mt-2 grid grid-cols-3 gap-2 text-sm
                     md:order-2 md:w-auto md:mt-0 md:grid-cols-none md:flex md:flex-1 md:justify-center md:gap-3">
           <a id="navBlog" href="blog.html" class="w-full px-3 py-1.5 text-center rounded-xl border border-neutral-200 hover:bg-neutral-50">Блог</a>
@@ -49,7 +45,6 @@
           <a id="navFav" href="favorites.html?v=3" class="w-full px-3 py-1.5 text-center rounded-xl border border-neutral-200 hover:bg-neutral-50">Избранное</a>
         </nav>
 
-        <!-- Язык -->
         <button id="langToggle" class="order-2 md:order-3 ml-auto lang-toggle text-sm" type="button">
           <span class="ru active">Рус</span> / <span class="ky">Кыр</span>
         </button>
@@ -60,7 +55,6 @@
   <main class="container mx-auto px-4 py-6 md:py-8">
     <h1 id="pageTitle" class="text-2xl md:text-3xl font-bold mb-4">Избранное</h1>
 
-    <!-- Пустое состояние -->
     <div id="empty" class="hidden rounded-2xl border border-neutral-200 bg-white shadow-soft p-10 text-center text-neutral-600">
       <div id="emptyText" class="mb-2">Пока пусто: ничего не выбрано.</div>
       <div class="mt-3">
@@ -68,11 +62,9 @@
       </div>
     </div>
 
-    <!-- Сетка избранных -->
     <div id="grid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-4"></div>
   </main>
 
-  <!-- Контакты -->
   <section id="contact" class="container mx-auto px-4 pb-10">
     <h2 id="contactTitle" class="text-2xl font-bold mb-3">Связаться с нами</h2>
     <p id="contactLead" class="text-neutral-700 mb-4 text-sm">Задайте вопрос — ответим на почту в течение дня.</p>
@@ -90,7 +82,6 @@
     </form>
   </section>
 
-  <!-- Футер -->
   <footer class="border-t border-neutral-100 bg-white">
     <div class="container mx-auto px-4 py-8 grid md:grid-cols-4 gap-6 text-sm">
       <div class="md:col-span-2">
@@ -124,7 +115,7 @@
   <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 hidden px-4 py-2 rounded-xl bg-neutral-900 text-white text-sm"></div>
 
   <script>
-    // ===== i18n словарь =====
+    // ===== i18n =====
     const I18N = {
       ru: {
         title: 'Избранное — Arendator.kg',
@@ -134,7 +125,7 @@
         empty: 'Пока пусто: ничего не выбрано.',
         empty_back: 'Вернуться и выбрать объявления',
         tg_btn: 'Получить номер в Telegram',
-        // >>> изменено по просьбе: новый текст заглушки
+        // нужный текст:
         no_photo: 'ФОТО НЕ ПРЕДОСТАВИЛИ — нет фотографий в обьявлении',
         remove: 'Удалить',
         toast_removed: 'Убрано из избранного',
@@ -175,35 +166,25 @@
       }
     };
 
-    // ===== язык =====
+    // ===== lang helpers =====
     function getLang(){ return localStorage.getItem('lang') || (document.documentElement.lang || 'ru'); }
     function applyLang(l){
       document.documentElement.lang = l;
       const t = I18N[l];
-
-      // title и верхняя полоса
       document.querySelector('[data-i18n-title]').textContent = t.title;
       document.getElementById('topline').textContent = t.topline;
-
-      // навигация
       document.getElementById('navBlog').textContent = t.nav_blog;
       document.getElementById('navPost').textContent = t.nav_add;
       document.getElementById('navFav').textContent = t.nav_fav;
-
-      // заголовки и тексты
       document.getElementById('pageTitle').textContent = t.page_title;
       document.getElementById('emptyText').textContent = t.empty;
       document.getElementById('emptyBack').textContent = t.empty_back;
-
-      // контактная форма
       document.getElementById('contactTitle').textContent = t.contact_title;
       document.getElementById('contactLead').textContent = t.contact_lead;
       document.getElementById('fName').placeholder = t.f_name;
       document.getElementById('fEmail').placeholder = t.f_email;
       document.getElementById('fMsg').placeholder = t.f_msg;
       document.getElementById('fSend').textContent = t.f_send;
-
-      // футер
       document.getElementById('footerAbout').textContent = t.footer_about;
       document.getElementById('footerNav').textContent = t.footer_nav;
       document.getElementById('footerLegal').textContent = t.footer_legal;
@@ -213,29 +194,24 @@
       document.getElementById('fDel').textContent = t.footer_del;
       document.getElementById('fPriv').textContent = t.footer_priv;
 
-      // переключатель
       const btn = document.getElementById('langToggle');
       btn.querySelector('.ru').classList.toggle('active', l==='ru');
       btn.querySelector('.ky').classList.toggle('active', l==='ky');
 
-      // перерисовать карточки (подписи/кнопки)
       render();
     }
-
     document.getElementById('langToggle').addEventListener('click', ()=>{
       const next = getLang()==='ru' ? 'ky' : 'ru';
       localStorage.setItem('lang', next);
       applyLang(next);
     });
 
-    // ===== общие утилиты =====
+    // ===== utils =====
     const TELEGRAM_URL = 'https://t.me/ArendatorKg_VIP_bot';
     const FAV_KEY = 'arendator:favs';
     const FAV_CACHE_KEY = 'arendator:favcache';
-
     const API_LIMIT = 200;
     const API_URL = (from=0,limit=API_LIMIT)=>`/api/listings?from=${from}&limit=${limit}`;
-
     const qs = (s,el=document)=>el.querySelector(s);
     const showToast=(m)=>{const t=qs('#toast'); t.textContent=m; t.classList.remove('hidden'); clearTimeout(showToast.t); showToast.t=setTimeout(()=>t.classList.add('hidden'),1800);};
 
@@ -263,25 +239,47 @@
       return isFinite(n) ? n.toLocaleString(getLang()==='ru'?'ru-RU':'ky-KG') + t.currency : escapeHtml(String(v));
     }
 
-    // ==== localStorage helpers ====
+    // --- placeholder detector (правила можно расширять) ---
+    const PLACEHOLDER_RXES = [
+      /no[-_ ]?photo/i,
+      /no[-_ ]?image/i,
+      /placeholder/i,
+      /default/i,
+      /stub/i,
+      /empty/i,
+      // очень частые для lalafo
+      /lalafo/i,
+      /promo/i,
+      /app(store)?/i,
+      /screenshot/i
+    ];
+    function isPlaceholderPhoto(url){
+      if(!url) return true;
+      try{
+        const s = String(url);
+        return PLACEHOLDER_RXES.some(rx => rx.test(s));
+      }catch{ return false; }
+    }
+
+    // ===== storage =====
     function readFavIds(){
       const a = new Set(JSON.parse(localStorage.getItem(FAV_KEY)||'[]'));
-      const b = new Set(JSON.parse(localStorage.getItem('favs')||'[]')); // совместимость со старым ключом
+      const b = new Set(JSON.parse(localStorage.getItem('favs')||'[]'));
       return [...new Set([...a, ...b])].map(String);
     }
     function writeFavIds(ids){
       localStorage.setItem(FAV_KEY, JSON.stringify(ids));
-      localStorage.setItem('favs', JSON.stringify(ids)); // для совместимости
+      localStorage.setItem('favs', JSON.stringify(ids));
     }
     function readFavCache(){ try{ return JSON.parse(localStorage.getItem(FAV_CACHE_KEY)||'{}'); }catch{ return {}; } }
     function writeFavCache(obj){ localStorage.setItem(FAV_CACHE_KEY, JSON.stringify(obj)); }
 
-    // ==== догрузка недостающих карточек по API ====
+    // ===== fetch missing cards =====
     async function fetchByIdsIfMissing(idsMissing){
       if(!idsMissing.length) return {};
       const found = {};
       let from = 0, guard = 0;
-      while(guard++ < 6){ // до 6 страниц по 200 = 1200 объявлений максимум
+      while(guard++ < 6){
         try{
           const res = await fetch(API_URL(from, API_LIMIT), {cache:'no-store'});
           if(!res.ok) break;
@@ -307,11 +305,15 @@
       return found;
     }
 
-    // ==== карточка ====
+    // ===== card =====
     function cardHTML(it){
       const t = I18N[getLang()];
       const photos = getPhotos(it.photos);
-      const img = photos[0] || '';
+
+      // берём первую НЕ-плейсхолдерную картинку
+      const firstReal = photos.find(u => !isPlaceholderPhoto(u));
+      const img = firstReal || '';
+
       const title = escapeHtml(it.title||'—');
       const price = fmtPrice(it.price, it.price_text);
       const district = escapeHtml(it.district || '');
@@ -329,7 +331,7 @@
             <a class="px-3 py-2 rounded-xl bg-blue-600 text-white text-sm text-center hover:bg-blue-700 inline-flex items-center justify-center"
                href="${TELEGRAM_URL}" target="_blank" rel="noopener">
               <span class="tg-ico" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5l4.6 1.4L18.9 6c.7-.4 1.3-.2 .8.2"/></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5л4.6 1.4L18.9 6c.7-.4 1.3-.2 .8.2"/></svg>
               </span>
               ${t.tg_btn}
             </a>
@@ -341,7 +343,7 @@
       </article>`;
     }
 
-    // ==== рендер избранного ====
+    // ===== render =====
     async function render(){
       const t = I18N[getLang()];
       const favIds = readFavIds();
@@ -355,10 +357,7 @@
       }
       empty.classList.add('hidden');
 
-      // достаём локальный кэш
       const cache = readFavCache();
-
-      // если каких-то карточек нет в кэше — пробуем дотянуть из API и сохранить
       const missing = favIds.filter(id => !cache[id]);
       if(missing.length){
         const fetched = await fetchByIdsIfMissing(missing);
@@ -371,7 +370,6 @@
       const items = favIds.map(id=>cache[id]).filter(Boolean);
       grid.innerHTML = items.map(cardHTML).join('');
 
-      // обработчик "удалить из избранного"
       grid.querySelectorAll('.unfav-btn').forEach(b=>{
         b.addEventListener('click', ()=>{
           const id = String(b.dataset.id);
@@ -382,12 +380,12 @@
           writeFavIds([...set]);
           writeFavCache(cacheNow);
           showToast(t.toast_removed);
-          render(); // перерисовать
+          render();
         });
       });
     }
 
-    // Контактная форма
+    // ===== init =====
     (function initContact(){
       const ts = document.getElementById('tsField'); if (ts) ts.value = Date.now();
       const form = document.getElementById('contactForm');
@@ -409,10 +407,9 @@
       });
     })();
 
-    // Инициализация
     document.addEventListener('DOMContentLoaded', ()=>{
       const lang = getLang();
-      localStorage.setItem('lang', lang); // нормализуем
+      localStorage.setItem('lang', lang);
       applyLang(lang);
     });
   </script>
