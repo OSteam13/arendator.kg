@@ -1,91 +1,104 @@
-// /api/ingest.js
-import { createClient } from '@supabase/supabase-js';
+// runtime: node (Vercel/Next API)
+export const config = { runtime: "nodejs" };
 
-export const config = { runtime: 'edge' };
+import crypto from "crypto";
+import { createClient } from "@supabase/supabase-js";
 
-const SUPABASE_URL =
-  process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
-const SUPABASE_SERVICE_ROLE =
-  process.env.SUPABASE_SERVICE_ROLE ||
-  process.env.SUPABASE_SERVICE_ROLE_KEY ||
-  process.env.SUPABASE_SERVICE_KEY; // на всякий случай все варианты
-const PIPE_SECRET = process.env.PIPE_SECRET;
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  // НУЖЕН service_role ключ!
+  process.env.SUPABASE_SERVICE_ROLE_KEY,
+  { auth: { persistSession: false } }
+);
 
-function bad(status, msg) {
-  return new Response(JSON.stringify({ ok: false, error: msg }), {
-    status,
-    headers: { 'content-type': 'application/json' },
-  });
+// ─── Утилиты ────────────────────────────────────────────────────────────────
+function normalizePhoneAny(s = "") {
+  let d = (s + "").replace(/\D+/g, "");
+  if (!d) return "";
+  // Kyrgyzstan
+  if (d.startsWith("996") && d.length >= 4 && d[3] === "0") d = d.slice(0, 3) + d.slice(4);
+  if (d.startsWith("996")) return "+" + d;
+  if (d.startsWith("0") && d.length >= 10) return "+996" + d.slice(-9);
+  if (d.length >= 9 && d.length <= 12 && !d.startsWith("996")) return "+996" + d.slice(-9);
+  return "+" + d;
 }
 
-export default async function handler(req) {
+function makeDedupeKey({ firstPhoto = "", phone = "", price = "", district = "", title = "" }) {
+  const basis = [
+    (firstPhoto || "").toLowerCase().trim(),
+    (phone || "").replace(/\s+/g, ""),
+    price || "",
+    (district || "").toLowerCase().trim(),
+    (title || "").toLowerCase().trim(),
+  ].join("|");
+  return crypto.createHash("sha1").update(basis).digest("hex"); // 40 символов
+}
+
+// ─── Эндпоинт ───────────────────────────────────────────────────────────────
+export default async function handler(req, res) {
+  if (req.method !== "POST") return res.status(405).json({ ok: false, error: "method" });
+
   try {
-    if (req.method !== 'POST') return bad(405, 'method_not_allowed');
-
-    // 1) секрет
-    const got = req.headers.get('x-pipe-secret') || '';
-    if (!PIPE_SECRET || got !== PIPE_SECRET) return bad(401, 'unauthorized');
-
-    // 2) JSON
-    let body;
-    try {
-      body = await req.json(); // НЕ парсим второй раз!
-    } catch {
-      return bad(400, 'bad_json');
-    }
-
-    // 3) нормализуем поля (чтобы PostgREST не ругался)
     const {
-      title = '',
-      price = null,
+      title = "Объявление",
       photos = [],
-      source = 'pipe',
-      source_post_id = null,
-      phone_full = null,
-      district = null,
-    } = body || {};
+      price = null,
+      district = "",
+      phone_full = "",
+      source = "tg",
+      source_post_id = "",     // если есть — идеальный ключ
+      description = "",
+      owner_tg_id = null,
+      price_text = ""
+    } = req.body || {};
 
-    // типы
-    const priceNum =
-      price === null || price === '' ? null : Number.parseInt(String(price).replace(/\D+/g, ''), 10);
-    const photosArr = Array.isArray(photos) ? photos.filter(Boolean) : [];
+    // Нормализуем телефон (ловит все «человеческие» форматы)
+    const phone = normalizePhoneAny(phone_full);
 
-    // быстрая валидация
-    if (!title || typeof title !== 'string') return bad(400, 'title_required');
-
-    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE)
-      return bad(500, 'supabase_env_missing');
-
-    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE, {
-      auth: { persistSession: false },
-    });
+    // Считаем dedupe_key (на случай отсутствия source_post_id)
+    const firstPhoto = Array.isArray(photos) && photos.length ? photos[0] : "";
+    const dedupe_key = makeDedupeKey({ firstPhoto, phone, price, district, title });
 
     const row = {
-      source,
-      source_post_id,
-      title,
-      price: Number.isFinite(priceNum) ? priceNum : null,
-      photos: photosArr,          // jsonb
-      phone_full,                 // text (может быть null)
-      district,                   // text (может быть null)
-      is_active: true,            // bool
-      created_at: new Date().toISOString(), // timestamp
+      title: String(title).slice(0, 200),
+      photos,
+      price,
+      price_text,
+      district,
+      description: description || "",
+      phone_full: phone,
+      source: source || "tg",
+      source_post_id: source_post_id || null,
+      dedupe_key,                     // важно: сохраняем!
+      approved: true,
+      owner_tg_id
     };
 
-    const { error } = await supabase.from('listings').insert(row);
+    // Если пришёл стабильный исходный ID — upsert по (source, source_post_id)
+    if (row.source_post_id) {
+      const { data, error } = await supabase
+        .from("listings")
+        .upsert([row], { onConflict: "source,source_post_id" })
+        .select()
+        .limit(1)
+        .maybeSingle();
 
-    if (error) {
-      // подробность в логах, но не в ответе
-      console.error('ingest error (supabase):', error);
-      return bad(500, 'db_error');
+      if (error) throw error;
+      return res.status(200).json({ ok: true, id: data?.id || null });
     }
 
-    return new Response(JSON.stringify({ ok: true }), {
-      status: 200,
-      headers: { 'content-type': 'application/json' },
-    });
+    // Иначе — upsert по (source, dedupe_key)
+    const { data, error } = await supabase
+      .from("listings")
+      .upsert([row], { onConflict: "source,dedupe_key" })
+      .select()
+      .limit(1)
+      .maybeSingle();
+
+    if (error) throw error;
+    return res.status(200).json({ ok: true, id: data?.id || null });
   } catch (e) {
-    console.error('ingest error:', e);
-    return bad(500, 'internal');
+    console.error("[ingest] error:", e);
+    return res.status(500).json({ ok: false, error: String(e.message || e) });
   }
 }
