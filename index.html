@@ -1,3 +1,4 @@
+```html
 <!doctype html>
 <html lang="ru">
 <head>
@@ -26,12 +27,6 @@
     .lang-toggle .active{opacity:1;font-weight:700}
     .tg-ico{display:inline-flex;align-items:center;margin-right:.5rem}
     .tg-ico svg{width:18px;height:18px}
-
-    /* разноцветные точки */
-    .dot{width:8px;height:8px;border-radius:9999px;display:inline-block}
-    .dot.pulse{animation:pulse 1.6s infinite}
-    .dot + .dot{margin-left:6px}
-    @keyframes pulse{0%,100%{transform:scale(1);opacity:.8}50%{transform:scale(1.25);opacity:1}}
 
     /* карточки объявлений */
     .ads-wrap { margin: 24px auto; max-width: var(--container); padding: 0 16px; }
@@ -86,12 +81,15 @@
     .hero-card{word-wrap:break-word;overflow-wrap:anywhere}
     #heroTitle{font-size:clamp(22px,6.5vw,48px); line-height:1.15}
     #heroLead{font-size:clamp(14px,4.2vw,18px)}
-    #btnTelegram,#btnSeeOnSite{ padding:clamp(10px,3vw,12px) clamp(14px,4vw,20px); font-size:clamp(14px,4vw,16px); }
+    #btnTelegram{ padding:clamp(10px,3vw,12px) clamp(14px,4vw,20px); font-size:clamp(14px,4vw,16px); }
     #heroActions{display:flex; flex-wrap:wrap; gap:.5rem}
     #heroActions a{flex:1 1 100%; min-width:0}
-    #heroBadges{flex-wrap:wrap; gap:.25rem .75rem}
     #heroSocial{flex-wrap:wrap; gap:.5rem 1rem}
     #heroSpot .spot-img{height:clamp(180px,42vw,300px)}
+
+    /* Пиллы-статистики */
+    .stat-pill{display:flex;align-items:center;gap:.5rem;border:1px solid #e5e7eb;border-radius:.75rem;padding:.6rem .9rem;background:#fff}
+    .stat-pill b{font-weight:800}
 
     @media (max-width:360px){
       .hero-card{padding:12px !important}
@@ -149,7 +147,7 @@
           Экономьте время и нервы: мы находим «живые» объявления, отсекаем посредников, выдаём контакты в Telegram — без спама и лишних звонков.
         </p>
 
-        <!-- Кнопки -->
+        <!-- Кнопка -->
         <div id="heroActions" class="mt-4">
           <a id="btnTelegram"
              class="box-border px-5 py-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center justify-center"
@@ -159,22 +157,16 @@
             </span>
             Открыть в Telegram
           </a>
-          <a id="btnSeeOnSite"
-             class="box-border px-5 py-3 rounded-xl border border-neutral-200 hover:bg-neutral-50 inline-flex items-center justify-center mt-2"
-             href="#feed" data-i18n="btn_see_site">Смотреть ленту на сайте</a>
         </div>
 
-        <!-- Бейджи -->
-        <div id="heroBadges" class="mt-3 flex items-center gap-4 text-sm text-neutral-600">
-          <div id="badgeAnti" class="flex items-center gap-2" data-i18n="badge_anti">
-            <span class="dot pulse" style="background:#22c55e"></span>
-            <span>Анти-агент фильтр</span>
-          </div>
-          <div id="badgeLive" class="flex items-center gap-2" data-i18n="badge_live">
-            <span class="dot pulse" style="background:#3b82f6;animation-delay:.2s"></span>
-            <span class="dot pulse" style="background:#f59e0b;animation-delay:.4s"></span>
-            <span>Ежесекундные обновления</span>
-          </div>
+        <!-- Новые статистические «кнопки» -->
+        <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <a href="#reviews" class="stat-pill shadow-soft hover:bg-neutral-50">
+            <span>⭐</span> <b>1000+</b> довольных клиентов
+          </a>
+          <a href="#reviews" class="stat-pill shadow-soft hover:bg-neutral-50">
+            <span>📝</span> Отзывы с <b>ФИО</b>
+          </a>
         </div>
 
         <!-- Соцссылки -->
@@ -236,9 +228,9 @@
       Лучшие варианты улетают за часы. Подключите доступ — бот пришлёт контакты владельцев.
     </p>
 
-    <div class="grid md:grid-cols-3 gap-3">
+    <div class="grid md:grid-cols-2 gap-3"><!-- оставили только 300 и 600 -->
       <div class="rounded-2xl border border-neutral-200 bg-white p-4 shadow-soft">
-        <div class="text-xl font-bold mb-1">150 сом — 1 день</div>
+        <div class="text-xl font-bold mb-1">300 сом — 5 дней</div>
         <ul class="space-y-1 text-neutral-700 text-sm mb-3">
           <li>• Контакты владельцев без лимита</li>
           <li>• Анти-агент фильтр</li>
@@ -247,24 +239,7 @@
         <a class="box-border w-full sm:w-auto px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center"
            href="https://t.me/arendatorkg" target="_blank" rel="noopener">
           <span class="tg-ico" aria-hidden="true">
-            <!-- тот же валидный путь, что сверху -->
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5l4.6 1.4Л18.9 6c.7-.4 1.3-.2 .8.2"/></svg>
-          </span>
-          Получить в Telegram
-        </a>
-      </div>
-
-      <div class="rounded-2xl border border-neutral-200 bg-white p-4 shadow-soft">
-        <div class="text-xl font-bold mb-1">300 сом — 5 дней</div>
-        <ul class="space-y-1 text-neutral-700 текст-sm mb-3">
-          <li>• Контакты владельцев без лимита</li>
-          <li>• Анти-агент фильтр</li>
-          <li>• Уведомления о новых совпадениях</li>
-        </ul>
-        <a class="box-border w_full sm:w-auto px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center"
-           href="https://t.me/arendatorkg" target="_blank" rel="noopener">
-          <span class="tg-ico" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5l4.6 1.4Л18.9 6c.7-.4 1.3-.2 .8.2"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5l4.6 1.4L18.9 6c.7-.4 1.3-.2 .8.2"/></svg>
           </span>
           Получить в Telegram
         </a>
@@ -280,7 +255,7 @@
         <a class="box-border w-full sm:w-auto px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center"
            href="https://t.me/arendatorkg" target="_blank" rel="noopener">
           <span class="tg-ico" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5l4.6 1.4Л18.9 6c.7-.4 1.3-.2 .8.2"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8л2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5l4.6 1.4L18.9 6c.7-.4 1.3-.2 .8.2"/></svg>
           </span>
           Получить в Telegram
         </a>
@@ -334,14 +309,12 @@
       </div>
     </div>
 
-    <!-- ↓↓↓ Добавлено: контактная почта в конце сайта ↓↓↓ -->
     <div class="container mx-auto px-4 pb-2">
       <p class="text-center text-sm text-neutral-600">
         В случае вопросов вы можете написать на почту
         <a href="mailto:info@arendator.kg" class="text-blue-600 hover:underline">info@arendator.kg</a>
       </p>
     </div>
-    <!-- ↑↑↑ Конец вставки ↑↑↑ -->
 
     <div class="text-center text-xs text-neutral-500 pb-5">© 2025 — Arendator.kg</div>
   </footer>
@@ -412,10 +385,8 @@
     const POLL_MS = 60_000;
     const BOT_LINK = 'https://t.me/arendatorkg';
 
-    // ⬇⬇⬇ ВСТАВЬ СВОИ ЗНАЧЕНИЯ из Supabase → Project Settings → API
     const SUPABASE_URL  = 'https://oirtcrnhbbuvjfgnjxsp.supabase.co';
     const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pcnRjcm5oYmJ1dmpmZ25qeHNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY2NTYzMDcsImV4cCI6MjA3MjIzMjMwN30.-s4QSiDkT8LEZE0S48oHDUV56crcyAuUO4VVYoeW-7c';
-    // ⬆⬆⬆
 
     const API_URL = (from=0, limit=API_LIMIT) =>
       `${SUPABASE_URL}/rest/v1/listings`
@@ -437,7 +408,7 @@
         price: r.price,
         price_text: r.price_text,
         district: r.district,
-        photos: r.photos,        // jsonb[]
+        photos: r.photos,
         createdAt: r.created_at
       }));
     }
@@ -563,7 +534,6 @@
       refreshFavButtons();
     }
 
-    /* ====== Локальные объявления из post.html (на случай офлайна) ====== */
     function getUserListings(){
       try{ return JSON.parse(localStorage.getItem('user_listings')||'[]'); }
       catch{ return []; }
@@ -626,3 +596,4 @@
   </script>
 </body>
 </html>
+```
