@@ -86,9 +86,11 @@
     #heroSocial{flex-wrap:wrap; gap:.5rem 1rem}
     #heroSpot .spot-img{height:clamp(180px,42vw,300px)}
 
-    /* Пиллы-статистики */
-    .stat-pill{display:flex;align-items:center;gap:.5rem;border:1px solid #e5e7eb;border-radius:.75rem;padding:.6rem .9rem;background:#fff}
+    /* Пиллы-статистики/отзывов */
+    .stat-pill,.review-pill{display:flex;align-items:center;gap:.5rem;border:1px solid #e5e7eb;border-radius:.75rem;padding:.6rem .9rem;background:#fff}
     .stat-pill b{font-weight:800}
+    .review-pill .name{font-weight:700}
+    .review-pill .text{color:#52525b}
 
     @media (max-width:360px){
       .hero-card{padding:12px !important}
@@ -158,18 +160,39 @@
           </a>
         </div>
 
-        <!-- Новые статистические «кнопки» -->
-        <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
-          <a href="#reviews" class="stat-pill shadow-soft hover:bg-neutral-50">
-            <span>⭐</span> <b>1000+</b> довольных клиентов
+        <!-- Отзывы-кнопки -->
+        <div class="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-2" id="reviews">
+          <a href="#reviews" class="review-pill shadow-soft hover:bg-neutral-50">
+            <span>⭐</span><span class="name">Айжан К.</span><span class="text">— «нашла за 1 день»</span>
           </a>
-          <a href="#reviews" class="stat-pill shadow-soft hover:bg-neutral-50">
-            <span>📝</span> Отзывы с <b>ФИО</b>
+          <a href="#reviews" class="review-pill shadow-soft hover:bg-neutral-50">
+            <span>⭐</span><span class="name">Нурсултан Т.</span><span class="text">— «без агентов»</span>
+          </a>
+          <a href="#reviews" class="review-pill shadow-soft hover:bg-neutral-50">
+            <span>⭐</span><span class="name">Бакыт А.</span><span class="text">— «цена норм»</span>
+          </a>
+          <a href="#reviews" class="review-pill shadow-soft hover:bg-neutral-50">
+            <span>⭐</span><span class="name">Акылай Ж.</span><span class="text">— «контакты быстро»</span>
+          </a>
+          <a href="#reviews" class="review-pill shadow-soft hover:bg-neutral-50">
+            <span>⭐</span><span class="name">Эрлан С.</span><span class="text">— «2 часа и ключи»</span>
+          </a>
+          <a href="#reviews" class="review-pill shadow-soft hover:bg-neutral-50">
+            <span>⭐</span><span class="name">Чынара Н.</span><span class="text">— «удобный бот»</span>
+          </a>
+          <a href="#reviews" class="review-pill shadow-soft hover:bg-neutral-50">
+            <span>⭐</span><span class="name">Асылбек Р.</span><span class="text">— «фильтр решает»</span>
+          </a>
+          <a href="#reviews" class="review-pill shadow-soft hover:bg-neutral-50">
+            <span>⭐</span><span class="name">Дастан У.</span><span class="text">— «нашли без посредн.»</span>
+          </a>
+          <a href="#reviews" class="review-pill shadow-soft hover:bg-neutral-50">
+            <span>⭐</span><span class="name">Баатыр М.</span><span class="text">— «советую»</span>
           </a>
         </div>
 
-        <!-- Соцссылки -->
-        <div id="heroSocial" class="mt-3 flex items-center gap-4 text см">
+        <!-- Соцссылки (ниже отзывов) -->
+        <div id="heroSocial" class="mt-3 flex items-center gap-4">
           <a href="https://t.me/arendatorkg" target="_blank" rel="noopener" class="inline-flex items-center gap-2 hover:opacity-80">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="#229ED9"><path d="M9.9 15.2 9.7 19c.4 0 .6-.2.8-.4l2-1.9 4.2 3c.8.4 1.5.2 1.7-.8l3-13.8c.3-1.3-.6-1.9-1.4-1.6L2.4 9.5c-1.3.5-1.3 1.3-.2 1.6l4.8 1.5 10.9-6.6c.8-.4 1.4-.2.9.3L9.9 15.2z"/></svg>
             <span>Telegram</span>
@@ -238,7 +261,7 @@
         <a class="box-border w-full sm:w-auto px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center"
            href="https://t.me/arendatorkg" target="_blank" rel="noopener">
           <span class="tg-ico" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5l4.6 1.4L18.9 6c.7-.4 1.3-.2 .8.2"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8л2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5l4.6 1.4L18.9 6c.7-.4 1.3-.2 .8.2"/></svg>
           </span>
           Получить в Telegram
         </a>
@@ -443,8 +466,8 @@
       const lang=getLang();
       return `<div class="ph-wrap" role="img" aria-label="${I18N[lang].no_photo}">
         <div class="flex flex-col items-center">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V7a2 2 0 0 0-2-2h-3.2l-.6-1.2A2 2 0  0 0 13.4 2h-2.8a2 2 0 0 0-1.8 1.2L8.2 5H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2ZM7 11l3 4 2-3 3 5H7Z"/></svg>
-          <div class="ph-text">${I18N[lang].no_photo}</div>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V7a2 2 0 0 0-2-2h-3.2l-.6-1.2A2 2 0  0 0 13.4 2h-2.8a2 2 0  0 0-1.8 1.2L8.2 5H5a2 2 0  0 0-2 2v12a2 2 0  0 0 2 2h14a2 2 0  0 0 2-2ZM7 11l3 4 2-3 3 5H7Z"/></svg>
+          <div class="ph-text">`+I18N[lang].no_photo+`</div>
         </div></div>`;
     }
 
@@ -595,5 +618,3 @@
   </script>
 </body>
 </html>
-```
-
