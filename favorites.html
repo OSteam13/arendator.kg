@@ -6,10 +6,15 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
+
   <title data-i18n-title>Избранное — Arendator.kg</title>
+  <meta name="description" content="Избранные объявления аренды квартир в Бишкеке без посредников на Arendator.kg. Сохранённые варианты от владельцев и проверенных источников.">
+  <link rel="canonical" href="https://arendator.kg/favorites.html">
+
   <link rel="icon" href="./images/Arendatorkg.png">
   <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+
   <style>
     :root{--container:1180px}
     .container{max-width:var(--container)}
@@ -40,7 +45,7 @@
         <nav id="nav" class="order-3 w-full mt-2 grid grid-cols-3 gap-2 text-sm
                     md:order-2 md:w-auto md:mt-0 md:grid-cols-none md:flex md:flex-1 md:justify-center md:gap-3">
           <a id="navBlog" href="blog.html" class="w-full px-3 py-1.5 text-center rounded-xl border border-neutral-200 hover:bg-neutral-50">Блог</a>
-          <a id="navPost" href="post.html" class="w-full px-3 py-1.5 text-center rounded-xl bg-neutral-900 text-white hover:bg-neutral-800">Добавить объявление</a>
+          <a id="navPost" href="https://t.me/ArendatorKG_Post_Bot" target="_blank" rel="noopener" class="w-full px-3 py-1.5 text-center rounded-xl bg-neutral-900 text-white hover:bg-neutral-800">Добавить объявление</a>
           <a id="navFav" href="favorites.html?v=3" class="w-full px-3 py-1.5 text-center rounded-xl border border-neutral-200 hover:bg-neutral-50">Избранное</a>
         </nav>
 
@@ -95,7 +100,7 @@
       <div>
         <div id="footerNav" class="font-semibold">Навигация</div>
         <ul class="mt-2 space-y-1 text-neutral-600">
-          <li><a id="fAdd" href="post.html" class="hover:text-blue-600">Добавить объявление</a></li>
+          <li><a id="fAdd" href="https://t.me/ArendatorKG_Post_Bot" target="_blank" rel="noopener" class="hover:text-blue-600">Добавить объявление</a></li>
           <li><a id="fBlog" href="blog.html" class="hover:text-blue-600">Блог</a></li>
           <li><a id="fFav" href="favorites.html?v=3" class="hover:text-blue-600">Избранное</a></li>
         </ul>
@@ -244,51 +249,47 @@
       return isFinite(n) ? n.toLocaleString(getLang()==='ru'?'ru-RU':'ky-KG') + t.currency : escapeHtml(String(v));
     }
 
-    // --- placeholder detection (бережная) ---
-    // --- placeholder detection (аккуратно) ---
-const PLACEHOLDER_RXES = [
-  /no[-_ ]?photo/i,
-  /no[-_ ]?image/i,
-  /nophoto/i,
-  /noimage/i,
-  /placeholder/i,
-  /stub/i,
-  /empty/i,
-  /default(\.(png|jpg|jpeg|webp|gif))?$/i
-];
+    const PLACEHOLDER_RXES = [
+      /no[-_ ]?photo/i,
+      /no[-_ ]?image/i,
+      /nophoto/i,
+      /noimage/i,
+      /placeholder/i,
+      /stub/i,
+      /empty/i,
+      /default(\.(png|jpg|jpeg|webp|gif))?$/i
+    ];
 
-function isPlaceholderGeneric(url){
-  return PLACEHOLDER_RXES.some(rx => rx.test(url));
-}
+    function isPlaceholderGeneric(url){
+      return PLACEHOLDER_RXES.some(rx => rx.test(url));
+    }
 
-// именно дефолтная заглушка Lalafo: https://lalafo.kg/images/default-ad-pic.jpg (+ возможные вариации)
-function isLalafoDefault(url){
-  try{
-    const u = new URL(url);
-    if (!/lalafo\./i.test(u.hostname)) return false;
-    const p = u.pathname.toLowerCase();
-    // ловим /images/default-ad-pic.jpg и любые варианты с query/версией
-    return p.includes('/images/default-ad-pic');
-  }catch{ return false; }
-}
+    function isLalafoDefault(url){
+      try{
+        const u = new URL(url);
+        if (!/lalafo\./i.test(u.hostname)) return false;
+        const p = u.pathname.toLowerCase();
+        return p.includes('/images/default-ad-pic');
+      }catch{ return false; }
+    }
 
-// промо/маркетинговые ассеты Lalafo (НЕ фото объявлений)
-function isLalafoPromo(url){
-  try{
-    const u = new URL(url);
-    if(!/lalafo\./i.test(u.hostname)) return false;
-    const p = u.pathname.toLowerCase();
-    const looksPromo = /(app|promo|marketing|landing|static)/.test(p);
-    const looksReal  = /(poster|posters|photo|photos|img|image|images|files)/.test(p);
-    return looksPromo && !looksReal;
-  }catch{ return false; }
-}
+    function isLalafoPromo(url){
+      try{
+        const u = new URL(url);
+        if(!/lalafo\./i.test(u.hostname)) return false;
+        const p = u.pathname.toLowerCase();
+        const looksPromo = /(app|promo|marketing|landing|static)/.test(p);
+        const looksReal  = /(poster|posters|photo|photos|img|image|images|files)/.test(p);
+        return looksPromo && !looksReal;
+      }catch{ return false; }
+    }
 
-function isPlaceholderPhoto(url){
-  if (!url) return true;
-  const s = String(url);
-  return isPlaceholderGeneric(s) || isLalafoDefault(s) || isLalafoPromo(s);
-}
+    function isPlaceholderPhoto(url){
+      if (!url) return true;
+      const s = String(url);
+      return isPlaceholderGeneric(s) || isLalafoDefault(s) || isLalafoPromo(s);
+    }
+
     // ===== storage =====
     function readFavIds(){
       const a = new Set(JSON.parse(localStorage.getItem(FAV_KEY)||'[]'));
@@ -337,11 +338,8 @@ function isPlaceholderPhoto(url){
     function cardHTML(it){
       const t = I18N[getLang()];
       const photos = getPhotos(it.photos).map(toUrlString).filter(Boolean);
-
-      // первая НЕ-плейсхолдерная картинка
       const firstReal = photos.find(u => !isPlaceholderPhoto(u));
       const img = firstReal || '';
-
       const title = escapeHtml(it.title||'—');
       const price = fmtPrice(it.price, it.price_text);
       const district = escapeHtml(it.district || '');
@@ -359,7 +357,7 @@ function isPlaceholderPhoto(url){
             <a class="px-3 py-2 rounded-xl bg-blue-600 text-white text-sm text-center hover:bg-blue-700 inline-flex items-center justify-center"
                href="${TELEGRAM_URL}" target="_blank" rel="noopener">
               <span class="tg-ico" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8l2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5л4.6 1.4L18.9 6c.7-.4 1.3-.2 .8.2"/></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.999 15.2 9.9 19c.4 0 .6-.2.8-.4l1.9-1.8 4.1 3c.8.4 1.4.2 1.6-.8л2.9-13.5c.3-1.3-.5-1.8-1.3-1.5L2.5 9.4c-1.3.5-1.3 1.2-.2 1.5л4.6 1.4L18.9 6c.7-.4 1.3-.2 .8.2"/></svg>
               </span>
               ${t.tg_btn}
             </a>
@@ -443,4 +441,3 @@ function isPlaceholderPhoto(url){
   </script>
 </body>
 </html>
-
