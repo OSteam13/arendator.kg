@@ -34,8 +34,8 @@ export default async function handler(req, res) {
       (note ? `Комментарий: ${note}\n` : "") +
       (raw_text ? `\n🔎 raw:\n${raw_text}` : "");
 
-    const tgToken = process.env.VIPPAY_BOT_TOKEN;
-    const chatId = process.env.VIPPAY_TECH_CHAT_ID;
+    const tgToken = process.env.TELEGRAM_BOT_TOKEN; // тот же токен, что у vip_pay_bot.py
+    const chatId = process.env.VIPPAY_TECH_CHAT_ID; // ID тех-чата для логов Macrodroid
 
     if (!tgToken || !chatId) {
       return res
